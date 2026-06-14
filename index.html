@@ -1886,7 +1886,7 @@ function chartGrouped(cid,labels,groups,opts){
   // groups = [{label:'Baru',bars:[{snb,color,data}]},{label:'Lama',bars:[...]}]
   opts=opts||{};
   drawCV(cid,(ctx,W,H)=>{
-    const PAD={t:20,r:10,b:42,l:52};
+    const PAD={t:20,r:10,b:46,l:52};
     const CW=W-PAD.l-PAD.r,CH=H-PAD.t-PAD.b;
     if(CW<20||CH<20)return;
     const allV=[];
@@ -1922,22 +1922,31 @@ function chartGrouped(cid,labels,groups,opts){
           const x=clusterX+bi*clusterW/nSNB;
           const y=PAD.t+CH-bh;
           ctx.fillStyle=b.color;ctx.globalAlpha=0.85;ctx.fillRect(x,y,barW,bh);ctx.globalAlpha=1;
-          if(bh>8){
-            const lbl=v.toLocaleString('id-ID');
+          // label nilai: vertikal di dalam bar, clipped supaya tidak keluar
+          const lbl=v.toLocaleString('id-ID');
+          const fs=Math.min(8,barW-1);
+          if(bh>20&&fs>=5){
             ctx.save();
-            ctx.fillStyle=b.color;ctx.font='bold 7px sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';
-            ctx.translate(x+barW/2,y-2);ctx.rotate(-Math.PI/2);
+            ctx.rect(x,y,barW,bh);ctx.clip();
+            ctx.fillStyle='#fff';ctx.globalAlpha=0.92;
+            ctx.font='bold '+fs+'px sans-serif';
+            ctx.textAlign='center';ctx.textBaseline='middle';
+            ctx.translate(x+barW/2,y+bh/2);ctx.rotate(-Math.PI/2);
             ctx.fillText(lbl,0,0);
             ctx.restore();
           }
         });
       });
     });
-    // x labels — tampil semua tanggal, font 8px, rotasi 60°
+    // x labels — rotasi konsisten 45°, tidak bergantung DPR
     labels.forEach((l,i)=>{
       const x=PAD.l+i*slotW+slotW/2;
-      ctx.save();ctx.font='600 8px sans-serif';ctx.fillStyle=gv('--muted');ctx.textAlign='right';ctx.textBaseline='top';
-      ctx.translate(x,PAD.t+CH+4);ctx.rotate(-Math.PI*60/180);ctx.fillText(l,0,0);ctx.restore();
+      ctx.save();
+      ctx.font='600 8px sans-serif';ctx.fillStyle=gv('--muted');
+      ctx.textAlign='right';ctx.textBaseline='top';
+      ctx.translate(x,PAD.t+CH+5);ctx.rotate(-Math.PI*45/180);
+      ctx.fillText(l,0,0);
+      ctx.restore();
     });
     // group labels (Baru / Lama) kecil di atas cluster pertama hari pertama
     if(nDays>0){
@@ -1955,7 +1964,7 @@ function chartGrouped(cid,labels,groups,opts){
 function chartBL(cid,labels,bars,lines,opts){
   opts=opts||{};
   drawCV(cid,(ctx,W,H)=>{
-    const PAD={t:28,r:8,b:36,l:52};
+    const PAD={t:28,r:8,b:44,l:52};
     const CW=W-PAD.l-PAD.r,CH=H-PAD.t-PAD.b;
     if(CW<20||CH<20)return;
     const allV=[];
@@ -1991,7 +2000,19 @@ function chartBL(cid,labels,bars,lines,opts){
         if(!v)return;const bh=CH*(v/YMAX);
         const x=PAD.l+i*sw+(sw-NS*bw)/2+si*bw;const y=PAD.t+CH-bh;
         ctx.fillStyle=s.color;ctx.globalAlpha=0.82;ctx.fillRect(x,y,bw,bh);ctx.globalAlpha=1;
-        if(bh>14){ctx.save();ctx.fillStyle=s.color;ctx.font='bold 8px sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.translate(x+bw/2,y-3);ctx.rotate(-Math.PI/2);ctx.fillText(v.toLocaleString('id-ID'),0,0);ctx.restore();}
+        // label nilai: vertikal di dalam bar, hanya tampil kalau bar cukup tinggi
+        const lbl=v.toLocaleString('id-ID');
+        const fs=Math.min(9,bw-2);
+        if(bh>22&&fs>=5){
+          ctx.save();
+          ctx.rect(x,y,bw,bh);ctx.clip();
+          ctx.fillStyle='#fff';ctx.globalAlpha=0.92;
+          ctx.font='bold '+fs+'px sans-serif';
+          ctx.textAlign='center';ctx.textBaseline='middle';
+          ctx.translate(x+bw/2,y+bh/2);ctx.rotate(-Math.PI/2);
+          ctx.fillText(lbl,0,0);
+          ctx.restore();
+        }
       });
     });
     // lines
@@ -2002,12 +2023,17 @@ function chartBL(cid,labels,bars,lines,opts){
       ctx.stroke();
       pts.forEach(p=>{if(p.y==null)return;ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);ctx.fillStyle=s.color;ctx.fill();});
     });
-    // xlabels
+    // xlabels — rotasi konsisten 45°, bottom padding cukup
     const step=Math.ceil(labels.length/10);
     labels.forEach((l,i)=>{
       if(i%step!==0&&i!==labels.length-1)return;
       const x=PAD.l+i*sw+sw/2;
-      ctx.save();ctx.font='600 9px sans-serif';ctx.fillStyle=gv('--muted');ctx.textAlign='right';ctx.textBaseline='top';ctx.translate(x,PAD.t+CH+4);ctx.rotate(-Math.PI*45/180);ctx.fillText(l,0,0);ctx.restore();
+      ctx.save();
+      ctx.font='600 9px sans-serif';ctx.fillStyle=gv('--muted');
+      ctx.textAlign='right';ctx.textBaseline='top';
+      ctx.translate(x,PAD.t+CH+5);ctx.rotate(-Math.PI*45/180);
+      ctx.fillText(l,0,0);
+      ctx.restore();
     });
     ctx.setLineDash([]);
   });
