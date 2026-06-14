@@ -1955,7 +1955,7 @@ function chartGrouped(cid,labels,groups,opts){
 function chartBL(cid,labels,bars,lines,opts){
   opts=opts||{};
   drawCV(cid,(ctx,W,H)=>{
-    const PAD={t:14,r:8,b:36,l:52};
+    const PAD={t:28,r:8,b:36,l:52};
     const CW=W-PAD.l-PAD.r,CH=H-PAD.t-PAD.b;
     if(CW<20||CH<20)return;
     const allV=[];
@@ -1991,7 +1991,7 @@ function chartBL(cid,labels,bars,lines,opts){
         if(!v)return;const bh=CH*(v/YMAX);
         const x=PAD.l+i*sw+(sw-NS*bw)/2+si*bw;const y=PAD.t+CH-bh;
         ctx.fillStyle=s.color;ctx.globalAlpha=0.82;ctx.fillRect(x,y,bw,bh);ctx.globalAlpha=1;
-        if(bh>12){ctx.fillStyle=s.color;ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(v.toLocaleString('id-ID'),x+bw/2,y-1);}
+        if(bh>14){ctx.save();ctx.fillStyle=s.color;ctx.font='bold 8px sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.translate(x+bw/2,y-3);ctx.rotate(-Math.PI/2);ctx.fillText(v.toLocaleString('id-ID'),0,0);ctx.restore();}
       });
     });
     // lines
@@ -2024,9 +2024,26 @@ function getDaysRange(from,to,view){
   const days=allDays(from,to);
   if(!view||view==='day')return{days,labels:days.map(d=>{const p=d.split('-');return p[2]+'/'+p[1];})};
   if(view==='month'){
+    // Kumpulkan daftar bulan unik dari range from..to
+    const mKeys=[];const seen={};let cur=new Date(from+'T00:00:00');const toD=new Date(to+'T00:00:00');
+    while(cur<=toD){
+      const key=cur.getFullYear()+'-'+String(cur.getMonth()+1).padStart(2,'0');
+      if(!seen[key]){seen[key]=true;mKeys.push(key);}
+      cur.setMonth(cur.getMonth()+1);
+    }
+    const today=ld();
     const mths={};
-    days.forEach(d=>{const key=d.slice(0,7);if(!mths[key])mths[key]={start:d,end:d};else mths[key].end=d;});
-    const mKeys=Object.keys(mths);
+    mKeys.forEach(k=>{
+      const yr=+k.slice(0,4),mo=+k.slice(5);
+      // start: tanggal 1 bulan tersebut (tapi jangan lebih awal dari from)
+      const firstDay=k+'-01';
+      const start=firstDay<from?from:firstDay;
+      // end: akhir bulan (atau today kalau bulan berjalan, atau to kalau lebih kecil)
+      const lastDayDate=new Date(yr,mo,0);// hari terakhir bulan
+      const lastDay=ld(lastDayDate);
+      const end=lastDay>today?today:(lastDay>to?to:lastDay);
+      mths[k]={start,end};
+    });
     const bn2=['','Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
     return{days:mKeys,labels:mKeys.map(k=>{const p=k.split('-');return bn2[+p[1]]+' '+p[0].slice(2);}),mths};
   }
@@ -2063,11 +2080,12 @@ function dbV(k,v,btn){
   const prefix='db-'+k+'-';
   document.querySelectorAll('[id^="'+prefix+'"]').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
-  // Kalau bulanan, set range default 6 bulan
+  // Kalau bulanan, set range default 6 bulan (dari awal bulan 6 bulan lalu)
   if(v==='month'){
-    const d1=document.getElementById(prefix+'d1'),d2=document.getElementById(prefix+'d2');
-    if(d1&&!d1.dataset.manualSet)d1.value=ld(new Date(Date.now()-180*86400000));
-    if(d2&&!d2.dataset.manualSet)d2.value=ld();
+    const d1el=document.getElementById(prefix+'d1'),d2el=document.getElementById(prefix+'d2');
+    const now6=new Date();now6.setMonth(now6.getMonth()-5);now6.setDate(1);
+    if(d1el)d1el.value=ld(now6);
+    if(d2el)d2el.value=ld();
   }
   if(k==='ss')drawDbSS();if(k==='lb')drawDbLB();if(k==='gt')drawDbGT();
 }
