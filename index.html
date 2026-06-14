@@ -1596,12 +1596,15 @@ function renderHS(){
   const fd1=document.getElementById('hs-fd1')?.value, fd2=document.getElementById('hs-fd2')?.value;
   if(!fd1){const d=document.getElementById('hs-fd1');if(d)d.value=ld(new Date(Date.now()-13*86400000));}
   if(!fd2){const d=document.getElementById('hs-fd2');if(d)d.value=ld();}
-  const p='range';
+  const from=document.getElementById('hs-fd1')?.value||ld(new Date(Date.now()-13*86400000));
+  const to=document.getElementById('hs-fd2')?.value||ld();
   const snbF=document.getElementById('hs-fsnb')?.value||'all';
   const shF=document.getElementById('hs-fsh')?.value||'all';
-  let rows=fp(shotLogs,p);
+  const jenisF=document.getElementById('hs-fjenis')?.value||'all';
+  let rows=shotLogs.filter(l=>l.date>=from&&l.date<=to);
   if(snbF!=='all')rows=rows.filter(l=>l.snb===snbF);
   if(shF!=='all')rows=rows.filter(l=>l.shift===shF);
+  if(jenisF!=='all')rows=rows.filter(l=>l.type===jenisF);
   const tb=document.getElementById('hs-tb');if(!tb)return;
   if(!rows.length){tb.innerHTML=`<tr><td colspan="8" class="es">Belum ada data</td></tr>`;return;}
   tb.innerHTML=rows.map(l=>{const kg=l.type==='Baru'?(l.qty*25):l.qty_kg||(l.qty*15);
@@ -1609,10 +1612,13 @@ function renderHS(){
   }).join('');
 }
 function renderHSD(){
-  const p='range';
+  const from=document.getElementById('hsd-fd1')?.value||ld(new Date(Date.now()-13*86400000));
+  const to=document.getElementById('hsd-fd2')?.value||ld();
+  if(!document.getElementById('hsd-fd1')?.value){const d=document.getElementById('hsd-fd1');if(d)d.value=from;}
+  if(!document.getElementById('hsd-fd2')?.value){const d=document.getElementById('hsd-fd2');if(d)d.value=to;}
   const snbF=document.getElementById('hsd-fsnb')?.value||'all';
   const shF=document.getElementById('hsd-fsh')?.value||'all';
-  let rows=fp(sandLogs,p);
+  let rows=sandLogs.filter(l=>l.date>=from&&l.date<=to);
   if(snbF!=='all')rows=rows.filter(l=>l.snb===snbF);
   if(shF!=='all')rows=rows.filter(l=>l.shift===shF);
   const tb=document.getElementById('hsd-tb');if(!tb)return;
@@ -1620,8 +1626,13 @@ function renderHSD(){
   tb.innerHTML=rows.map(l=>`<tr><td class="mn">${fd(l.date)}</td><td><span class="bd bd-if">${l.shift}</span></td><td class="mn">${l.snb}</td><td class="mn t-wn">${l.qty_pasir}</td><td class="t-mu">${l.loc||'—'}</td><td>${l.op}</td>${eBtn('lb',l.id)}</tr>`).join('');
 }
 function renderHG(){
-  const p='range';
-  let rows=fp(gtLogs,p);
+  const from=document.getElementById('hg-fd1')?.value||ld(new Date(Date.now()-13*86400000));
+  const to=document.getElementById('hg-fd2')?.value||ld();
+  if(!document.getElementById('hg-fd1')?.value){const d=document.getElementById('hg-fd1');if(d)d.value=from;}
+  if(!document.getElementById('hg-fd2')?.value){const d=document.getElementById('hg-fd2');if(d)d.value=to;}
+  const shF=document.getElementById('hg-fsh')?.value||'all';
+  let rows=gtLogs.filter(l=>l.date>=from&&l.date<=to);
+  if(shF!=='all')rows=rows.filter(l=>l.shift===shF);
   const tb=document.getElementById('hg-tb');if(!tb)return;
   if(!rows.length){tb.innerHTML=`<tr><td colspan="8" class="es">Belum ada data</td></tr>`;return;}
   tb.innerHTML=rows.map(l=>{
