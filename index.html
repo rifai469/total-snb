@@ -327,7 +327,14 @@ tr:hover td{background:var(--accent-bg);}
 <!-- ===== DASHBOARD ===== -->
 <div id="p-dash" class="pg">
   <div class="cd" style="margin-bottom:12px;">
-    <div class="st">📊 Ringkasan Hari Ini</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+      <div class="st" style="margin:0;" id="dash-summary-title">📊 Ringkasan Hari Ini</div>
+      <div style="display:flex;gap:4px;">
+        <button class="chc-b on" id="ds-h" style="font-size:.65rem;padding:3px 8px" onclick="setDashSum('harian',this)">Harian</button>
+        <button class="chc-b" id="ds-w" style="font-size:.65rem;padding:3px 8px" onclick="setDashSum('mingguan',this)">Mingguan</button>
+        <button class="chc-b" id="ds-b" style="font-size:.65rem;padding:3px 8px" onclick="setDashSum('bulanan',this)">Bulanan</button>
+      </div>
+    </div>
     <div class="bar" id="dash-chips"></div>
     <div class="al" id="dash-alerts"></div>
     <div class="st" style="margin-top:8px;">⚙ Status Mesin SNB</div>
@@ -355,6 +362,7 @@ tr:hover td{background:var(--accent-bg);}
           <div style="display:flex;gap:4px;">
             <button class="chc-b on" id="db-ss-d" style="font-size:.6rem;padding:2px 6px" onclick="dbV('ss','day',this)">Harian</button>
             <button class="chc-b" id="db-ss-w" style="font-size:.6rem;padding:2px 6px" onclick="dbV('ss','week',this)">Mingguan</button>
+            <button class="chc-b" id="db-ss-m" style="font-size:.6rem;padding:2px 6px" onclick="dbV('ss','month',this)">Bulanan</button>
           </div>
         </div>
       </div>
@@ -379,6 +387,7 @@ tr:hover td{background:var(--accent-bg);}
           <div style="display:flex;gap:4px;">
             <button class="chc-b on" id="db-lb-d" style="font-size:.6rem;padding:2px 6px" onclick="dbV('lb','day',this)">Harian</button>
             <button class="chc-b" id="db-lb-w" style="font-size:.6rem;padding:2px 6px" onclick="dbV('lb','week',this)">Mingguan</button>
+            <button class="chc-b" id="db-lb-m" style="font-size:.6rem;padding:2px 6px" onclick="dbV('lb','month',this)">Bulanan</button>
           </div>
         </div>
       </div>
@@ -405,6 +414,7 @@ tr:hover td{background:var(--accent-bg);}
           <div style="display:flex;gap:4px;">
             <button class="chc-b on" id="db-gt-d" style="font-size:.6rem;padding:2px 6px" onclick="dbV('gt','day',this)">Harian</button>
             <button class="chc-b" id="db-gt-w" style="font-size:.6rem;padding:2px 6px" onclick="dbV('gt','week',this)">Mingguan</button>
+            <button class="chc-b" id="db-gt-m" style="font-size:.6rem;padding:2px 6px" onclick="dbV('gt','month',this)">Bulanan</button>
           </div>
         </div>
       </div>
@@ -1192,9 +1202,17 @@ function openWAResume(){
     scopeBar.innerHTML=`
       <div style="display:flex;flex-direction:column;gap:8px;width:100%">
         <div style="background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(79,70,229,.08));border:1px solid rgba(99,102,241,.25);border-radius:10px;padding:10px 12px;font-size:.82rem;color:var(--accent);font-weight:700">
-          📋 Resume Harian — Semua Data (Steelshot + Limbah + Impeler)
+          📋 Resume — Semua Data (Steelshot + Limbah + Impeler)
         </div>
         <div>
+          <div style="font-size:.65rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Periode Resume</div>
+          <div style="display:flex;gap:6px">
+            <button class="chc-b wa-resume-pd-btn on" data-pd="harian" onclick="_setWaResumePd('harian',this)">📅 Harian</button>
+            <button class="chc-b wa-resume-pd-btn" data-pd="mingguan" onclick="_setWaResumePd('mingguan',this)">📆 Mingguan</button>
+            <button class="chc-b wa-resume-pd-btn" data-pd="bulanan" onclick="_setWaResumePd('bulanan',this)">🗓 Bulanan</button>
+          </div>
+        </div>
+        <div id="wa-resume-shift-row">
           <div style="font-size:.65rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Shift</div>
           <div style="display:flex;gap:6px">
             <button class="chc-b wa-resume-sh-btn on" data-sh="ALL" onclick="_setWaResumeShift('ALL')">🔄 Semua</button>
@@ -1211,6 +1229,19 @@ function openWAResume(){
   document.getElementById('wa-title').textContent='📋 Resume Harian';
   _buildWAMsg('ss');
   document.getElementById('wa-modal').classList.add('on');
+}
+let _waResumePd='harian';
+function _setWaResumePd(pd,btn){
+  _waResumePd=pd;
+  document.querySelectorAll('.wa-resume-pd-btn').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  const titles={harian:'📋 Resume Harian',mingguan:'📋 Resume Mingguan',bulanan:'📋 Resume Bulanan'};
+  const titleEl=document.getElementById('wa-title');
+  if(titleEl)titleEl.textContent=titles[pd]||titles.harian;
+  // Shift row hanya relevan untuk harian
+  const shiftRow=document.getElementById('wa-resume-shift-row');
+  if(shiftRow)shiftRow.style.display=pd==='harian'?'':'none';
+  _buildWAMsg('ss');
 }
 
 // ── HISTORY SUB TABS ──
@@ -1739,31 +1770,57 @@ async function doDel(){
 }
 
 // ── DASHBOARD ──
+let _dashSumMode='harian';
+function setDashSum(mode,btn){
+  _dashSumMode=mode;
+  document.querySelectorAll('[id^="ds-"]').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  const titles={harian:'📊 Ringkasan Hari Ini',mingguan:'📊 Ringkasan Minggu Ini',bulanan:'📊 Ringkasan Bulan Ini'};
+  const el=document.getElementById('dash-summary-title');
+  if(el)el.textContent=titles[mode]||titles.harian;
+  renderDash();
+}
 function renderDash(){
   const today=ld();const mn=today.slice(0,7);
-  const sh=shotLogs.filter(l=>l.date===today);
+  let dateFilter;
+  if(_dashSumMode==='mingguan'){
+    const now=new Date();const dow=now.getDay();const diff=now.getDate()-(dow===0?6:dow-1);
+    const mon=new Date(new Date().setDate(diff));const monStr=ld(mon);
+    dateFilter=d=>d>=monStr&&d<=today;
+  }else if(_dashSumMode==='bulanan'){
+    dateFilter=d=>d.startsWith(mn);
+  }else{
+    dateFilter=d=>d===today;
+  }
+  const suffix=_dashSumMode==='harian'?'Hari Ini':(_dashSumMode==='mingguan'?'Minggu Ini':'Bulan Ini');
+  const sh=shotLogs.filter(l=>dateFilter(l.date));
   const kgH=sh.reduce((s,l)=>s+(l.type==='Baru'?(l.qty*25):l.qty_kg||(l.qty*15)),0);
-  const sd=sandLogs.filter(l=>l.date===today);
+  const kgBaru=sh.filter(l=>l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
+  const kgBekas=sh.filter(l=>l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0);
+  const sd=sandLogs.filter(l=>dateFilter(l.date));
   const tpH=sd.reduce((s,l)=>s+l.qty_pasir,0);
-  const gtH=gtLogs.filter(l=>l.date===today);
-  const ssH=gtH.length>0?(gtH[0].ss_kg||((gtH[0].ss550||0)+(gtH[0].wc||0))):0;
-  const ikH=gtH.reduce((s,l)=>s+l.ikomi,0)/Math.max(gtH.length,1)||0;
-  const gvH=gtH.length>0&&gtH[0].gentani?+gtH[0].gentani:null;
+  const gtH=gtLogs.filter(l=>dateFilter(l.date));
+  let gvDisp=null,ikDisp=0;
+  if(_dashSumMode==='harian'){
+    const gtToday=gtLogs.filter(l=>l.date===today);
+    ikDisp=gtToday.reduce((s,l)=>s+l.ikomi,0)/Math.max(gtToday.length,1)||0;
+    gvDisp=gtToday.length>0&&gtToday[0].gentani?+gtToday[0].gentani:null;
+  }else{
+    ikDisp=gtH.reduce((s,l)=>s+l.ikomi,0);
+    gvDisp=ikDisp>0?+(kgBaru/ikDisp).toFixed(2):null;
+  }
   const kgB=shotLogs.filter(l=>l.date?.startsWith(mn)).reduce((s,l)=>s+(l.type==='Baru'?(l.qty*25):l.qty_kg||(l.qty*15)),0);
-  const gtB=gtLogs.filter(l=>l.date?.startsWith(mn));
-  const ssB=gtB.reduce((s,l)=>s+l.ss550+l.wc,0);const ikB=gtB.reduce((s,l)=>s+l.ikomi,0);
-  const gvB=ikB>0?+(ssB/ikB).toFixed(2):null;
   document.getElementById('dash-chips').innerHTML=`
-    <div class="cp ok"><span>⚙ Shot Hari Ini</span><span class="v">${kgH} kg</span></div>
-    <div class="cp wn"><span>🪣 Pasir Hari Ini</span><span class="v">${tpH} Troli</span></div>
-    <div class="cp if"><span>📊 Gentani Hari Ini</span><span class="v">${gvH?gvH+' Kg/T':'—'}</span></div>
-    <div class="cp mu"><span>📊 Gentani Bulan</span><span class="v">${gvB?gvB+' Kg/T':'—'}</span></div>
-    <div class="cp ok"><span>⚖ Ikomi Hari Ini</span><span class="v">${ikH||'—'} Ton</span></div>
-    <div class="cp wn"><span>⚙ Shot Bulan Ini</span><span class="v">${kgB} kg</span></div>`;
+    <div class="cp ok"><span>⚙ Shot ${suffix}</span><span class="v">${kgH.toLocaleString('id-ID')} kg</span></div>
+    <div class="cp ok"><span>🟢 Baru ${suffix}</span><span class="v">${kgBaru.toLocaleString('id-ID')} kg</span></div>
+    <div class="cp wn"><span>🟡 Bekas ${suffix}</span><span class="v">${kgBekas.toLocaleString('id-ID')} kg</span></div>
+    <div class="cp wn"><span>🪣 Pasir ${suffix}</span><span class="v">${tpH} Troli</span></div>
+    <div class="cp if"><span>📊 Gentani ${suffix}</span><span class="v">${gvDisp?gvDisp+' Kg/T':'—'}</span></div>
+    <div class="cp mu"><span>⚖ Ikomi ${suffix}</span><span class="v">${ikDisp?ikDisp.toLocaleString('id-ID')+' T':'—'}</span></div>
+    ${_dashSumMode!=='bulanan'?`<div class="cp ok"><span>⚙ Shot Bulan Ini</span><span class="v">${kgB.toLocaleString('id-ID')} kg</span></div>`:''}`;
   const al=[];const lo=+cfg.gtLo||0,hi=+cfg.gtHi||0;
-  if(hi>0&&gvH&&gvH>hi)al.push({t:'d',m:'⚠ Gentani hari ini TINGGI ('+gvH+' Kg/T) — batas atas '+hi});
-  if(lo>0&&gvH&&gvH<lo)al.push({t:'w',m:'⚡ Gentani hari ini RENDAH ('+gvH+' Kg/T) — batas bawah '+lo});
-  if(hi>0&&gvB&&gvB>hi)al.push({t:'w',m:'📊 Gentani akumulasi bulan TINGGI ('+gvB+' Kg/T)'});
+  if(hi>0&&gvDisp&&gvDisp>hi)al.push({t:'d',m:'⚠ Gentani '+suffix+' TINGGI ('+gvDisp+' Kg/T) — batas atas '+hi});
+  if(lo>0&&gvDisp&&gvDisp<lo)al.push({t:'w',m:'⚡ Gentani '+suffix+' RENDAH ('+gvDisp+' Kg/T) — batas bawah '+lo});
   if(!al.length)al.push({t:'o',m:'✅ Semua parameter dalam batas normal'});
   document.getElementById('dash-alerts').innerHTML=al.map(a=>`<div class="al-i al-${a.t}">${a.m}</div>`).join('');
   renderMC();
@@ -1829,7 +1886,7 @@ function chartGrouped(cid,labels,groups,opts){
   // groups = [{label:'Baru',bars:[{snb,color,data}]},{label:'Lama',bars:[...]}]
   opts=opts||{};
   drawCV(cid,(ctx,W,H)=>{
-    const PAD={t:20,r:10,b:42,l:46};
+    const PAD={t:20,r:10,b:42,l:52};
     const CW=W-PAD.l-PAD.r,CH=H-PAD.t-PAD.b;
     if(CW<20||CH<20)return;
     const allV=[];
@@ -1846,7 +1903,7 @@ function chartGrouped(cid,labels,groups,opts){
       ctx.strokeStyle=gv('--border');ctx.lineWidth=1;ctx.setLineDash([]);
       ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.stroke();
       ctx.fillStyle=gv('--muted');ctx.font='600 9px sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';
-      ctx.fillText(t>=1000?(Math.round(t/100)/10)+'k':t,PAD.l-4,y);
+      ctx.fillText(t.toLocaleString('id-ID'),PAD.l-4,y);
     });
     const nDays=labels.length;
     const nGroups=groups.length; // 2 (Baru, Lama)
@@ -1866,7 +1923,7 @@ function chartGrouped(cid,labels,groups,opts){
           const y=PAD.t+CH-bh;
           ctx.fillStyle=b.color;ctx.globalAlpha=0.85;ctx.fillRect(x,y,barW,bh);ctx.globalAlpha=1;
           if(bh>8){
-            const lbl=v>=1000?(Math.round(v/100)/10)+'k':String(v);
+            const lbl=v.toLocaleString('id-ID');
             ctx.save();
             ctx.fillStyle=b.color;ctx.font='bold 7px sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';
             ctx.translate(x+barW/2,y-2);ctx.rotate(-Math.PI/2);
@@ -1898,7 +1955,7 @@ function chartGrouped(cid,labels,groups,opts){
 function chartBL(cid,labels,bars,lines,opts){
   opts=opts||{};
   drawCV(cid,(ctx,W,H)=>{
-    const PAD={t:14,r:8,b:36,l:42};
+    const PAD={t:14,r:8,b:36,l:52};
     const CW=W-PAD.l-PAD.r,CH=H-PAD.t-PAD.b;
     if(CW<20||CH<20)return;
     const allV=[];
@@ -1919,7 +1976,7 @@ function chartBL(cid,labels,bars,lines,opts){
       ctx.strokeStyle=gv('--border');ctx.lineWidth=1;ctx.setLineDash([]);
       ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.stroke();
       ctx.fillStyle=gv('--muted');ctx.font='600 9px sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';
-      ctx.fillText(t>=1000?(Math.round(t/100)/10)+'k':t,PAD.l-4,y);
+      ctx.fillText(t.toLocaleString('id-ID'),PAD.l-4,y);
     });
     // hlines
     if(opts.hl)opts.hl.forEach((hv,hi)=>{
@@ -1934,7 +1991,7 @@ function chartBL(cid,labels,bars,lines,opts){
         if(!v)return;const bh=CH*(v/YMAX);
         const x=PAD.l+i*sw+(sw-NS*bw)/2+si*bw;const y=PAD.t+CH-bh;
         ctx.fillStyle=s.color;ctx.globalAlpha=0.82;ctx.fillRect(x,y,bw,bh);ctx.globalAlpha=1;
-        if(bh>12){ctx.fillStyle=s.color;ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(v>=1000?(Math.round(v/100)/10)+'k':v,x+bw/2,y-1);}
+        if(bh>12){ctx.fillStyle=s.color;ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(v.toLocaleString('id-ID'),x+bw/2,y-1);}
       });
     });
     // lines
@@ -1963,9 +2020,16 @@ function _setDefDates(id1,id2,days){
   if(e1&&!e1.value)e1.value=ld(new Date(Date.now()-(days-1)*86400000));
   if(e2&&!e2.value)e2.value=ld();
 }
-function getDaysRange(from,to,week){
+function getDaysRange(from,to,view){
   const days=allDays(from,to);
-  if(!week)return{days,labels:days.map(d=>{const p=d.split('-');return p[2]+'/'+p[1];})};
+  if(!view||view==='day')return{days,labels:days.map(d=>{const p=d.split('-');return p[2]+'/'+p[1];})};
+  if(view==='month'){
+    const mths={};
+    days.forEach(d=>{const key=d.slice(0,7);if(!mths[key])mths[key]={start:d,end:d};else mths[key].end=d;});
+    const mKeys=Object.keys(mths);
+    const bn2=['','Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+    return{days:mKeys,labels:mKeys.map(k=>{const p=k.split('-');return bn2[+p[1]]+' '+p[0].slice(2);}),mths};
+  }
   const wks={};
   days.forEach(d=>{const dt=pld(d);const wd=new Date(dt.getFullYear(),0,1);const wk=Math.ceil(((dt-wd)/86400000+wd.getDay()+1)/7);const key=d.slice(0,4)+'-W'+String(wk).padStart(2,'0');if(!wks[key])wks[key]={start:d,end:d};else wks[key].end=d;});
   const wkKeys=Object.keys(wks);
@@ -1994,34 +2058,59 @@ function _initDbDates(){
 function drawDbCharts(){_initDbDates();drawDbSS();drawDbLB();drawDbGT();}
 let _dbSSTog={baru:true,bekas:true};
 function dbSSTog(k,btn){_dbSSTog[k]=!_dbSSTog[k];btn.classList.toggle('on',_dbSSTog[k]);drawDbSS();}
-function dbV(k,v,btn){_dbV[k]=v;const prefix='db-'+k+'-';document.querySelectorAll('[id^="'+prefix+'"]').forEach(b=>b.classList.remove('on'));btn.classList.add('on');if(k==='ss')drawDbSS();if(k==='lb')drawDbLB();if(k==='gt')drawDbGT();}
+function dbV(k,v,btn){
+  _dbV[k]=v;
+  const prefix='db-'+k+'-';
+  document.querySelectorAll('[id^="'+prefix+'"]').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  // Kalau bulanan, set range default 6 bulan
+  if(v==='month'){
+    const d1=document.getElementById(prefix+'d1'),d2=document.getElementById(prefix+'d2');
+    if(d1&&!d1.dataset.manualSet)d1.value=ld(new Date(Date.now()-180*86400000));
+    if(d2&&!d2.dataset.manualSet)d2.value=ld();
+  }
+  if(k==='ss')drawDbSS();if(k==='lb')drawDbLB();if(k==='gt')drawDbGT();
+}
+function _aggRange(logs,period,fn){
+  if(period.wks)return Object.keys(period.wks).map(k=>{const{start,end}=period.wks[k];return fn(logs.filter(l=>l.date>=start&&l.date<=end));});
+  if(period.mths)return Object.keys(period.mths).map(k=>{const{start,end}=period.mths[k];return fn(logs.filter(l=>l.date>=start&&l.date<=end));});
+  return period.days.map(d=>fn(logs.filter(l=>l.date===d)));
+}
 function drawDbSS(){
   const d1=document.getElementById('db-ss-d1')?.value, d2=document.getElementById('db-ss-d2')?.value;
   const from=d1||ld(new Date(Date.now()-13*86400000)), to=d2||ld();
-  const{days,labels,wks}=getDaysRange(from,to,_dbV.ss==='week');
+  const period=getDaysRange(from,to,_dbV.ss);
+  const{days,labels}=period;
   const bars=[];
-  if(_dbSSTog.baru){const baru=wks?aggW(shotLogs,wks,r=>r.filter(l=>l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0)):days.map(d=>shotLogs.filter(l=>l.date===d&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0));bars.push({color:'#0066cc',data:baru});}
-  if(_dbSSTog.bekas){const bekas=wks?aggW(shotLogs,wks,r=>r.filter(l=>l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0)):days.map(d=>shotLogs.filter(l=>l.date===d&&l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0));bars.push({color:'#d97706',data:bekas});}
+  if(_dbSSTog.baru){const baru=_aggRange(shotLogs,period,r=>r.filter(l=>l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0));bars.push({color:'#0066cc',data:baru});}
+  if(_dbSSTog.bekas){const bekas=_aggRange(shotLogs,period,r=>r.filter(l=>l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0));bars.push({color:'#d97706',data:bekas});}
   chartBL('c-ss',labels,bars,[]);
 }
 function drawDbLB(){
   const d1=document.getElementById('db-lb-d1')?.value, d2=document.getElementById('db-lb-d2')?.value;
   const from=d1||ld(new Date(Date.now()-13*86400000)), to=d2||ld();
-  const{days,labels,wks}=getDaysRange(from,to,_dbV.lb==='week');
-  const pasir=wks?aggW(sandLogs,wks,r=>r.reduce((s,l)=>s+l.qty_pasir,0)):days.map(d=>sandLogs.filter(l=>l.date===d).reduce((s,l)=>s+l.qty_pasir,0));
-  chartBL('c-lb',labels,[{color:'#d97706',data:pasir}],[]);
+  const period=getDaysRange(from,to,_dbV.lb);
+  const pasir=_aggRange(sandLogs,period,r=>r.reduce((s,l)=>s+l.qty_pasir,0));
+  chartBL('c-lb',period.labels,[{color:'#d97706',data:pasir}],[]);
 }
 function drawDbGT(){
   const d1=document.getElementById('db-gt-d1')?.value, d2=document.getElementById('db-gt-d2')?.value;
   const from=d1||ld(new Date(Date.now()-13*86400000)), to=d2||ld();
-  const{days,labels,wks}=getDaysRange(from,to,_dbV.gt==='week');
-  const gtD=wks
-    ?aggW(gtLogs,wks,r=>{const ik=r.reduce((s,l)=>s+l.ikomi,0);if(!ik||!r.length)return null;const d0=r[0]?.date;if(!d0)return null;const ssKg=getSSKgForDate(d0,'baru');return ik>0?+(ssKg/ik).toFixed(2):null;})
-    :days.map(d=>{const r=gtLogs.filter(l=>l.date===d);if(!r.length)return null;const ssKg=getSSKgForDate(d,'baru');const ik=r[0].ikomi;return ik>0?+(ssKg/ik).toFixed(2):null;});
+  const period=getDaysRange(from,to,_dbV.gt);
+  const{days,labels}=period;
+  const gtD=_aggRange(gtLogs,period,r=>{
+    if(!r.length)return null;
+    const ik=r.reduce((s,l)=>s+l.ikomi,0);
+    if(!ik)return null;
+    const ssKg=r.reduce((s,l)=>s+getSSKgForDate(l.date,'baru'),0);
+    return+(ssKg/ik).toFixed(2);
+  });
   let aS=0,aI=0;
-  const gtA=days.map((d,i)=>{
-    if(wks){const wkKeys=Object.keys(wks);const{start,end}=wks[wkKeys[i]||d]||{start:d,end:d};const r=gtLogs.filter(l=>l.date>=start&&l.date<=end);r.forEach(l=>{aS+=getSSKgForDate(l.date,'baru');aI+=l.ikomi;});}
-    else{const r=gtLogs.filter(l=>l.date===d);r.forEach(l=>{aS+=getSSKgForDate(d,'baru');aI+=l.ikomi;});}
+  const allPeriodKeys=period.wks?Object.keys(period.wks):(period.mths?Object.keys(period.mths):days);
+  const gtA=allPeriodKeys.map((key,i)=>{
+    const{start,end}=period.wks?period.wks[key]:(period.mths?period.mths[key]:{start:key,end:key});
+    const r=gtLogs.filter(l=>l.date>=start&&l.date<=end);
+    r.forEach(l=>{aS+=getSSKgForDate(l.date,'baru');aI+=l.ikomi;});
     return aI>0?+(aS/aI).toFixed(2):null;
   });
   const lo=+cfg.gtLo||0,hi=+cfg.gtHi||0;
@@ -2035,23 +2124,23 @@ function ssTog(k,btn){_ssSh[k]=!_ssSh[k];btn.classList.toggle('on',_ssSh[k]);dra
 function drawSSFull(){
   const d1=document.getElementById('ss-fdate1')?.value, d2=document.getElementById('ss-fdate2')?.value;
   const from=d1||ld(new Date(Date.now()-13*86400000)), to=d2||ld();
-  const{days,labels,wks}=getDaysRange(from,to,_ssFV==='week');
+  const period=getDaysRange(from,to,_ssFV==='week'?'week':(_ssFV==='month'?'month':undefined));
+  const{days,labels}=period;
   const fsnb=document.getElementById('ss-fsnb-trend')?.value||'all';
   const lg=document.getElementById('ss-full-legend');
   const snbs=['SNB-1','SNB-2','SNB-3','SNB-4'];
   if(fsnb==='all'){
-    // Grouped cluster: kiri=Baru, kanan=Lama — masing2 dipecah 4 SNB
     const groups=[];
     if(_ssSh.baru){
       groups.push({label:'Baru',bars:snbs.map(snb=>({
         snb,color:_impColors[snb],
-        data:days.map(d=>shotLogs.filter(l=>l.date===d&&l.snb===snb&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0))
+        data:_aggRange(shotLogs.filter(l=>l.snb===snb&&l.type==='Baru'),period,r=>r.reduce((s,l)=>s+(l.qty*25),0))
       }))});
     }
     if(_ssSh.bekas){
       groups.push({label:'Lama',bars:snbs.map(snb=>({
         snb,color:_impColors[snb]+'99',
-        data:days.map(d=>shotLogs.filter(l=>l.date===d&&l.snb===snb&&l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0))
+        data:_aggRange(shotLogs.filter(l=>l.snb===snb&&l.type==='Bekas'),period,r=>r.reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0))
       }))});
     }
     chartGrouped('c-ss-full',labels,groups);
@@ -2059,8 +2148,8 @@ function drawSSFull(){
       +(_ssSh.baru&&_ssSh.bekas?`<div class="lg-i" style="margin-left:8px;color:var(--muted);font-size:.75rem">■ solid=Baru, ■ transparan=Lama</div>`:'');
   }else{
     const filt=l=>l.snb===fsnb;
-    const baru=days.map(d=>shotLogs.filter(l=>l.date===d&&l.type==='Baru'&&filt(l)).reduce((s,l)=>s+(l.qty*25),0));
-    const bekas=days.map(d=>shotLogs.filter(l=>l.date===d&&l.type==='Bekas'&&filt(l)).reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0));
+    const baru=_aggRange(shotLogs.filter(l=>filt(l)&&l.type==='Baru'),period,r=>r.reduce((s,l)=>s+(l.qty*25),0));
+    const bekas=_aggRange(shotLogs.filter(l=>filt(l)&&l.type==='Bekas'),period,r=>r.reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0));
     const bars=[];
     if(_ssSh.baru)bars.push({color:'#0066cc',data:baru,label:'Baru (kg)'});
     if(_ssSh.bekas)bars.push({color:'#d97706',data:bekas,label:'Lama (kg)'});
@@ -2075,7 +2164,8 @@ function lbView(v,btn){_lbFV=v;document.querySelectorAll('[id^=lb-v]').forEach(b
 function drawLBFull(){
   const d1=document.getElementById('lb-fdate1')?.value, d2=document.getElementById('lb-fdate2')?.value;
   const from=d1||ld(new Date(Date.now()-13*86400000)), to=d2||ld();
-  const{days,labels,wks}=getDaysRange(from,to,_lbFV==='week');
+  const period=getDaysRange(from,to,_lbFV==='week'?'week':(_lbFV==='month'?'month':undefined));
+  const{days,labels}=period;
   const fsnb=document.getElementById('lb-fsnb-trend')?.value||'all';
   const lo=+cfg.pLo||0,hi=+cfg.pHi||0;
   const lg=document.getElementById('lb-full-legend');
@@ -2083,13 +2173,13 @@ function drawLBFull(){
   if(fsnb==='all'){
     const groups=[{label:'Pasir',bars:snbs.map(snb=>({
       snb,color:_impColors[snb],
-      data:days.map(d=>sandLogs.filter(l=>l.date===d&&l.snb===snb).reduce((s,l)=>s+l.qty_pasir,0))
+      data:_aggRange(sandLogs.filter(l=>l.snb===snb),period,r=>r.reduce((s,l)=>s+l.qty_pasir,0))
     }))}];
     chartGrouped('c-lb-full',labels,groups);
     if(lg)lg.innerHTML=snbs.map(snb=>`<div class="lg-i"><div class="lg-d" style="background:${_impColors[snb]}"></div>${snb}</div>`).join('');
   }else{
     const filt=l=>l.snb===fsnb;
-    const pasir=days.map(d=>sandLogs.filter(l=>l.date===d&&filt(l)).reduce((s,l)=>s+l.qty_pasir,0));
+    const pasir=_aggRange(sandLogs.filter(l=>filt(l)),period,r=>r.reduce((s,l)=>s+l.qty_pasir,0));
     chartBL('c-lb-full',labels,[{color:'#d97706',data:pasir}],[],{hl:[lo,hi],hc:['#059669','#dc2626']});
     if(lg)lg.innerHTML=`<div class="lg-i"><div class="lg-d" style="background:#d97706"></div>Pasir (Troli)</div>`;
   }
@@ -2212,7 +2302,7 @@ function _buildWAMsg(kind){
     const d=shiftFilter?logs.filter(l=>l.shift===shiftFilter):logs;
     return['SNB-1','SNB-2','SNB-3','SNB-4'].map(snb=>{
       const kg=d.filter(l=>l.snb===snb&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
-      return'  '+snb+': *'+kg+' Kg*';
+      return'  '+snb+': *'+kg.toLocaleString('id-ID')+' Kg*';
     }).join('\n');
   }
   function lbPerSnbPasir(logs,shiftFilter){
@@ -2225,15 +2315,31 @@ function _buildWAMsg(kind){
 
   let msg='';
   if(isResume){
-    // ── RESUME SEMUA — Steelshot (Baru) + Limbah Debu + Impeler, breakdown per mesin ──
-    const ssAll=shotLogs.filter(l=>l.date===rptDate);
-    const lbAll=sandLogs.filter(l=>l.date===rptDate);
-    const impAll=impLogs.filter(l=>l.date===rptDate);
+    // ── RESUME: Steelshot + Limbah + Impeler ──
+    const pd=typeof _waResumePd!=='undefined'?_waResumePd:'harian';
+    let dateFilter, periodeLabel, periodeHeader;
+    if(pd==='mingguan'){
+      const now2=new Date(rptDate);const dow=now2.getDay();const diff=now2.getDate()-(dow===0?6:dow-1);
+      const monD=new Date(new Date(rptDate).setDate(diff));const monStr=ld(monD);
+      dateFilter=d=>d>=monStr&&d<=rptDate;
+      periodeLabel=`Minggu ${fd(monStr)} s/d ${fd(rptDate)}`;
+      periodeHeader='RESUME MINGGUAN';
+    }else if(pd==='bulanan'){
+      dateFilter=d=>d.startsWith(mn);
+      periodeLabel=`Bulan ${bn(mn.slice(5))} ${mn.slice(0,4)}`;
+      periodeHeader='RESUME BULANAN';
+    }else{
+      dateFilter=d=>d===rptDate;
+      periodeLabel=fd(rptDate);
+      periodeHeader='RESUME HARIAN';
+    }
+    const ssAll=shotLogs.filter(l=>dateFilter(l.date));
+    const lbAll=sandLogs.filter(l=>dateFilter(l.date));
+    const impAll=impLogs.filter(l=>l.date===rptDate); // impeler tetap pakai hari ini (last reading)
     const ssNSP=ssBlock(ssAll,'NSP'), ssNSM=ssBlock(ssAll,'NSM'), ssTotal=ssBlock(ssAll,null);
     const lbNSP=lbBlock(lbAll,'NSP'), lbNSM=lbBlock(lbAll,'NSM');
     const lbTot={pasir:lbNSP.pasir+lbNSM.pasir};
-    const kgBulan=shotLogs.filter(l=>l.date?.startsWith(mn)&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
-    // impeler per SNB
+    const kgBulan=pd==='bulanan'?ssTotal.total:shotLogs.filter(l=>l.date?.startsWith(mn)&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
     const impLines=['SNB-1','SNB-2','SNB-3','SNB-4'].map(snb=>{
       const r=impAll.filter(l=>l.snb===snb);
       if(!r.length)return'  '+snb+': —';
@@ -2242,25 +2348,26 @@ function _buildWAMsg(kind){
       const i2=last.imp2_amp?last.imp2_amp+'A ('+last.imp2_cond+')':'—';
       return'  '+snb+': Imp1 *'+i1+'* | Imp2 *'+i2+'*';
     }).join('\n');
-    const rs=_waResumeShift;
-    if(rs==='NSP'||rs==='NSM'){
+    const rs=pd==='harian'?_waResumeShift:'ALL';
+    if(pd==='harian'&&(rs==='NSP'||rs==='NSM')){
       const ssSh=rs==='NSP'?ssNSP:ssNSM;
       const lbSh=rs==='NSP'?lbNSP:lbNSM;
       const ssSnbLines=ssPerSnb(ssAll,rs);
       const pasirSnbLines=lbPerSnbPasir(lbAll,rs);
-      msg=`📋 *RESUME HARIAN — ${fd(rptDate)}*\n📅 ${tgl}\n🕐 Shift *${rs}* | Dikirim: ${jam}\n━━━━━━━━━━━━━━━━━━━\n⚙ *STEELSHOT*\n  Total : *${ssSh.total} Kg* (${ssSh.karung} karung)\n${ssSnbLines}\n  Bulan : *${kgBulan} Kg* akumulasi\n\n🪣 *LIMBAH PASIR*\n  Total : *${lbSh.pasir} Troli*\n${pasirSnbLines}\n\n⚡ *IMPELER*\n${impLines}\n━━━━━━━━━━━━━━━━━━━\n\n_Dikirim ${jam} — SNB Casting 2_`;
+      msg=`📋 *${periodeHeader} — ${periodeLabel}*\n📅 ${tgl}\n🕐 Shift *${rs}* | Dikirim: ${jam}\n━━━━━━━━━━━━━━━━━━━\n⚙ *STEELSHOT*\n  Total : *${ssSh.total.toLocaleString('id-ID')} Kg* (${ssSh.karung} karung)\n${ssSnbLines}\n  Bulan : *${kgBulan.toLocaleString('id-ID')} Kg* akumulasi\n\n🪣 *LIMBAH PASIR*\n  Total : *${lbSh.pasir} Troli*\n${pasirSnbLines}\n\n⚡ *IMPELER*\n${impLines}\n━━━━━━━━━━━━━━━━━━━\n\n_Dikirim ${jam} — SNB Casting 2_`;
     }else{
       const ssSnbLines=ssPerSnb(ssAll,null);
       const pasirSnbLines=lbPerSnbPasir(lbAll,null);
-      msg=`📋 *RESUME HARIAN — ${fd(rptDate)}*\n📅 ${tgl}\n🕐 Dikirim: ${jam}\n━━━━━━━━━━━━━━━━━━━\n⚙ *STEELSHOT*\n  NSP   : *${ssNSP.total} Kg* (${ssNSP.karung} karung)\n  NSM   : *${ssNSM.total} Kg* (${ssNSM.karung} karung)\n  Total : *${ssTotal.total} Kg*\n${ssSnbLines}\n  Bulan : *${kgBulan} Kg* akumulasi\n\n🪣 *LIMBAH PASIR*\n  NSP   : *${lbNSP.pasir} Troli*\n  NSM   : *${lbNSM.pasir} Troli*\n  Total : *${lbTot.pasir} Troli*\n${pasirSnbLines}\n\n⚡ *IMPELER*\n${impLines}\n━━━━━━━━━━━━━━━━━━━\n\n_Dikirim ${jam} — SNB Casting 2_`;
+      const bulanLine=pd==='bulanan'?'':`\n  Bulan : *${kgBulan.toLocaleString('id-ID')} Kg* akumulasi`;
+      msg=`📋 *${periodeHeader} — ${periodeLabel}*\n📅 ${tgl}\n🕐 Dikirim: ${jam}\n━━━━━━━━━━━━━━━━━━━\n⚙ *STEELSHOT*\n  NSP   : *${ssNSP.total.toLocaleString('id-ID')} Kg* (${ssNSP.karung} karung)\n  NSM   : *${ssNSM.total.toLocaleString('id-ID')} Kg* (${ssNSM.karung} karung)\n  Total : *${ssTotal.total.toLocaleString('id-ID')} Kg*\n${ssSnbLines}${bulanLine}\n\n🪣 *LIMBAH PASIR*\n  NSP   : *${lbNSP.pasir} Troli*\n  NSM   : *${lbNSM.pasir} Troli*\n  Total : *${lbTot.pasir} Troli*\n${pasirSnbLines}\n\n⚡ *IMPELER*\n${impLines}\n━━━━━━━━━━━━━━━━━━━\n\n_Dikirim ${jam} — SNB Casting 2_`;
     }
-    document.getElementById('wa-title').textContent='📋 Resume Harian';
+    document.getElementById('wa-title').textContent=`📋 ${pd.charAt(0).toUpperCase()+pd.slice(1).replace('ian','ian').replace('guan',' Mingguan').replace('anan',' Bulanan')||'Resume'}`;
   } else if(kind==='ss'){
     const ssAll=shotLogs.filter(l=>l.date===rptDate);
     const b=ssBlock(ssAll,sh);
     const kgB=shotLogs.filter(l=>l.date?.startsWith(mn)&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
     const perSnb=ssPerSnb(ssAll,sh);
-    msg=`⚙ *LAPORAN STEELSHOT*\n📅 ${tgl}\n📌 ${tglLaporan}\n🕐 Shift *${sh}* | Dikirim: ${jam}\n━━━━━━━━━━━━━━━━━━━\n*PEMAKAIAN SHIFT ${sh}*\n  Baru  : *${b.karung} karung = ${b.kgBaru} Kg*\n  Total : *${b.total} Kg*\n\n*PER MESIN SNB*\n${perSnb}\n\n*AKUMULASI BULAN ${bn(mn.slice(5))} ${mn.slice(0,4)}*\n  Total : *${kgB} Kg*\n━━━━━━━━━━━━━━━━━━━\n\n_Dikirim ${jam} — SNB Casting 2_`;
+    msg=`⚙ *LAPORAN STEELSHOT*\n📅 ${tgl}\n📌 ${tglLaporan}\n🕐 Shift *${sh}* | Dikirim: ${jam}\n━━━━━━━━━━━━━━━━━━━\n*PEMAKAIAN SHIFT ${sh}*\n  Baru  : *${b.karung} karung = ${b.kgBaru.toLocaleString('id-ID')} Kg*\n  Total : *${b.total.toLocaleString('id-ID')} Kg*\n\n*PER MESIN SNB*\n${perSnb}\n\n*AKUMULASI BULAN ${bn(mn.slice(5))} ${mn.slice(0,4)}*\n  Total : *${kgB.toLocaleString('id-ID')} Kg*\n━━━━━━━━━━━━━━━━━━━\n\n_Dikirim ${jam} — SNB Casting 2_`;
     document.getElementById('wa-title').textContent='📱 Laporan Steelshot';
   } else if(kind==='lb'){
     const lbAll=sandLogs.filter(l=>l.date===rptDate);
