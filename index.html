@@ -1,0 +1,2408 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOTAL SNB — Casting 2 · PT AT Indonesia</title>
+<style>
+[data-theme="light"]{
+  --bg:#eef2f7;--card:#fff;--card2:#f6f8fb;
+  --border:#d8dfe9;--border2:#c4cdda;
+  --text:#1a2332;--text2:#3d5068;--muted:#7a93ad;
+  --accent:#0066cc;--accent-bg:rgba(0,102,204,.08);
+  --ok:#059669;--ok-bg:rgba(5,150,105,.1);
+  --warn:#d97706;--warn-bg:rgba(217,119,6,.1);
+  --danger:#dc2626;--danger-bg:rgba(220,38,38,.1);
+  --info:#0891b2;--info-bg:rgba(8,145,178,.1);
+  --shadow:0 1px 3px rgba(15,30,55,.06),0 4px 14px rgba(15,30,55,.06);
+  --header:rgba(238,242,247,.96);
+}
+[data-theme="dark"]{
+  --bg:#0a0f17;--card:#141d2c;--card2:#0f1825;
+  --border:#1e2c44;--border2:#2a3a55;
+  --text:#e0eaf5;--text2:#a0b6cd;--muted:#5a7390;
+  --accent:#3b9eff;--accent-bg:rgba(59,158,255,.12);
+  --ok:#10b981;--ok-bg:rgba(16,185,129,.13);
+  --warn:#f59e0b;--warn-bg:rgba(245,158,11,.13);
+  --danger:#ef4444;--danger-bg:rgba(239,68,68,.13);
+  --info:#06b6d4;--info-bg:rgba(6,182,212,.13);
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
+  --header:rgba(10,15,23,.96);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+*{-webkit-tap-highlight-color:transparent;}
+button,a,[onclick]{touch-action:manipulation;cursor:pointer;}
+html{font-size:16px;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.45;min-height:100vh;}
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;background:var(--header);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+@media(max-width:480px){.lg-t2{display:none;}#clk{display:none;}.hdr{padding:8px 10px;}}
+.lg{display:flex;align-items:center;gap:12px;}
+.lg-ic{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),#0044aa);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;box-shadow:0 3px 10px rgba(0,102,204,.25);flex-shrink:0;}
+.lg-t1{font-size:1.2rem;font-weight:800;letter-spacing:.5px;line-height:1.05;}
+.lg-t2{font-size:.7rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;font-weight:600;}
+.hdr-r{display:flex;align-items:center;gap:8px;}
+.live{display:flex;align-items:center;gap:5px;background:var(--ok-bg);border:1px solid rgba(5,150,105,.3);border-radius:20px;padding:4px 11px;font-size:.7rem;color:var(--ok);font-weight:700;letter-spacing:.5px;}
+.live-d{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:bk 1.5s infinite;}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.2}}
+#clk{font-family:'Courier New',monospace;font-size:.82rem;color:var(--accent);font-weight:600;}
+.thbtn{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 9px;cursor:pointer;font-size:1rem;color:var(--text2);}
+.thbtn:hover{border-color:var(--accent);color:var(--accent);}
+.db-pill{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:20px;border:1px solid var(--border);color:var(--muted);white-space:nowrap;}
+.db-pill.ok{color:var(--ok);border-color:rgba(5,150,105,.35);background:var(--ok-bg);}
+.db-pill.err{color:var(--danger);border-color:rgba(220,38,38,.35);background:var(--danger-bg);}
+.db-pill.snap{color:var(--warn);border-color:rgba(217,119,6,.35);background:var(--warn-bg);}
+/* NAV */
+.nv{display:flex;background:var(--card);border-bottom:2px solid var(--border);overflow-x:auto;scrollbar-width:none;position:sticky;top:58px;z-index:99;box-shadow:var(--shadow);}
+.nv::-webkit-scrollbar{display:none;}
+.tb{flex:0 0 auto;padding:12px 14px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--muted);font-family:inherit;font-size:.78rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px;min-height:44px;}
+@media(max-width:600px){.tb{padding:12px 10px;font-size:.7rem;gap:4px;}}
+.tb.on{color:var(--accent);border-bottom-color:var(--accent);}
+.tb:hover:not(.on){color:var(--text);}
+/* CONTENT */
+.ct{padding:10px;max-width:1800px;margin:0 auto;}
+@media(min-width:600px){.ct{padding:14px;}}
+.pg{display:none;}.pg.on{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.pg.on{animation:fadeIn .2s ease;}
+/* CARDS */
+.cd{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow);}
+.cd+.cd{margin-top:12px;}
+.st{font-size:.72rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.st::after{content:'';flex:1;height:1px;background:var(--border);}
+/* CHIPS */
+.bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.cp{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:5px 10px;display:flex;align-items:center;gap:5px;font-size:.72rem;font-weight:600;color:var(--text2);}
+.cp .v{font-family:'Courier New',monospace;font-size:1.05rem;font-weight:700;}
+.cp.ok .v{color:var(--ok);}.cp.wn .v{color:var(--warn);}.cp.dg .v{color:var(--danger);}.cp.if .v{color:var(--info);}.cp.mu .v{color:var(--muted);}
+/* ALERTS */
+.al{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.al-i{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;font-size:.78rem;font-weight:600;}
+.al-d{background:var(--danger-bg);border:1px solid rgba(220,38,38,.25);color:var(--danger);}
+.al-w{background:var(--warn-bg);border:1px solid rgba(217,119,6,.25);color:var(--warn);}
+.al-o{background:var(--ok-bg);border:1px solid rgba(5,150,105,.25);color:var(--ok);}
+/* MACHINE CARDS */
+.mc-grid{display:grid;gap:10px;grid-template-columns:repeat(2,1fr);}
+@media(min-width:900px){.mc-grid{grid-template-columns:repeat(4,1fr);}}
+.mc{background:var(--card2);border:1px solid var(--border);border-left:3px solid var(--ok);border-radius:10px;padding:10px;}
+.mc-nm{font-family:'Courier New',monospace;font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}
+.mc-bdg{font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--ok-bg);color:var(--ok);border:1px solid rgba(5,150,105,.3);}
+.mc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:7px;}
+.mc-st{background:var(--card);border:1px solid var(--border);border-radius:7px;padding:6px 4px;text-align:center;}
+.mc-stv{font-family:'Courier New',monospace;font-size:.92rem;font-weight:800;}
+.mc-stl{font-size:.58rem;color:var(--muted);margin-top:1px;}
+.mc-spark{height:48px;position:relative;overflow:hidden;border-radius:5px;background:var(--card);border:1px solid var(--border);}
+.mc-spark canvas{position:absolute;inset:0;width:100%!important;height:100%!important;}
+/* DASHBOARD 3 COLS */
+.db3{display:grid;gap:12px;grid-template-columns:1fr;}
+@media(min-width:700px){.db3{grid-template-columns:1fr 1fr;}}
+@media(min-width:1100px){.db3{grid-template-columns:1fr 1fr 1fr;}}
+.db-card{height:320px;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;box-shadow:var(--shadow);overflow:hidden;}
+@media(min-width:700px){.db-card{height:360px;}}
+@media(min-width:1100px){.db-card{height:380px;}}
+.db-head{height:30px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;margin-bottom:6px;}
+.db-canvas{flex:1;min-height:0;position:relative;}
+.db-canvas>canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;}
+.db-foot{flex-shrink:0;margin-top:8px;}
+/* CHART CONTROLS */
+.chc{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
+.chc-b{padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--text2);font-family:inherit;font-size:.72rem;font-weight:600;cursor:pointer;}
+.chc-b.on,.chc-b:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
+.lg-r{display:flex;gap:10px;flex-wrap:wrap;}
+.lg-i{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--text2);font-weight:600;}
+.lg-d{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+/* FORMS */
+.fr{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.fg{flex:1;min-width:140px;}
+@media(max-width:380px){.fg{min-width:100%;flex:none;}}
+.fg label{display:block;font-size:.65rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:8px 10px;color:var(--text);font-family:inherit;font-size:16px;}
+@media(min-width:600px){.fg input,.fg select,.fg textarea{font-size:.85rem;}}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.fg textarea{resize:vertical;min-height:55px;}
+/* INFO BOX */
+.info-box{display:flex;align-items:center;gap:8px;padding:7px 11px;border-radius:8px;font-size:.78rem;font-weight:600;margin-bottom:10px;}
+.info-box.ok{background:var(--ok-bg);border:1px solid rgba(5,150,105,.25);color:var(--ok);}
+.info-box.info{background:var(--info-bg);border:1px solid rgba(8,145,178,.25);color:var(--info);}
+/* SHIFT TOGGLE */
+.shift-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+.sh-btn{padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.5px;}
+.sh-btn.active{background:var(--accent-bg);border-color:var(--accent);color:var(--accent);}
+/* SHOT TYPE */
+.shot-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+.stt-btn{padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;}
+.stt-btn .si{font-size:1.1rem;display:block;margin-bottom:3px;}
+.stt-btn .ss{font-size:.65rem;opacity:.75;margin-top:2px;}
+.stt-btn.active-baru{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);}
+.stt-btn.active-bekas{background:var(--warn-bg);border-color:var(--warn);color:var(--warn);}
+/* KG PREVIEW */
+.kg-prev{font-family:'Courier New',monospace;font-size:.78rem;color:var(--ok);margin-top:3px;min-height:16px;}
+/* GENTANI */
+.gt-stat{font-family:'Courier New',monospace;font-size:.78rem;font-weight:700;padding:5px 10px;border-radius:6px;display:inline-block;border:1px solid;}
+.gt-stat.ok{background:var(--ok-bg);color:var(--ok);border-color:rgba(5,150,105,.3);}
+.gt-stat.hi{background:var(--danger-bg);color:var(--danger);border-color:rgba(220,38,38,.3);}
+.gt-stat.lo{background:var(--warn-bg);color:var(--warn);border-color:rgba(217,119,6,.3);}
+.gt-prev-box{padding:12px;background:var(--card2);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;display:none;}
+.gt-big{font-family:'Courier New',monospace;font-size:2rem;font-weight:800;color:var(--accent);line-height:1;}
+.gt-unit{font-size:.7rem;color:var(--muted);margin-top:2px;}
+/* TABLE */
+.tw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.78rem;}
+th{background:var(--card2);color:var(--muted);padding:7px 8px;text-align:left;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-bottom:2px solid var(--border);font-size:.65rem;white-space:nowrap;}
+td{padding:6px 8px;border-bottom:1px solid var(--border);font-size:.82rem;}
+tr:hover td{background:var(--accent-bg);}
+.bd{display:inline-block;padding:2px 8px;border-radius:5px;font-size:.65rem;font-weight:700;letter-spacing:.4px;}
+.bd-ok{background:var(--ok-bg);color:var(--ok);}
+.bd-ng{background:var(--danger-bg);color:var(--danger);}
+.bd-wn{background:var(--warn-bg);color:var(--warn);}
+.bd-if{background:var(--info-bg);color:var(--info);}
+/* BUTTONS */
+.btn{padding:9px 18px;border-radius:9px;border:none;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:44px;}
+.btn *{pointer-events:none;}
+@media(max-width:600px){.btn{font-size:.8rem;}}
+.btn:hover{filter:brightness(.92);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-p{background:var(--accent);color:#fff;}
+.btn-d{background:var(--danger);color:#fff;}
+.btn-g{background:var(--card2);border:1px solid var(--border);color:var(--text2);}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-s{padding:5px 11px;font-size:.7rem;min-height:34px;}
+/* MODAL */
+.mv{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(2px);}
+.mv.on{display:flex;}
+.mw{background:var(--card);border:1px solid var(--border);border-radius:14px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 30px rgba(0,0,0,.3);}
+.mh{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--card);border-radius:14px 14px 0 0;z-index:1;}
+.mh h3{font-size:1rem;font-weight:700;}
+.mx{background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;padding:2px 6px;border-radius:5px;line-height:1;}
+.mx:hover{background:var(--danger-bg);color:var(--danger);}
+.mb{padding:14px 18px;}
+.mb label{display:block;font-size:.65rem;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;}
+.mb input,.mb select,.mb textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:8px 10px;color:var(--text);font-family:inherit;font-size:16px;margin-bottom:10px;}
+@media(min-width:600px){.mb input,.mb select,.mb textarea{font-size:.85rem;}}
+.ma{display:flex;gap:7px;flex-wrap:wrap;}
+/* FILTER BAR */
+.fbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.fbar-lbl{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;white-space:nowrap;}
+.fbar-sel{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;height:34px;min-width:90px;}
+.fbar-sel:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.fbar-sep{width:1px;height:24px;background:var(--border);flex-shrink:0;}
+/* SETTING */
+.sr{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:.82rem;}
+.sr:last-child{border:none;}
+.sl{flex:1;font-weight:500;}
+.si{width:120px;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:5px 9px;color:var(--text);font-family:'Courier New',monospace;font-size:16px;text-align:right;}
+@media(min-width:600px){.si{font-size:.82rem;}}
+@media(max-width:480px){.si{width:90px;}}
+.si-w{width:260px;text-align:left;font-family:inherit;font-size:.82rem!important;}
+/* EDIT BANNER */
+.edit-banner{display:none;background:var(--warn-bg);border:1px solid rgba(217,119,6,.3);border-radius:8px;padding:7px 12px;margin-bottom:8px;font-size:.78rem;color:var(--warn);font-weight:600;}
+.edit-banner.on{display:block;}
+.edit-btn{background:var(--card2);border:1px solid var(--border);border-radius:7px;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;color:var(--muted);}
+.edit-btn:hover,.edit-btn.on{border-color:var(--warn);color:var(--warn);background:var(--warn-bg);}
+/* SPINNER */
+.spinner-ov{position:fixed;inset:0;z-index:9997;display:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(15,25,45,.45);backdrop-filter:blur(4px);}
+.spinner-ov.on{display:flex;}
+.spinner-card{background:var(--card);border:2px solid var(--accent);border-radius:22px;padding:36px 44px;display:flex;flex-direction:column;align-items:center;gap:18px;box-shadow:0 12px 50px rgba(0,0,0,.4);min-width:240px;text-align:center;}
+.spinner-ring{width:64px;height:64px;border:5px solid var(--border);border-top-color:var(--accent);border-right-color:var(--accent);border-radius:50%;animation:spin .65s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner-msg{font-size:1.1rem;font-weight:700;color:var(--text);}
+.spinner-sub{font-size:.8rem;color:var(--muted);margin-top:-10px;}
+/* TOAST */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:10px;font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);white-space:nowrap;pointer-events:none;display:none;}
+/* LOADBAR */
+#top-lb{position:fixed;top:0;left:0;height:3px;width:0;z-index:99999;background:linear-gradient(90deg,var(--accent),var(--ok));transition:width .3s,opacity .4s;opacity:0;pointer-events:none;}
+/* CHART AREA */
+.chart-area{height:240px;position:relative;margin-bottom:8px;}
+.chart-area canvas{position:absolute;inset:0;width:100%!important;height:100%!important;}
+/* SUB TABS */
+.sub-tabs{display:flex;background:var(--card2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:12px;}
+.sub-tab{flex:1;padding:9px 8px;background:none;border:none;border-right:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:.75rem;font-weight:700;cursor:pointer;text-align:center;transition:all .15s;}
+.sub-tab:last-child{border-right:none;}
+.sub-tab.on{background:var(--accent);color:#fff;}
+.sub-tab:hover:not(.on){background:var(--accent-bg);color:var(--accent);}
+/* WA PREVIEW */
+.wa-pre{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:'Courier New',monospace;font-size:.72rem;color:var(--text2);white-space:pre-wrap;max-height:250px;overflow-y:auto;margin-bottom:12px;line-height:1.6;}
+/* MOBILE FIRST — bigger touch targets */
+@media(max-width:600px){
+  .btn{min-height:52px;font-size:.95rem;padding:12px 18px;border-radius:12px;}
+  .btn-s{min-height:44px;font-size:.82rem;padding:10px 14px;}
+  .sh-btn{min-height:52px;font-size:.95rem;border-radius:10px;}
+  .stt-btn{min-height:72px;border-radius:12px;}
+  .stt-btn .si{font-size:1.4rem;}
+  .fg input,.fg select,.fg textarea{padding:12px 11px;border-radius:10px;}
+  .fg label{font-size:.75rem;margin-bottom:5px;}
+  .cd{padding:14px 12px;border-radius:14px;}
+  .ct{padding:8px;}
+  .fbar-sel{height:40px;font-size:.85rem;padding:8px 10px;}
+  .kg-prev{font-size:.9rem;margin-top:5px;}
+  .info-box{font-size:.85rem;padding:9px 12px;}
+  .mx{font-size:1.6rem;padding:4px 10px;}
+  .mh h3{font-size:1.1rem;}
+  .mw{border-radius:18px 18px 0 0;max-height:92vh;position:fixed;bottom:0;left:0;right:0;width:100%;max-width:100%;}
+  .mv{align-items:flex-end;padding:0;}
+  .mh{border-radius:18px 18px 0 0;}
+  .mc-stv{font-size:1.05rem;}
+  .lg-t1{font-size:1rem;}
+  .live{padding:4px 8px;font-size:.65rem;}
+}
+/* Pop-in animation for result modal */
+@keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+/* MISC */
+.fb{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.es{text-align:center;padding:25px;color:var(--muted);font-size:.82rem;}
+.mn{font-family:'Courier New',monospace;}
+.t-ok{color:var(--ok);}.t-wn{color:var(--warn);}.t-dg{color:var(--danger);}.t-mu{color:var(--muted);}
+
+/* COLLAPSIBLE SECTION */
+.coll-hdr{width:100%;background:none;border:none;padding:8px 2px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;color:var(--accent);font-family:inherit;font-size:.78rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;}
+.coll-hdr:hover{color:var(--text);}
+.coll-arrow{font-size:.75rem;transition:transform .25s;display:inline-block;}
+.coll-hdr.open .coll-arrow{transform:rotate(180deg);}
+.coll-body{overflow:hidden;}
+
+/* LOADING OVERLAY for data fetch */
+#data-loading{position:fixed;bottom:16px;right:16px;background:var(--accent);color:#fff;border-radius:12px;padding:8px 16px;font-size:.8rem;font-weight:700;z-index:9990;display:none;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,.25);}
+#data-loading.on{display:flex;}
+.dl-spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0;}
+
+/* EXTRA NAV (hidden tabs) */
+.nv-hidden{border-top:1px solid var(--border);background:var(--card);padding:0 8px;}
+.tb-more{color:var(--accent)!important;font-weight:900;}
+.tb-more:hover{background:rgba(0,102,204,.08)!important;}
+
+/* WA RESUME BUTTON — floating in each input page */
+.wa-resume-float{
+  position:fixed;bottom:20px;right:20px;z-index:800;
+  display:flex;flex-direction:column;gap:8px;align-items:flex-end;
+}
+.wa-resume-fab{
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  color:#fff;border:none;border-radius:50px;padding:12px 18px;
+  font-size:.82rem;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 18px rgba(37,211,102,.45);
+  display:flex;align-items:center;gap:8px;
+  white-space:nowrap;
+}
+.wa-resume-fab:hover{filter:brightness(1.08);}
+.wa-resume-fab.fab-resume{
+  background:linear-gradient(135deg,#6366f1,#4f46e5);
+  box-shadow:0 4px 18px rgba(99,102,241,.45);
+}
+</style>
+</head>
+<body>
+<div id="top-lb"></div>
+<!-- HEADER -->
+<div class="hdr">
+  <div class="lg">
+    <div class="lg-ic">⚙</div>
+    <div>
+      <div class="lg-t1">TOTAL SNB</div>
+      <div class="lg-t2">Casting 2 · PT AT Indonesia</div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <span id="db-pill" class="db-pill">DB...</span>
+    <button class="thbtn" id="thbtn" onclick="tgTheme()">🌙</button>
+    <div class="live"><span class="live-d"></span>LIVE</div>
+    <div id="clk"></div>
+  </div>
+</div>
+<!-- NAV -->
+<div class="nv" id="nv-main">
+  <button class="tb on" data-t="ss">⚙ Steel Shot</button>
+  <button class="tb" data-t="lb">🪣 Limbah</button>
+  <button class="tb" data-t="imp">⚡ Impeler</button>
+  <button class="tb" data-t="sp">🔧 Sparepart</button>
+  <button class="tb tb-more" onclick="toggleMoreNav()" id="btn-more">⋯ Lainnya</button>
+</div>
+<div class="nv nv-hidden" id="nv-extra" style="display:none">
+  <button class="tb" data-t="gt">📊 Gentani</button>
+  <button class="tb" data-t="dash">📊 Dashboard</button>
+  <button class="tb" data-t="hist">📋 History</button>
+  <button class="tb" data-t="set">⚙ Setting</button>
+  <button class="tb tb-more" onclick="toggleMoreNav()">✕ Tutup</button>
+</div>
+<div class="ct">
+<!-- ===== DASHBOARD ===== -->
+<div id="p-dash" class="pg">
+  <div class="cd" style="margin-bottom:12px;">
+    <div class="st">📊 Ringkasan Hari Ini</div>
+    <div class="bar" id="dash-chips"></div>
+    <div class="al" id="dash-alerts"></div>
+    <div class="st" style="margin-top:8px;">⚙ Status Mesin SNB</div>
+    <div class="mc-grid" id="mc-grid"></div>
+  </div>
+  <div class="db3">
+    <div class="db-card">
+      <div class="db-head">
+        <div class="st" style="margin:0;flex:1;">⚙ Steel Shot — Trend</div>
+        <button class="btn btn-g btn-s" onclick="goTab('ss')">Detail →</button>
+      </div>
+      <div class="db-canvas"><canvas id="c-ss"></canvas></div>
+      <div class="db-foot">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
+          <span style="font-size:.65rem;color:var(--muted)">Dari</span>
+          <input type="date" id="db-ss-d1" style="font-size:.65rem;padding:2px 4px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text)" onchange="drawDbSS()">
+          <span style="font-size:.65rem;color:var(--muted)">S/d</span>
+          <input type="date" id="db-ss-d2" style="font-size:.65rem;padding:2px 4px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text)" onchange="drawDbSS()">
+        </div>
+        <div class="lg-r" style="justify-content:space-between;flex-wrap:wrap;gap:4px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="chc-b on" id="db-ss-baru" style="font-size:.6rem;padding:2px 6px" onclick="dbSSTog('baru',this)">Baru</button>
+            <button class="chc-b on" id="db-ss-bekas" style="font-size:.6rem;padding:2px 6px" onclick="dbSSTog('bekas',this)">Bekas</button>
+          </div>
+          <div style="display:flex;gap:4px;">
+            <button class="chc-b on" id="db-ss-d" style="font-size:.6rem;padding:2px 6px" onclick="dbV('ss','day',this)">Harian</button>
+            <button class="chc-b" id="db-ss-w" style="font-size:.6rem;padding:2px 6px" onclick="dbV('ss','week',this)">Mingguan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="db-card">
+      <div class="db-head">
+        <div class="st" style="margin:0;flex:1;">🪣 Limbah — Trend</div>
+        <button class="btn btn-g btn-s" onclick="goTab('lb')">Detail →</button>
+      </div>
+      <div class="db-canvas"><canvas id="c-lb"></canvas></div>
+      <div class="db-foot">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
+          <span style="font-size:.65rem;color:var(--muted)">Dari</span>
+          <input type="date" id="db-lb-d1" style="font-size:.65rem;padding:2px 4px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text)" onchange="drawDbLB()">
+          <span style="font-size:.65rem;color:var(--muted)">S/d</span>
+          <input type="date" id="db-lb-d2" style="font-size:.65rem;padding:2px 4px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text)" onchange="drawDbLB()">
+        </div>
+        <div class="lg-r" style="justify-content:space-between;flex-wrap:wrap;gap:4px;">
+          <div style="display:flex;gap:8px;">
+            <div class="lg-i"><div class="lg-d" style="background:#d97706"></div>Pasir</div>
+          </div>
+          <div style="display:flex;gap:4px;">
+            <button class="chc-b on" id="db-lb-d" style="font-size:.6rem;padding:2px 6px" onclick="dbV('lb','day',this)">Harian</button>
+            <button class="chc-b" id="db-lb-w" style="font-size:.6rem;padding:2px 6px" onclick="dbV('lb','week',this)">Mingguan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="db-card">
+      <div class="db-head">
+        <div class="st" style="margin:0;flex:1;">📊 Gentani Steelshot</div>
+        <button class="btn btn-g btn-s" onclick="goTab('gt')">Detail →</button>
+      </div>
+      <div class="db-canvas"><canvas id="c-gt"></canvas></div>
+      <div class="db-foot">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
+          <span style="font-size:.65rem;color:var(--muted)">Dari</span>
+          <input type="date" id="db-gt-d1" style="font-size:.65rem;padding:2px 4px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text)" onchange="drawDbGT()">
+          <span style="font-size:.65rem;color:var(--muted)">S/d</span>
+          <input type="date" id="db-gt-d2" style="font-size:.65rem;padding:2px 4px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text)" onchange="drawDbGT()">
+        </div>
+        <div class="lg-r" style="justify-content:space-between;flex-wrap:wrap;gap:4px;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div class="lg-i"><div class="lg-d" style="background:#0891b2"></div>Harian</div>
+            <div class="lg-i"><div class="lg-d" style="background:#7c3aed"></div>Akumulasi</div>
+            <div class="lg-i"><div class="lg-d" style="background:#059669"></div>Target</div>
+          </div>
+          <div style="display:flex;gap:4px;">
+            <button class="chc-b on" id="db-gt-d" style="font-size:.6rem;padding:2px 6px" onclick="dbV('gt','day',this)">Harian</button>
+            <button class="chc-b" id="db-gt-w" style="font-size:.6rem;padding:2px 6px" onclick="dbV('gt','week',this)">Mingguan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STEEL SHOT ===== -->
+<div id="p-ss" class="pg on">
+  <div class="cd">
+    <div class="st">⚙ Input Steel Shot</div>
+    <div class="info-box info">ℹ️ Baru: 1 karung = 25 kg &nbsp;|&nbsp; Bekas: 1 box = 15 kg (bisa isi berat aktual)</div>
+    <div class="fr">
+      <div class="fg" style="min-width:100%">
+        <label>Shift</label>
+        <div class="shift-row">
+          <button type="button" class="sh-btn active" id="sh-ss-nsp" onclick="setShift('ss','NSP')">🌅 NSP</button>
+          <button type="button" class="sh-btn" id="sh-ss-nsm" onclick="setShift('ss','NSM')">🌙 NSM</button>
+        </div>
+        <input type="hidden" id="ss-sh" value="NSP">
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg" style="min-width:100%">
+        <label>Jenis Steelshot</label>
+        <div class="shot-row">
+          <button type="button" class="stt-btn active-baru" id="stt-baru" onclick="selType('Baru')">
+            <span class="si">🟢</span>BARU<div class="ss">Satuan: Karung (25 kg)</div>
+          </button>
+          <button type="button" class="stt-btn" id="stt-bekas" onclick="selType('Bekas')">
+            <span class="si">🟡</span>BEKAS<div class="ss">Satuan: Box (15 kg)</div>
+          </button>
+        </div>
+        <input type="hidden" id="ss-type" value="Baru">
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Tanggal</label><input type="date" id="ss-date"></div>
+    </div>
+    <div id="sf-baru">
+      <div class="fr">
+        <div class="fg"><label>Mesin SNB</label><select id="ss-snb"><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select></div>
+        <div class="fg"><label>Jumlah Karung</label>
+          <input type="number" id="ss-karung" min="0" step="0.5" placeholder="0" oninput="prevKarung()">
+          <div class="kg-prev" id="prev-karung">= 0 kg</div>
+        </div>
+      </div>
+    </div>
+    <div id="sf-bekas" style="display:none">
+      <div class="fr">
+        <div class="fg"><label>Mesin SNB</label><select id="ss-snb-b"><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select></div>
+        <div class="fg"><label>Jumlah Box</label><input type="number" id="ss-box" min="0" step="0.5" placeholder="0" oninput="prevBekas()"></div>
+        <div class="fg"><label>Berat Aktual kg (opsional)</label><input type="number" id="ss-kg-akt" min="0" step="0.1" placeholder="Default 15 kg/box" oninput="prevBekas()"></div>
+      </div>
+      <div class="kg-prev" id="prev-bekas" style="margin-bottom:8px"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Operator</label><input type="text" id="ss-op" placeholder="Nama operator..."></div>
+      <div class="fg"><label>Catatan</label><input type="text" id="ss-note" placeholder="Opsional..."></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+      <button class="btn btn-p" style="flex:2;min-width:140px" onclick="submitShot(event)">💾 Simpan Steel Shot</button>
+      <button class="btn btn-wa" style="flex:1;min-width:120px" onclick="openWA('ss')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Laporan WA
+      </button>
+    </div>
+  </div>
+  <div class="cd">
+    <button class="coll-hdr" onclick="toggleColl('ss-log-body',this)">
+      <span>📋 Log Steel Shot</span><span class="coll-arrow">▼</span>
+    </button>
+    <div class="coll-body" id="ss-log-body" style="display:none">
+      <div class="fb" style="margin-bottom:8px;margin-top:8px">
+        <button class="edit-btn" id="ss-edit-btn" onclick="togEdit('ss')">✏️</button>
+      </div>
+      <div class="edit-banner" id="ss-edit-banner">✏️ Mode Edit — klik ✏️/🗑 di tiap baris. <button onclick="togEdit('ss')" style="background:none;border:none;color:var(--warn);font-weight:700;cursor:pointer;text-decoration:underline">Selesai</button></div>
+      <div class="fbar">
+        <span class="fbar-lbl">Periode</span>
+        <select class="fbar-sel" id="ss-fp" onchange="renderSS()"><option value="today">Hari Ini</option><option value="7d">7 Hari</option><option value="30d">30 Hari</option><option value="all">Semua</option></select>
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">SNB</span>
+        <select class="fbar-sel" id="ss-fsnb" onchange="renderSS()"><option value="all">Semua</option><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select>
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Shift</span>
+        <select class="fbar-sel" id="ss-fsh" onchange="renderSS()"><option value="all">Semua</option><option>NSP</option><option>NSM</option></select>
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Jenis</span>
+        <select class="fbar-sel" id="ss-fj" onchange="renderSS()"><option value="all">Semua</option><option>Baru</option><option>Bekas</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>Tgl</th><th>Shift</th><th>SNB</th><th>Jenis</th><th>Qty</th><th>Kg Total</th><th>Operator</th><th>Catatan</th></tr></thead><tbody id="ss-tb"></tbody></table></div>
+    </div>
+  </div>
+  <div class="cd">
+    <button class="coll-hdr" onclick="toggleColl('ss-trend-body',this);if(document.getElementById('ss-trend-body').style.display!=='none'){_setDefDates('ss-fdate1','ss-fdate2',14);drawSSFull();}">
+      <span>📈 Trend Steel Shot</span><span class="coll-arrow">▼</span>
+    </button>
+    <div class="coll-body" id="ss-trend-body" style="display:none">
+      <div class="chc" style="margin-top:8px">
+        <button class="chc-b on" id="ss-vd" onclick="ssView('day',this)">Harian</button>
+        <button class="chc-b" id="ss-vw" onclick="ssView('week',this)">Mingguan</button>
+        <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
+        <button class="chc-b on" id="ss-sb" onclick="ssTog('baru',this)">Baru</button>
+        <button class="chc-b on" id="ss-sk" onclick="ssTog('bekas',this)">Bekas</button>
+      </div>
+      <div class="fbar" style="margin-top:8px">
+        <span class="fbar-lbl">Dari</span>
+        <input type="date" class="fbar-sel" id="ss-fdate1" onchange="drawSSFull()">
+        <span class="fbar-lbl">Sampai</span>
+        <input type="date" class="fbar-sel" id="ss-fdate2" onchange="drawSSFull()">
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Mesin</span>
+        <select class="fbar-sel" id="ss-fsnb-trend" onchange="drawSSFull()"><option value="all">Total Semua Mesin</option><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select>
+      </div>
+      <div class="chart-area"><canvas id="c-ss-full"></canvas></div>
+      <div class="lg-r" id="ss-full-legend">
+        <div class="lg-i"><div class="lg-d" style="background:#0066cc"></div>Baru (kg)</div>
+        <div class="lg-i"><div class="lg-d" style="background:#d97706"></div>Bekas (kg)</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ===== LIMBAH ===== -->
+<div id="p-lb" class="pg">
+  <div class="cd">
+    <div class="st">🪣 Input Limbah Pasir &amp; Debu</div>
+    <div class="fr">
+      <div class="fg" style="min-width:100%">
+        <label>Shift</label>
+        <div class="shift-row">
+          <button type="button" class="sh-btn active" id="sh-lb-nsp" onclick="setShift('lb','NSP')">🌅 NSP</button>
+          <button type="button" class="sh-btn" id="sh-lb-nsm" onclick="setShift('lb','NSM')">🌙 NSM</button>
+        </div>
+        <input type="hidden" id="lb-sh" value="NSP">
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Tanggal</label><input type="date" id="lb-date"></div>
+      <div class="fg"><label>Mesin SNB</label><select id="lb-snb"><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select></div>
+      <div class="fg"><label>Troli Pasir</label><input type="number" id="lb-pasir" min="0" step="0.5" placeholder="0"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Lokasi TPS</label><input type="text" id="lb-loc" placeholder="TPS-1"></div>
+      <div class="fg"><label>Operator</label><input type="text" id="lb-op" placeholder="Nama operator..."></div>
+      <div class="fg"><label>Keterangan</label><input type="text" id="lb-note" placeholder="Opsional..."></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+      <button class="btn btn-p" style="flex:2;min-width:140px" onclick="submitSand(event)">💾 Simpan Limbah</button>
+      <button class="btn btn-wa" style="flex:1;min-width:120px" onclick="openWA('lb')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Laporan WA
+      </button>
+    </div>
+  </div>
+  <div class="cd">
+    <button class="coll-hdr" onclick="toggleColl('lb-log-body',this)">
+      <span>📋 Log Limbah</span><span class="coll-arrow">▼</span>
+    </button>
+    <div class="coll-body" id="lb-log-body" style="display:none">
+      <div class="fb" style="margin-bottom:8px;margin-top:8px">
+        <button class="edit-btn" id="lb-edit-btn" onclick="togEdit('lb')">✏️</button>
+      </div>
+      <div class="edit-banner" id="lb-edit-banner">✏️ Mode Edit aktif. <button onclick="togEdit('lb')" style="background:none;border:none;color:var(--warn);font-weight:700;cursor:pointer;text-decoration:underline">Selesai</button></div>
+      <div class="fbar">
+        <span class="fbar-lbl">Periode</span>
+        <select class="fbar-sel" id="lb-fp" onchange="renderLB()"><option value="today">Hari Ini</option><option value="7d">7 Hari</option><option value="30d">30 Hari</option><option value="all">Semua</option></select>
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">SNB</span>
+        <select class="fbar-sel" id="lb-fsnb" onchange="renderLB()"><option value="all">Semua</option><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select>
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Shift</span>
+        <select class="fbar-sel" id="lb-fsh" onchange="renderLB()"><option value="all">Semua</option><option>NSP</option><option>NSM</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>Tgl</th><th>Shift</th><th>SNB</th><th>Pasir (Troli)</th><th>Status</th><th>Lokasi</th><th>Operator</th></tr></thead><tbody id="lb-tb"></tbody></table></div>
+    </div>
+  </div>
+  <div class="cd">
+    <button class="coll-hdr" onclick="toggleColl('lb-trend-body',this);if(document.getElementById('lb-trend-body').style.display!=='none'){_setDefDates('lb-fdate1','lb-fdate2',14);drawLBFull();}">
+      <span>📈 Trend Limbah</span><span class="coll-arrow">▼</span>
+    </button>
+    <div class="coll-body" id="lb-trend-body" style="display:none">
+      <div class="chc" style="margin-top:8px">
+        <button class="chc-b on" id="lb-vd" onclick="lbView('day',this)">Harian</button>
+        <button class="chc-b" id="lb-vw" onclick="lbView('week',this)">Mingguan</button>
+      </div>
+      <div class="fbar" style="margin-top:8px">
+        <span class="fbar-lbl">Dari</span>
+        <input type="date" class="fbar-sel" id="lb-fdate1" onchange="drawLBFull()">
+        <span class="fbar-lbl">Sampai</span>
+        <input type="date" class="fbar-sel" id="lb-fdate2" onchange="drawLBFull()">
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Mesin</span>
+        <select class="fbar-sel" id="lb-fsnb-trend" onchange="drawLBFull()"><option value="all">Total Semua Mesin</option><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select>
+      </div>
+      <div class="chart-area"><canvas id="c-lb-full"></canvas></div>
+      <div class="lg-r" id="lb-full-legend">
+        <div class="lg-i"><div class="lg-d" style="background:#d97706"></div>Pasir (Troli)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GENTANI ===== -->
+<div id="p-gt" class="pg">
+  <div class="cd">
+    <div class="st">📊 Input Ikomi &amp; Hitung Gentani</div>
+    <div class="info-box ok">ℹ️ Gentani = Total SS Tanggal Ini ÷ Ikomi (Ton). Steelshot otomatis diambil dari inputan.</div>
+
+    <!-- Tanggal -->
+    <div class="fr">
+      <div class="fg" style="min-width:100%">
+        <label>Tanggal</label>
+        <input type="date" id="gt-date" oninput="onGTDateChange()">
+      </div>
+    </div>
+
+    <!-- Auto SS Preview Box -->
+    <div id="gt-ss-preview" style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:none">
+      <div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:8px">📦 Steelshot Terpakai — Diambil dari Data Input</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center">
+          <div class="mn t-ok" style="font-size:1.1rem;font-weight:800" id="gt-auto-baru">0</div>
+          <div style="font-size:.65rem;color:var(--muted);margin-top:2px">Baru (kg)</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center">
+          <div class="mn t-wn" style="font-size:1.1rem;font-weight:800" id="gt-auto-bekas">0</div>
+          <div style="font-size:.65rem;color:var(--muted);margin-top:2px">Bekas (kg)</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center">
+          <div class="mn" style="font-size:1.1rem;font-weight:800;color:var(--accent)" id="gt-auto-total">0</div>
+          <div style="font-size:.65rem;color:var(--muted);margin-top:2px">Total (kg)</div>
+        </div>
+      </div>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:8px" id="gt-auto-note">—</div>
+    </div>
+    <div id="gt-no-ss" style="background:var(--warn-bg);border:1px solid rgba(217,119,6,.3);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:.82rem;color:var(--warn);font-weight:600;display:none">
+      ⚠️ Belum ada data steelshot untuk tanggal ini. Silakan input steelshot terlebih dahulu.
+    </div>
+
+    <!-- Mode Gentani: Baru saja / Baru+Bekas (otomatis baru, toggle tersembunyi via double-click label) -->
+    <div class="fg" style="margin-bottom:12px">
+      <label id="gt-mode-label" ondblclick="toggleGTMode()" style="cursor:default;user-select:none">Perhitungan Gentani</label>
+      <div style="font-size:.72rem;color:var(--muted)" id="gt-mode-desc">Berdasarkan steelshot baru ÷ Ikomi</div>
+      <input type="hidden" id="gt-mode" value="baru">
+    </div>
+
+    <!-- Ikomi & Operator -->
+    <div class="fr">
+      <div class="fg"><label>Ikomi (Ton)</label><input type="number" id="gt-ikomi" min="0" step="0.1" oninput="calcGT()" placeholder="0"></div>
+      <div class="fg"><label>Operator</label><input type="text" id="gt-op" placeholder="Nama operator..."></div>
+    </div>
+
+    <!-- Preview Gentani -->
+    <div class="gt-prev-box" id="gt-prev-box">
+      <div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:6px">Preview Gentani</div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div>
+          <div class="gt-big" id="gt-prev-num">—</div>
+          <div class="gt-unit">Kg / Ton</div>
+        </div>
+        <div id="gt-prev-stat"></div>
+      </div>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:6px" id="gt-prev-detail"></div>
+    </div>
+
+    <div class="fr"><div class="fg"><label>Keterangan</label><input type="text" id="gt-note" placeholder="Opsional..."></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+      <button class="btn btn-p" style="flex:2;min-width:140px" onclick="submitGT(event)">💾 Simpan Gentani</button>
+      <button class="btn btn-wa" style="flex:1;min-width:120px" onclick="openWA('gt')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Laporan WA
+      </button>
+    </div>
+  </div>
+
+  <!-- Trend chart -->
+  <div class="cd">
+    <button class="coll-hdr" onclick="toggleColl('gt-trend-body',this);if(document.getElementById('gt-trend-body').style.display!=='none')drawGTFull()">
+      <span>📈 Trend Gentani</span><span class="coll-arrow">▼</span>
+    </button>
+    <div class="coll-body" id="gt-trend-body" style="display:none">
+      <div class="fbar" style="margin-top:8px">
+        <span class="fbar-lbl">Periode</span>
+        <select class="fbar-sel" id="gt-fpd" onchange="gtPd(this.value)">
+          <option value="cur">Bulan Ini</option><option value="prev">Bulan Lalu</option>
+          <option value="3m">3 Bulan</option><option value="6m">6 Bulan</option>
+        </select>
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Mode</span>
+        <select class="fbar-sel" id="gt-chart-mode" onchange="drawGTFull()">
+          <option value="baru">SS Baru</option>
+          <option value="all">Baru+Bekas</option>
+        </select>
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Tampilan</span>
+        <select class="fbar-sel" id="gt-fv" onchange="drawGTFull()"><option value="day">Harian</option><option value="week">Mingguan</option></select>
+      </div>
+      <div class="chart-area"><canvas id="c-gt-full"></canvas></div>
+      <div class="lg-r">
+        <div class="lg-i"><div class="lg-d" style="background:#0891b2"></div>Harian</div>
+        <div class="lg-i"><div class="lg-d" style="background:#7c3aed"></div>Akumulasi</div>
+        <div class="lg-i"><div class="lg-d" style="background:#059669"></div>Target Bawah</div>
+        <div class="lg-i"><div class="lg-d" style="background:#dc2626"></div>Target Atas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- History log -->
+  <div class="cd">
+    <button class="coll-hdr" onclick="toggleColl('gt-log-body',this)">
+      <span>📋 History Gentani</span><span class="coll-arrow">▼</span>
+    </button>
+    <div class="coll-body" id="gt-log-body" style="display:none">
+      <div class="fb" style="margin-bottom:8px;margin-top:8px">
+        <button class="edit-btn" id="gt-edit-btn" onclick="togEdit('gt')">✏️</button>
+      </div>
+      <div class="edit-banner" id="gt-edit-banner">✏️ Mode Edit aktif. <button onclick="togEdit('gt')" style="background:none;border:none;color:var(--warn);font-weight:700;cursor:pointer;text-decoration:underline">Selesai</button></div>
+      <div class="fbar">
+        <span class="fbar-lbl">Periode</span>
+        <select class="fbar-sel" id="gt-fp" onchange="renderGT()"><option value="today">Hari Ini</option><option value="7d">7 Hari</option><option value="30d">30 Hari</option><option value="all">Semua</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>Tgl</th><th>Mode</th><th>SS (Kg)</th><th>Ikomi (Ton)</th><th>Gentani</th><th>Status</th><th>Operator</th></tr></thead><tbody id="gt-tb"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== IMPELER ===== -->
+<div id="p-imp" class="pg">
+  <div class="cd">
+    <div class="st">⚡ Input Kondisi Impeler</div>
+    <div class="fr">
+      <div class="fg"><label>Mesin SNB</label><select id="imp-snb"><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select></div>
+      <div class="fg"><label>Tanggal</label><input type="date" id="imp-date"></div>
+    </div>
+    <div style="background:var(--info-bg);border:1px solid rgba(8,145,178,.2);border-radius:8px;padding:12px;margin-bottom:10px">
+      <div style="font-weight:700;font-size:.78rem;color:var(--info);margin-bottom:8px">⚙ IMPELER 1</div>
+      <div class="fr" style="margin-bottom:0">
+        <div class="fg">
+          <label>Ampere (A)</label>
+          <input type="number" id="imp1-amp" min="0" step="0.1" placeholder="cth: 33.5" oninput="autoImpCond('imp1-cond',this.value)">
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px">Normal: 30–40A | Di bawah standar: &lt;30A | Kritis: &gt;40A</div>
+        </div>
+        <div class="fg">
+          <label>Kondisi</label>
+          <select id="imp1-cond">
+            <option value="normal">✅ Normal</option>
+            <option value="warning">⚠️ Di Bawah Standar</option>
+            <option value="critical">🔴 Kritis / Ganti</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg" style="margin-top:6px"><label>Catatan Impeler 1</label><input type="text" id="imp1-note" placeholder="Vibrasi, suara, dll..."></div>
+    </div>
+    <div style="background:var(--ok-bg);border:1px solid rgba(5,150,105,.2);border-radius:8px;padding:12px;margin-bottom:10px">
+      <div style="font-weight:700;font-size:.78rem;color:var(--ok);margin-bottom:8px">⚙ IMPELER 2</div>
+      <div class="fr" style="margin-bottom:0">
+        <div class="fg">
+          <label>Ampere (A)</label>
+          <input type="number" id="imp2-amp" min="0" step="0.1" placeholder="cth: 34.0" oninput="autoImpCond('imp2-cond',this.value)">
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px">Normal: 30–40A | Di bawah standar: &lt;30A | Kritis: &gt;40A</div>
+        </div>
+        <div class="fg">
+          <label>Kondisi</label>
+          <select id="imp2-cond">
+            <option value="normal">✅ Normal</option>
+            <option value="warning">⚠️ Di Bawah Standar</option>
+            <option value="critical">🔴 Kritis / Ganti</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg" style="margin-top:6px"><label>Catatan Impeler 2</label><input type="text" id="imp2-note" placeholder="Vibrasi, suara, dll..."></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Operator</label><input type="text" id="imp-op" placeholder="Nama operator..."></div>
+    </div>
+    <button class="btn btn-p" style="width:100%" onclick="submitImp(event)">⚡ Simpan Kondisi Impeler</button>
+  </div>
+
+  <div class="cd">
+    <button class="coll-hdr" onclick="toggleColl('imp-log-body',this)">
+      <span>📋 Riwayat Impeler</span><span class="coll-arrow">▼</span>
+    </button>
+    <div class="coll-body" id="imp-log-body" style="display:none">
+      <div class="fb" style="margin-bottom:8px;margin-top:8px">
+        <button class="edit-btn" id="imp-edit-btn" onclick="togEdit('imp')">✏️</button>
+      </div>
+      <div class="edit-banner" id="imp-edit-banner">✏️ Mode Edit aktif. <button onclick="togEdit('imp')" style="background:none;border:none;color:var(--warn);font-weight:700;cursor:pointer;text-decoration:underline">Selesai</button></div>
+      <div class="tw"><table><thead><tr><th>Tgl</th><th>SNB</th><th>Imp1 (A)</th><th>Imp2 (A)</th><th>Operator</th></tr></thead><tbody id="imp-tb"></tbody></table></div>
+    </div>
+  </div>
+  <div class="cd">
+    <button class="coll-hdr" onclick="toggleColl('imp-trend-body',this);if(document.getElementById('imp-trend-body').style.display!=='none'){_setDefDates('imp-fdate1','imp-fdate2',14);drawImpFull();}">
+      <span>📈 Trend Ampere Impeler</span><span class="coll-arrow">▼</span>
+    </button>
+    <div class="coll-body" id="imp-trend-body" style="display:none">
+      <div class="fbar" style="margin-top:8px">
+        <span class="fbar-lbl">Dari</span>
+        <input type="date" class="fbar-sel" id="imp-fdate1" onchange="drawImpFull()">
+        <span class="fbar-lbl">Sampai</span>
+        <input type="date" class="fbar-sel" id="imp-fdate2" onchange="drawImpFull()">
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Mesin</span>
+        <select class="fbar-sel" id="imp-fsnb" onchange="drawImpFull()"><option value="all">Total Semua Mesin</option><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select>
+      </div>
+      <div class="chart-area"><canvas id="c-imp-full"></canvas></div>
+      <div class="lg-r" id="imp-full-legend"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SPAREPART ===== -->
+<div id="p-sp" class="pg">
+  <div class="cd">
+    <div class="st">🔧 Pergantian Sparepart</div>
+    <div class="fr">
+      <div class="fg"><label>Mesin SNB</label><select id="sp-snb"><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select></div>
+      <div class="fg"><label>Tanggal</label><input type="date" id="sp-date"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Komponen</label><input type="text" id="sp-comp" placeholder="Tulis nama komponen..."></div>
+      <div class="fg"><label>Qty</label><input type="number" id="sp-qty" min="1" value="1"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Teknisi</label><input type="text" id="sp-tek" placeholder="Nama teknisi..."></div>
+      <div class="fg"><label>Catatan</label><input type="text" id="sp-note" placeholder="Opsional..."></div>
+    </div>
+    <button class="btn btn-p" style="width:100%" onclick="submitSp(event)">🔧 Simpan & Reset Runtime</button>
+  </div>
+
+  <div class="cd">
+    <button class="coll-hdr" onclick="toggleColl('sp-log-body',this)">
+      <span>📋 Riwayat Sparepart</span><span class="coll-arrow">▼</span>
+    </button>
+    <div class="coll-body" id="sp-log-body" style="display:none">
+      <div class="fb" style="margin-bottom:8px;margin-top:8px">
+        <button class="edit-btn" id="sp-edit-btn" onclick="togEdit('sp')">✏️</button>
+      </div>
+      <div class="edit-banner" id="sp-edit-banner">✏️ Mode Edit aktif. <button onclick="togEdit('sp')" style="background:none;border:none;color:var(--warn);font-weight:700;cursor:pointer;text-decoration:underline">Selesai</button></div>
+      <div class="tw"><table><thead><tr><th>Tgl</th><th>SNB</th><th>Komponen</th><th>Qty</th><th>Teknisi</th><th>Catatan</th></tr></thead><tbody id="sp-tb"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HISTORY ===== -->
+<div id="p-hist" class="pg">
+  <div class="sub-tabs">
+    <button class="sub-tab on" data-ht="shot" onclick="hTab(this,'shot')">⚙ Steel Shot</button>
+    <button class="sub-tab" data-ht="sand" onclick="hTab(this,'sand')">🪣 Limbah</button>
+    <button class="sub-tab" data-ht="gt" onclick="hTab(this,'gt')">📊 Gentani</button>
+    <button class="sub-tab" data-ht="imp" onclick="hTab(this,'imp')">⚡ Impeler</button>
+    <button class="sub-tab" data-ht="sp" onclick="hTab(this,'sp')">🔧 Sparepart</button>
+  </div>
+  <div id="hp-shot">
+    <div class="cd">
+      <div class="st">⚙ Rekap Steelshot</div>
+      <div class="fbar" style="flex-wrap:wrap;gap:6px">
+        <span class="fbar-lbl">Dari</span>
+        <input type="date" class="fbar-sel" id="hs-fd1" onchange="renderHS()">
+        <span class="fbar-lbl">S/d</span>
+        <input type="date" class="fbar-sel" id="hs-fd2" onchange="renderHS()">
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">SNB</span>
+        <select class="fbar-sel" id="hs-fsnb" onchange="renderHS()"><option value="all">Semua</option><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select>
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Shift</span>
+        <select class="fbar-sel" id="hs-fsh" onchange="renderHS()"><option value="all">Semua</option><option>NSP</option><option>NSM</option></select>
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Jenis</span>
+        <select class="fbar-sel" id="hs-fjenis" onchange="renderHS()"><option value="all">Semua</option><option value="Baru">Baru</option><option value="Bekas">Bekas</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>Tgl</th><th>Shift</th><th>SNB</th><th>Jenis</th><th>Qty</th><th>Kg</th><th>Operator</th><th>Aksi</th></tr></thead><tbody id="hs-tb"></tbody></table></div>
+    </div>
+  </div>
+  <div id="hp-sand" style="display:none">
+    <div class="cd">
+      <div class="st">🪣 Rekap Limbah</div>
+      <div class="fbar" style="flex-wrap:wrap;gap:6px">
+        <span class="fbar-lbl">Dari</span>
+        <input type="date" class="fbar-sel" id="hsd-fd1" onchange="renderHSD()">
+        <span class="fbar-lbl">S/d</span>
+        <input type="date" class="fbar-sel" id="hsd-fd2" onchange="renderHSD()">
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">SNB</span>
+        <select class="fbar-sel" id="hsd-fsnb" onchange="renderHSD()"><option value="all">Semua</option><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select>
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Shift</span>
+        <select class="fbar-sel" id="hsd-fsh" onchange="renderHSD()"><option value="all">Semua</option><option>NSP</option><option>NSM</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>Tgl</th><th>Shift</th><th>SNB</th><th>Pasir</th><th>Lokasi</th><th>Operator</th><th>Aksi</th></tr></thead><tbody id="hsd-tb"></tbody></table></div>
+    </div>
+  </div>
+  <div id="hp-gt" style="display:none">
+    <div class="cd">
+      <div class="st">📊 Rekap Gentani</div>
+      <div class="fbar" style="flex-wrap:wrap;gap:6px">
+        <span class="fbar-lbl">Dari</span>
+        <input type="date" class="fbar-sel" id="hg-fd1" onchange="renderHG()">
+        <span class="fbar-lbl">S/d</span>
+        <input type="date" class="fbar-sel" id="hg-fd2" onchange="renderHG()">
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">Shift</span>
+        <select class="fbar-sel" id="hg-fsh" onchange="renderHG()"><option value="all">Semua</option><option>NSP</option><option>NSM</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>Tgl</th><th>Mode</th><th>SS (Kg)</th><th>Ikomi (Ton)</th><th>Gentani</th><th>Status</th><th>Operator</th><th>Aksi</th></tr></thead><tbody id="hg-tb"></tbody></table></div>
+    </div>
+  </div>
+  <div id="hp-imp" style="display:none">
+    <div class="cd">
+      <div class="st">⚡ Rekap Impeler</div>
+      <div class="fbar" style="flex-wrap:wrap;gap:6px">
+        <span class="fbar-lbl">Dari</span>
+        <input type="date" class="fbar-sel" id="hi-fd1" onchange="renderHI()">
+        <span class="fbar-lbl">S/d</span>
+        <input type="date" class="fbar-sel" id="hi-fd2" onchange="renderHI()">
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">SNB</span>
+        <select class="fbar-sel" id="hi-fsnb" onchange="renderHI()"><option value="all">Semua</option><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>Tgl</th><th>SNB</th><th>Imp1 (A)</th><th>Imp1 Cond</th><th>Imp2 (A)</th><th>Imp2 Cond</th><th>Operator</th></tr></thead><tbody id="hi-tb"></tbody></table></div>
+    </div>
+  </div>
+  <div id="hp-sp" style="display:none">
+    <div class="cd">
+      <div class="st">🔧 Rekap Sparepart</div>
+      <div class="fbar" style="flex-wrap:wrap;gap:6px">
+        <span class="fbar-lbl">Dari</span>
+        <input type="date" class="fbar-sel" id="hsp-fd1" onchange="renderHSP()">
+        <span class="fbar-lbl">S/d</span>
+        <input type="date" class="fbar-sel" id="hsp-fd2" onchange="renderHSP()">
+        <div class="fbar-sep"></div>
+        <span class="fbar-lbl">SNB</span>
+        <select class="fbar-sel" id="hsp-fsnb" onchange="renderHSP()"><option value="all">Semua</option><option>SNB-1</option><option>SNB-2</option><option>SNB-3</option><option>SNB-4</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>Tgl</th><th>SNB</th><th>Part</th><th>Qty</th><th>Satuan</th><th>Catatan</th><th>Operator</th></tr></thead><tbody id="hsp-tb"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SETTING ===== -->
+<div id="p-set" class="pg">
+  <div class="cd">
+    <div class="st">📊 Target Gentani (Kg/Ton)</div>
+    <div class="sr"><div class="sl">Gentani — Batas Bawah</div><input class="si" type="number" step="0.1" id="s-gtlo"></div>
+    <div class="sr"><div class="sl">Gentani — Batas Atas</div><input class="si" type="number" step="0.1" id="s-gthi"></div>
+    <button class="btn btn-p btn-s" style="margin-top:10px" onclick="saveCfg(event)">💾 Simpan</button>
+  </div>
+  <div class="cd">
+    <div class="st">🪣 Range Normal Limbah (Troli/shift)</div>
+    <div class="sr"><div class="sl">Pasir — Batas Bawah</div><input class="si" type="number" step="0.5" id="s-plo"></div>
+    <div class="sr"><div class="sl">Pasir — Batas Atas</div><input class="si" type="number" step="0.5" id="s-phi"></div>
+    <div class="sr"><div class="sl">Debu — Batas Bawah</div><input class="si" type="number" step="0.5" id="s-dlo"></div>
+    <div class="sr"><div class="sl">Debu — Batas Atas</div><input class="si" type="number" step="0.5" id="s-dhi"></div>
+    <button class="btn btn-p btn-s" style="margin-top:10px" onclick="saveCfg(event)">💾 Simpan</button>
+  </div>
+  <div class="cd">
+    <div class="st">📱 WhatsApp Tujuan</div>
+    <div class="sr"><div class="sl">No. WA (628xxx)</div><input class="si si-w" type="tel" id="s-wa" placeholder="628xxxxxxxxxx"></div>
+    <div style="font-size:.72rem;color:var(--muted);margin-top:4px">Kosongkan = buka WA tanpa nomor tujuan.</div>
+    <button class="btn btn-p btn-s" style="margin-top:10px" onclick="saveWA()">💾 Simpan</button>
+  </div>
+  <div class="cd">
+    <div class="st">🔗 Supabase Connection</div>
+    <div class="sr"><div class="sl">URL</div><input class="si si-w" type="text" id="s-sburl" placeholder="https://xxx.supabase.co"></div>
+    <div class="sr"><div class="sl">Anon Key</div><input class="si si-w" type="text" id="s-sbkey" placeholder="eyJ..."></div>
+    <div style="font-size:.72rem;color:var(--muted);margin-top:4px">Status: <span id="s-sbst" style="font-weight:700">—</span></div>
+    <button class="btn btn-p btn-s" style="margin-top:10px" onclick="saveSB()">💾 Simpan &amp; Reconnect</button>
+  </div>
+  <div class="cd">
+    <div class="st">🗃 Data &amp; Snapshot</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-g btn-s" onclick="doSnapshot()">📦 Download Snapshot HTML</button>
+      <button class="btn btn-d btn-s" onclick="clearLocal()">🗑 Hapus Data Lokal</button>
+    </div>
+    <div style="font-size:.72rem;color:var(--muted);margin-top:8px">Snapshot: file HTML offline berisi semua data ter-embed, tidak perlu Supabase.</div>
+  </div>
+</div>
+
+</div><!-- /ct -->
+
+<!-- MODAL EDIT -->
+<div class="mv" id="edit-modal">
+  <div class="mw">
+    <div class="mh"><h3 id="em-title">✏️ Edit</h3><button class="mx" onclick="closeEM()">✕</button></div>
+    <div class="mb" id="em-body"></div>
+  </div>
+</div>
+<!-- MODAL DELETE -->
+<div class="mv" id="del-modal">
+  <div class="mw" style="max-width:360px">
+    <div class="mh"><h3 style="color:var(--danger)">⚠ Konfirmasi Hapus</h3><button class="mx" onclick="closeDM()">✕</button></div>
+    <div class="mb">
+      <p style="margin-bottom:16px;font-size:.85rem;color:var(--text2)">Yakin hapus data ini? Tidak bisa dipulihkan.</p>
+      <div class="ma"><button class="btn btn-d" style="flex:1" onclick="doDel()">🗑 Hapus</button><button class="btn btn-g" onclick="closeDM()">Batal</button></div>
+    </div>
+  </div>
+</div>
+<!-- MODAL WA -->
+<div class="mv" id="wa-modal">
+  <div class="mw">
+    <div class="mh"><h3 id="wa-title">📱 Laporan WhatsApp</h3><button class="mx" onclick="closeWM()">✕</button></div>
+    <div class="mb">
+      <div id="wa-scope-bar" style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"></div>
+      <label>Catatan Tambahan (opsional)</label>
+      <textarea id="wa-note" style="margin-bottom:10px;min-height:55px" placeholder="Tambahkan catatan..."></textarea>
+      <div class="wa-pre" id="wa-prev"></div>
+      <div class="ma">
+        <button class="btn btn-wa" style="flex:1" onclick="sendWA()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Kirim ke WhatsApp
+        </button>
+        <button class="btn btn-g" onclick="closeWM()">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- SPINNER -->
+<div class="spinner-ov" id="spin-ov">
+  <div class="spinner-card">
+    <div class="spinner-ring"></div>
+    <div class="spinner-msg" id="spin-msg">Memproses...</div>
+    <div class="spinner-sub" id="spin-sub">Mohon tunggu sebentar</div>
+  </div>
+</div>
+<div id="toast"></div>
+<div id="data-loading"><div class="dl-spin"></div><span>Memuat data...</span></div>
+<!-- FLOATING WA RESUME -->
+<div class="wa-resume-float" id="wa-fab">
+  <button class="wa-resume-fab fab-resume" onclick="openWAResume()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    📋 Resume Hari Ini
+  </button>
+</div>
+<script>
+'use strict';
+// ── SUPABASE ──
+let SB_URL=localStorage.getItem('snb_sb_url')||'https://qvregsaqrxgxjgwardvx.supabase.co';
+let SB_KEY=localStorage.getItem('snb_sb_key')||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF2cmVnc2FxcnhneGpnd2FyZHZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTIzMzAsImV4cCI6MjA5NDU4ODMzMH0.E5OyJnCmMk1M9uKOt72k1czl7hNRILMwPne1-OozDBA';
+let sbOnline=false;
+const T_SS='snb_shot',T_LB='snb_sand',T_GT='snb_gentani',T_IMP='snb_imp',T_SP='snb_sp';
+
+// ── DATA STORES ──
+let shotLogs=[];
+let sandLogs=[];
+let gtLogs=[];
+let impLogs=[];
+let spLogs=[];
+let cfg=JSON.parse(localStorage.getItem('snb_cfg')||'{}');
+cfg.gtLo=cfg.gtLo??0; cfg.gtHi=cfg.gtHi??0;
+cfg.pLo=cfg.pLo??0; cfg.pHi=cfg.pHi??0;
+cfg.dLo=cfg.dLo??0; cfg.dHi=cfg.dHi??0;
+cfg.waNo=cfg.waNo??'';
+function saveCfgL(){localStorage.setItem('snb_cfg',JSON.stringify(cfg));}
+
+// ── STATE ──
+const _em={ss:false,lb:false,gt:false,imp:false,sp:false};
+let _pdel=null, _waKind=null, _waMsg='';
+const _sh={ss:'NSP',lb:'NSP',gt:'NSP'};
+let _dbV={ss:'day',lb:'day',gt:'day'};
+let _gtPdV='cur';
+
+// ── UTILS ──
+function ld(d){const dt=d||new Date();return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');}
+function lt(){const n=new Date();return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');}
+function pld(s){if(!s)return null;const p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+function uid(){return Date.now()+Math.floor(Math.random()*9999);}
+function fd(s){if(!s)return'—';const p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+const BUL=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'];
+function bn(m){return BUL[+m-1]||m;}
+function allDays(f,t){const d=[];let x=pld(f);const e=pld(t);if(!x||!e)return d;while(x<=e){d.push(ld(x));x=new Date(x.getTime()+86400000);}return d;}
+function fp(logs,period){
+  const today=ld();const now=new Date();
+  return logs.filter(l=>{const d=l.date||'';
+    if(period==='today')return d===today;
+    if(period==='7d')return d>=ld(new Date(now-7*86400000));
+    if(period==='30d')return d>=ld(new Date(now-30*86400000));
+    return true;});
+}
+
+// ── UI HELPERS ──
+function lbStart(){const b=document.getElementById('top-lb');if(b){b.style.opacity='1';b.style.width='70%';}}
+function lbEnd(){const b=document.getElementById('top-lb');if(b){b.style.width='100%';setTimeout(()=>{b.style.opacity='0';setTimeout(()=>{b.style.width='0';},400);},250);}}
+function showSpin(m){
+  const o=document.getElementById('spin-ov');o.classList.add('on');
+  document.getElementById('spin-msg').textContent=m||'Memproses...';
+  document.getElementById('spin-sub').textContent='Mohon tunggu sebentar';
+}
+function hideSpin(){document.getElementById('spin-ov').classList.remove('on');}
+// Result modal — besar, mobile friendly
+function showSuccess(title,icon,detail){_resultModal('ok',icon||'✅',title,detail);}
+function showFail(title,icon,detail){_resultModal('fail',icon||'❌',title,detail);}
+function _resultModal(type,icon,title,detail){
+  let m=document.getElementById('result-modal');
+  if(m)m.remove();
+  m=document.createElement('div');m.id='result-modal';
+  m.style.cssText='position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);';
+  const col=type==='ok'?'var(--ok)':'var(--danger)';
+  m.innerHTML=`<div style="background:var(--card);border-radius:22px;padding:32px 24px 26px;text-align:center;max-width:310px;width:100%;box-shadow:0 16px 50px rgba(0,0,0,.35);border:2px solid ${col};animation:popIn .2s ease;">
+    <div style="font-size:4rem;line-height:1;margin-bottom:14px">${icon}</div>
+    <div style="font-size:1.3rem;font-weight:800;color:${col};margin-bottom:8px">${title}</div>
+    <div style="font-size:.85rem;color:var(--muted);margin-bottom:24px;line-height:1.55">${detail||''}</div>
+    <button onclick="document.getElementById('result-modal').remove()" style="width:100%;padding:15px;border-radius:13px;border:none;font-size:1.05rem;font-weight:700;cursor:pointer;min-height:52px;background:${col};color:#fff;letter-spacing:.3px;">OK</button>
+  </div>`;
+  document.body.appendChild(m);
+  if(type==='ok'){clearTimeout(m._t);m._t=setTimeout(()=>{if(m.parentNode)m.remove();},2500);}
+}
+// Warning toast (non-blocking, di bawah)
+function toastMob(msg,type,dur){
+  const t=document.getElementById('toast');if(!t)return;
+  const bg=type==='warn'?'var(--warn)':type==='danger'?'var(--danger)':'var(--ok)';
+  t.style.cssText=`display:block;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);padding:14px 22px;border-radius:14px;font-size:1rem;font-weight:700;z-index:9999;opacity:1;max-width:88vw;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.25);pointer-events:none;background:${bg};color:#fff;`;
+  t.textContent=msg;
+  clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity='0',dur||3000);
+}
+function toast(msg,type,dur){toastMob(msg,type,dur);}
+function ferr(id){const el=document.getElementById(id);if(!el)return;el.focus();el.scrollIntoView({behavior:'smooth',block:'center'});const ob=el.style.borderColor,os=el.style.boxShadow;el.style.borderColor='var(--danger)';el.style.boxShadow='0 0 0 3px var(--danger-bg)';setTimeout(()=>{el.style.borderColor=ob;el.style.boxShadow=os;},1800);}
+
+// ── COLLAPSIBLE ──
+function toggleColl(id,btn){
+  const body=document.getElementById(id);if(!body)return;
+  const open=body.style.display==='none'||body.style.display==='';
+  body.style.display=open?'block':'none';
+  if(btn)btn.classList.toggle('open',open);
+}
+
+// ── CLOCK + THEME ──
+function updClk(){const el=document.getElementById('clk');if(el)el.textContent=new Date().toLocaleTimeString('id-ID');}
+setInterval(updClk,1000);updClk();
+function tgTheme(){
+  const h=document.documentElement;const dk=h.getAttribute('data-theme')==='dark';
+  h.setAttribute('data-theme',dk?'light':'dark');
+  document.getElementById('thbtn').textContent=dk?'🌙':'☀️';
+  localStorage.setItem('snb_theme',dk?'light':'dark');
+  setTimeout(()=>{renderDash();if(_curTab==='lb')drawLBFull();if(_curTab==='gt')drawGTFull();},80);
+}
+(()=>{const t=localStorage.getItem('snb_theme');if(t){document.documentElement.setAttribute('data-theme',t);document.getElementById('thbtn').textContent=t==='dark'?'☀️':'🌙';}})();
+
+// ── NAV ──
+let _curTab='ss';
+// tabs yang termasuk "inputan utama" → tampil di nav utama
+const _mainTabs=['ss','lb','imp','sp'];
+function toggleMoreNav(){
+  const ex=document.getElementById('nv-extra');
+  if(!ex)return;
+  const open=ex.style.display==='none'||ex.style.display==='';
+  ex.style.display=open?'flex':'none';
+}
+function goTab(id){
+  _curTab=id;
+  // hide extra nav after selection
+  const ex=document.getElementById('nv-extra');if(ex)ex.style.display='none';
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tb[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===id));
+  // highlight "Lainnya" button if on a non-main tab
+  const moreBtn=document.getElementById('btn-more');
+  if(moreBtn)moreBtn.classList.toggle('on',!_mainTabs.includes(id));
+  const pg=document.getElementById('p-'+id);if(pg)pg.classList.add('on');
+  if(id==='dash')renderDash();
+  if(id==='ss'){renderSS();}
+  if(id==='lb'){renderLB();drawLBFull();}
+  if(id==='gt'){renderGT();drawGTFull();onGTDateChange();}
+  if(id==='imp')renderImp();
+  if(id==='sp')renderSp();
+  if(id==='hist')hTab(document.querySelector('.sub-tab.on'),'shot');
+  if(id==='set')loadSetUI();
+}
+document.querySelectorAll('.tb[data-t]').forEach(b=>b.addEventListener('click',()=>goTab(b.dataset.t)));
+
+// ── WA RESUME SEMUA (shortcut dari FAB) ──
+let _waResumeShift='ALL'; // 'ALL' | 'NSP' | 'NSM'
+function _setWaResumeShift(sh){
+  _waResumeShift=sh;
+  document.querySelectorAll('.wa-resume-sh-btn').forEach(b=>b.classList.toggle('on',b.dataset.sh===sh));
+  _buildWAMsg('ss');
+}
+function openWAResume(){
+  _waKind='ss'; // kind doesn't matter for resume, we'll force scope
+  _waScope='resume';
+  _waShift='NSP';
+  _waResumeShift='ALL';
+  _waDate='';
+  document.getElementById('wa-note').value='';
+  const scopeBar=document.getElementById('wa-scope-bar');
+  const today=ld();
+  if(scopeBar){
+    scopeBar.innerHTML=`
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+        <div style="background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(79,70,229,.08));border:1px solid rgba(99,102,241,.25);border-radius:10px;padding:10px 12px;font-size:.82rem;color:var(--accent);font-weight:700">
+          📋 Resume Harian — Semua Data (Steelshot + Limbah + Impeler)
+        </div>
+        <div>
+          <div style="font-size:.65rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Shift</div>
+          <div style="display:flex;gap:6px">
+            <button class="chc-b wa-resume-sh-btn on" data-sh="ALL" onclick="_setWaResumeShift('ALL')">🔄 Semua</button>
+            <button class="chc-b wa-resume-sh-btn" data-sh="NSP" onclick="_setWaResumeShift('NSP')">🌅 NSP</button>
+            <button class="chc-b wa-resume-sh-btn" data-sh="NSM" onclick="_setWaResumeShift('NSM')">🌙 NSM</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:.65rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Tanggal Laporan</div>
+          <input type="date" id="wa-date-pick" value="${today}" oninput="_onWaDate()" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:8px 10px;color:var(--text);font-family:inherit;font-size:.85rem">
+        </div>
+      </div>`;
+  }
+  document.getElementById('wa-title').textContent='📋 Resume Harian';
+  _buildWAMsg('ss');
+  document.getElementById('wa-modal').classList.add('on');
+}
+
+// ── HISTORY SUB TABS ──
+function hTab(el,kind){
+  document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('on'));
+  if(el)el.classList.add('on');
+  ['shot','sand','gt'].forEach(k=>document.getElementById('hp-'+k).style.display='none');
+  document.getElementById('hp-'+kind).style.display='block';
+  if(kind==='shot')renderHS();
+  if(kind==='sand')renderHSD();
+  if(kind==='gt')renderHG();
+}
+
+// ── SHIFT / SHOT TYPE ──
+function setShift(k,v){
+  _sh[k]=v;
+  ['nsp','nsm'].forEach(s=>{const el=document.getElementById('sh-'+k+'-'+s);if(el)el.classList.toggle('active',s===v.toLowerCase());});
+  document.getElementById(k+'-sh').value=v;
+}
+function selType(t){
+  document.getElementById('ss-type').value=t;
+  document.getElementById('stt-baru').className='stt-btn'+(t==='Baru'?' active-baru':'');
+  document.getElementById('stt-bekas').className='stt-btn'+(t==='Bekas'?' active-bekas':'');
+  document.getElementById('sf-baru').style.display=t==='Baru'?'':'none';
+  document.getElementById('sf-bekas').style.display=t==='Bekas'?'':'none';
+}
+function prevKarung(){const v=parseFloat(document.getElementById('ss-karung').value)||0;document.getElementById('prev-karung').textContent='= '+(v*25)+' kg';}
+function prevBekas(){
+  const box=parseFloat(document.getElementById('ss-box').value)||0;
+  const kg=parseFloat(document.getElementById('ss-kg-akt').value)||0;
+  const el=document.getElementById('prev-bekas');
+  if(box>0){const tot=kg>0?kg:box*15;el.textContent='= '+tot+' kg'+(kg>0?' (aktual)':'');}else el.textContent='';
+}
+
+// ── GENTANI MODE (hidden toggle: double-click label) ──
+function toggleGTMode(){
+  const cur=document.getElementById('gt-mode').value;
+  const next=cur==='baru'?'all':'baru';
+  document.getElementById('gt-mode').value=next;
+  document.getElementById('gt-mode-desc').textContent = next==='all'
+    ? 'Berdasarkan steelshot baru + bekas ÷ Ikomi'
+    : 'Berdasarkan steelshot baru ÷ Ikomi';
+  calcGT();
+}
+
+// Called when date changes — pull SS from shotLogs for that date
+function onGTDateChange(){
+  const date=document.getElementById('gt-date').value||ld();
+  const shots=shotLogs.filter(l=>l.date===date);
+  const kgBaru=shots.filter(l=>l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
+  const kgBekas=shots.filter(l=>l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0);
+  const total=kgBaru+kgBekas;
+  const nsp_baru=shots.filter(l=>l.shift==='NSP'&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
+  const nsm_baru=shots.filter(l=>l.shift==='NSM'&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
+  const prevBox=document.getElementById('gt-ss-preview');
+  const noBox=document.getElementById('gt-no-ss');
+  if(total>0){
+    prevBox.style.display='block'; noBox.style.display='none';
+    document.getElementById('gt-auto-baru').textContent=kgBaru;
+    document.getElementById('gt-auto-bekas').textContent=kgBekas;
+    document.getElementById('gt-auto-total').textContent=total;
+    document.getElementById('gt-auto-note').textContent=`NSP Baru: ${nsp_baru} kg | NSM Baru: ${nsm_baru} kg | Bekas: ${kgBekas} kg`;
+  } else {
+    prevBox.style.display='none'; noBox.style.display='block';
+  }
+  calcGT();
+}
+
+// ── IMPELER ──
+function autoImpCond(selId,ampVal){
+  const a=parseFloat(ampVal)||0;
+  const el=document.getElementById(selId);if(!el||a<=0)return;
+  el.value=a>40?'critical':a>=30?'normal':'warning';
+}
+async function submitImp(ev){
+  const btn=ev.currentTarget;btn.disabled=true;
+  const date=document.getElementById('imp-date').value||ld();
+  const snb=document.getElementById('imp-snb').value;
+  const imp1Amp=parseFloat(document.getElementById('imp1-amp').value)||0;
+  const imp1Cond=document.getElementById('imp1-cond').value;
+  const imp1Note=document.getElementById('imp1-note').value.trim();
+  const imp2Amp=parseFloat(document.getElementById('imp2-amp').value)||0;
+  const imp2Cond=document.getElementById('imp2-cond').value;
+  const imp2Note=document.getElementById('imp2-note').value.trim();
+  const op=document.getElementById('imp-op').value.trim()||'Operator';
+  if(imp1Amp<=0&&imp2Amp<=0){toastMob('⚠️ Masukkan ampere minimal satu impeler','warn');btn.disabled=false;return;}
+  showSpin('Menyimpan kondisi impeler...');
+  try{
+    const row={snb,imp1_amp:imp1Amp,imp1_cond:imp1Cond,imp1_note:imp1Note,imp2_amp:imp2Amp,imp2_cond:imp2Cond,imp2_note:imp2Note,operator:op,waktu:lt(),tanggal:date};
+    let id=uid();
+    if(sbOnline){const res=await sbF(T_IMP,'POST',row);if(res&&res[0])id=res[0].id;}
+    impLogs.unshift({id,snb,imp1_amp:imp1Amp,imp1_cond:imp1Cond,imp1_note:imp1Note,imp2_amp:imp2Amp,imp2_cond:imp2Cond,imp2_note:imp2Note,op,time:lt(),date});
+    localStorage.setItem('snb_imp',JSON.stringify(impLogs));
+    hideSpin();showSuccess('Kondisi Impeler Tersimpan!','⚡',snb+' — '+fd(date));
+    document.getElementById('imp1-amp').value='';document.getElementById('imp2-amp').value='';
+    document.getElementById('imp1-note').value='';document.getElementById('imp2-note').value='';
+    document.getElementById('imp1-cond').value='normal';document.getElementById('imp2-cond').value='normal';
+    renderImp();
+  }catch(e){hideSpin();showFail('Gagal Simpan','❌',e.message);}
+  btn.disabled=false;
+}
+function impCondBadge(c){
+  if(c==='critical')return'<span class="bd bd-wn">🔴 Kritis</span>';
+  if(c==='warning')return'<span class="bd bd-if">⚠️ Di Bawah Standar</span>';
+  return'<span class="bd bd-ok">✅ Normal</span>';
+}
+
+// ── SPAREPART ──
+async function submitSp(ev){
+  const btn=ev.currentTarget;btn.disabled=true;
+  const date=document.getElementById('sp-date').value||ld();
+  const snb=document.getElementById('sp-snb').value;
+  const comp=document.getElementById('sp-comp').value.trim();
+  const qty=parseInt(document.getElementById('sp-qty').value)||1;
+  const tek=document.getElementById('sp-tek').value.trim()||'Teknisi';
+  const note=document.getElementById('sp-note').value.trim();
+  if(!comp){toastMob('⚠️ Tulis nama komponen','warn');btn.disabled=false;ferr('sp-comp');return;}
+  showSpin('Menyimpan sparepart...');
+  try{
+    const row={snb,komponen:comp,qty,teknisi:tek,catatan:note,waktu:lt(),tanggal:date};
+    let id=uid();
+    if(sbOnline){const res=await sbF(T_SP,'POST',row);if(res&&res[0])id=res[0].id;}
+    spLogs.unshift({id,snb,comp,qty,teknisi:tek,note,time:lt(),date});
+    localStorage.setItem('snb_sp',JSON.stringify(spLogs));
+    hideSpin();showSuccess('Sparepart Tersimpan!','🔧',snb+' — '+comp);
+    document.getElementById('sp-comp').value='';document.getElementById('sp-qty').value='1';
+    document.getElementById('sp-tek').value='';document.getElementById('sp-note').value='';
+    renderSp();
+  }catch(e){hideSpin();showFail('Gagal Simpan','❌',e.message);}
+  btn.disabled=false;
+}
+
+// ── GENTANI CALC ──
+function calcGT(){
+  const date=document.getElementById('gt-date')?.value||ld();
+  const mode=document.getElementById('gt-mode')?.value||'baru';
+  const shots=shotLogs.filter(l=>l.date===date);
+  const kgBaru=shots.filter(l=>l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
+  const kgBekas=shots.filter(l=>l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0);
+  const ssKg=mode==='baru'?kgBaru:(kgBaru+kgBekas);
+  const ik=parseFloat(document.getElementById('gt-ikomi')?.value)||0;
+  const box=document.getElementById('gt-prev-box');
+  if(ssKg>0&&ik>0){
+    const g=(ssKg/ik).toFixed(2);
+    document.getElementById('gt-prev-num').textContent=g;
+    document.getElementById('gt-prev-stat').innerHTML=gtBadge(+g);
+    document.getElementById('gt-prev-detail').textContent=`SS ${mode==='baru'?'Baru':'Baru+Bekas'}: ${ssKg} kg ÷ Ikomi: ${ik} Ton`;
+    box.style.display='block';
+  } else {
+    box.style.display='none';
+  }
+}
+function gtBadge(v){
+  const lo=+cfg.gtLo||0,hi=+cfg.gtHi||0;
+  if(hi>0&&v>hi)return`<span class="gt-stat hi">🔴 TINGGI (&gt;${hi})</span>`;
+  if(lo>0&&v<lo)return`<span class="gt-stat lo">🟡 RENDAH (&lt;${lo})</span>`;
+  return`<span class="gt-stat ok">🟢 NORMAL</span>`;
+}
+function gtStr(v){
+  const lo=+cfg.gtLo||0,hi=+cfg.gtHi||0;
+  if(v==null)return'—';
+  if(hi>0&&v>hi)return`🔴 TINGGI (>${hi})`;
+  if(lo>0&&v<lo)return`🟡 RENDAH (<${lo})`;
+  return'🟢 Normal';
+}
+
+// ── SUPABASE ──
+async function sbF(path,method,body){
+  const h={'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+  if(method==='POST')h['Prefer']='return=representation';
+  if(method==='PATCH')h['Prefer']='return=minimal';
+  const o={method:method||'GET',headers:h};if(body)o.body=JSON.stringify(body);
+  const r=await fetch(SB_URL+'/rest/v1/'+path,o);
+  if(!r.ok)throw new Error(await r.text());
+  const txt=await r.text();return txt?JSON.parse(txt):[];
+}
+function setPill(ok,lbl){
+  const el=document.getElementById('db-pill');if(!el)return;
+  el.className='db-pill '+(ok?'ok':'err');
+  el.textContent=ok?('✅ '+(lbl||'DB ONLINE')):'❌ OFFLINE';
+}
+async function sbInit(){
+  if(!SB_URL||!SB_KEY){setPill(false,'BELUM SETUP');loadLS();renderDash();return;}
+  try{await sbF(T_SS+'?limit=1');sbOnline=true;setPill(true);await sbAll();setInterval(sbAll,15000);}
+  catch(e){sbOnline=false;setPill(false);loadLS();renderDash();}
+}
+function loadLS(){
+  shotLogs=JSON.parse(localStorage.getItem('snb_shot')||'[]');
+  sandLogs=JSON.parse(localStorage.getItem('snb_sand')||'[]');
+  gtLogs=JSON.parse(localStorage.getItem('snb_gt')||'[]');
+  impLogs=JSON.parse(localStorage.getItem('snb_imp')||'[]');
+  spLogs=JSON.parse(localStorage.getItem('snb_sp')||'[]');
+}
+async function sbAll(){
+  try{
+    lbStart();
+    const dl=document.getElementById('data-loading');if(dl)dl.classList.add('on');
+    const [s,sd,g,im,sp]=await Promise.all([
+      sbF(T_SS+'?order=created_at.desc&limit=1000').catch(()=>[]),
+      sbF(T_LB+'?order=created_at.desc&limit=1000').catch(()=>[]),
+      sbF(T_GT+'?order=created_at.desc&limit=1000').catch(()=>[]),
+      sbF(T_IMP+'?order=created_at.desc&limit=1000').catch(()=>[]),
+      sbF(T_SP+'?order=created_at.desc&limit=1000').catch(()=>[]),
+    ]);
+    shotLogs=s.map(r=>({id:r.id,snb:r.snb,shift:r.shift||'NSP',type:r.jenis,qty:+r.qty,qty_unit:r.qty_unit||(r.jenis==='Baru'?'karung':'box'),qty_kg:r.qty_kg||null,op:r.operator,note:r.catatan||'',time:r.waktu,date:r.tanggal||r.created_at?.slice(0,10)||ld()}));
+    sandLogs=sd.map(r=>({id:r.id,snb:r.snb,shift:r.shift||'NSP',qty_pasir:+r.qty_pasir||0,qty_debu:+r.qty_debu||0,loc:r.lokasi||'',op:r.operator,note:r.catatan||'',time:r.waktu,date:r.tanggal||r.created_at?.slice(0,10)||ld()}));
+    gtLogs=g.map(r=>({id:r.id,shift:r.shift||'NSP',ss550:+r.ss550||0,wc:+r.wire_cut||0,slb:+r.slb||0,ikomi:+r.ikomi||0,gentani:+r.gentani||0,op:r.operator,note:r.catatan||'',time:r.waktu,date:r.tanggal||r.created_at?.slice(0,10)||ld()}));
+    impLogs=im.map(r=>({id:r.id,snb:r.snb,imp1_amp:+r.imp1_amp||0,imp1_cond:r.imp1_cond||'normal',imp1_note:r.imp1_note||'',imp2_amp:+r.imp2_amp||0,imp2_cond:r.imp2_cond||'normal',imp2_note:r.imp2_note||'',op:r.operator,time:r.waktu,date:r.tanggal||r.created_at?.slice(0,10)||ld()}));
+    spLogs=sp.map(r=>({id:r.id,snb:r.snb,comp:r.komponen,qty:+r.qty||1,teknisi:r.teknisi,note:r.catatan||'',time:r.waktu,date:r.tanggal||r.created_at?.slice(0,10)||ld()}));
+    localStorage.setItem('snb_shot',JSON.stringify(shotLogs));
+    localStorage.setItem('snb_sand',JSON.stringify(sandLogs));
+    localStorage.setItem('snb_gt',JSON.stringify(gtLogs));
+    localStorage.setItem('snb_imp',JSON.stringify(impLogs));
+    localStorage.setItem('snb_sp',JSON.stringify(spLogs));
+    lbEnd();const dl2=document.getElementById('data-loading');if(dl2)dl2.classList.remove('on');renderDash();
+  }catch(e){lbEnd();const dl3=document.getElementById('data-loading');if(dl3)dl3.classList.remove('on');}
+}
+
+// ── SUBMIT ──
+async function submitShot(ev){
+  const btn=ev.currentTarget;btn.disabled=true;
+  const type=document.getElementById('ss-type').value;
+  const shift=document.getElementById('ss-sh').value;
+  const tanggal=document.getElementById('ss-date').value||ld();
+  const snb=type==='Baru'?document.getElementById('ss-snb').value:document.getElementById('ss-snb-b').value;
+  const op=document.getElementById('ss-op').value.trim()||'Operator';
+  const note=document.getElementById('ss-note').value.trim();
+  let qty,qty_kg;
+  if(type==='Baru'){qty=parseFloat(document.getElementById('ss-karung').value)||0;if(qty<=0){toastMob('⚠️ Masukkan jumlah karung','warn');btn.disabled=false;ferr('ss-karung');return;}qty_kg=qty*25;}
+  else{qty=parseFloat(document.getElementById('ss-box').value)||0;const ka=parseFloat(document.getElementById('ss-kg-akt').value)||0;if(qty<=0){toastMob('⚠️ Masukkan jumlah box','warn');btn.disabled=false;ferr('ss-box');return;}qty_kg=ka>0?ka:qty*15;}
+  showSpin('Menyimpan steelshot...');
+  try{
+    const row={snb,shift,jenis:type,qty,qty_unit:type==='Baru'?'karung':'box',qty_kg,operator:op,catatan:note,waktu:lt(),tanggal};
+    let id=uid();if(sbOnline){const res=await sbF(T_SS,'POST',row);if(res&&res[0])id=res[0].id;}
+    shotLogs.unshift({id,snb,shift,type,qty,qty_unit:row.qty_unit,qty_kg,op,note,time:row.waktu,date:tanggal});
+    localStorage.setItem('snb_shot',JSON.stringify(shotLogs));
+    hideSpin();showSuccess('Steel Shot Tersimpan!','✅',''+qty_kg+' kg — '+snb+' | Shift '+shift+' | '+fd(tanggal));
+    document.getElementById('ss-karung').value='';document.getElementById('ss-box').value='';document.getElementById('ss-kg-akt').value='';document.getElementById('ss-note').value='';
+    document.getElementById('prev-karung').textContent='= 0 kg';document.getElementById('prev-bekas').textContent='';
+    renderSS();renderDash();
+  }catch(e){hideSpin();showFail('Gagal Simpan','❌',e.message);}
+  btn.disabled=false;
+}
+async function submitSand(ev){
+  const btn=ev.currentTarget;btn.disabled=true;
+  const snb=document.getElementById('lb-snb').value;
+  const shift=document.getElementById('lb-sh').value;
+  const date=document.getElementById('lb-date').value||ld();
+  const qp=parseFloat(document.getElementById('lb-pasir').value)||0;
+  const loc=document.getElementById('lb-loc').value.trim();
+  const op=document.getElementById('lb-op').value.trim()||'Operator';
+  const note=document.getElementById('lb-note').value.trim();
+  if(qp<=0){toastMob('⚠️ Masukkan troli pasir','warn');btn.disabled=false;ferr('lb-pasir');return;}
+  showSpin('Menyimpan limbah...');
+  try{
+    const row={snb,shift,qty_pasir:qp,lokasi:loc,operator:op,catatan:note,waktu:lt(),tanggal:date};
+    let id=uid();if(sbOnline){const res=await sbF(T_LB,'POST',row);if(res&&res[0])id=res[0].id;}
+    sandLogs.unshift({id,snb,shift,qty_pasir:qp,qty_debu:0,loc,op,note,time:row.waktu,date});
+    localStorage.setItem('snb_sand',JSON.stringify(sandLogs));
+    hideSpin();showSuccess('Limbah Tersimpan!','✅','Pasir '+qp+' troli — '+snb+' | Shift '+shift);
+    document.getElementById('lb-pasir').value='';document.getElementById('lb-note').value='';
+    renderLB();drawLBFull();renderDash();
+  }catch(e){hideSpin();showFail('Gagal Simpan','❌',e.message);}
+  btn.disabled=false;
+}
+async function submitGT(ev){
+  const btn=ev.currentTarget;btn.disabled=true;
+  const date=document.getElementById('gt-date').value||ld();
+  const mode=document.getElementById('gt-mode').value||'baru';
+  const ikomi=parseFloat(document.getElementById('gt-ikomi').value)||0;
+  const op=document.getElementById('gt-op').value.trim()||'Operator';
+  const note=document.getElementById('gt-note').value.trim();
+  // Auto-pull SS from shotLogs for this date
+  const shots=shotLogs.filter(l=>l.date===date);
+  const kgBaru=shots.filter(l=>l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
+  const kgBekas=shots.filter(l=>l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0);
+  const ssKg=mode==='baru'?kgBaru:(kgBaru+kgBekas);
+  if(ssKg<=0){toastMob('⚠️ Tidak ada data steelshot untuk tanggal ini. Input steelshot dulu.','warn');btn.disabled=false;return;}
+  if(ikomi<=0){toastMob('⚠️ Masukkan Ikomi (Ton)','warn');btn.disabled=false;ferr('gt-ikomi');return;}
+  const gentani=+(ssKg/ikomi).toFixed(4);
+  showSpin('Menyimpan gentani...');
+  try{
+    const row={mode,ss_kg:ssKg,ss_baru:kgBaru,ss_bekas:kgBekas,ikomi,gentani,operator:op,catatan:note,waktu:lt(),tanggal:date};
+    let id=uid();
+    if(sbOnline){
+      // Store in supabase — map to existing columns
+      const sbRow={shift:'HARIAN',ss550:kgBaru,wire_cut:0,slb:kgBekas,ikomi,gentani,operator:op,catatan:(mode==='all'?'[BARU+BEKAS] ':'[BARU] ')+note,waktu:lt(),tanggal:date};
+      const res=await sbF(T_GT,'POST',sbRow);if(res&&res[0])id=res[0].id;
+    }
+    gtLogs.unshift({id,mode,ss_kg:ssKg,ss_baru:kgBaru,ss_bekas:kgBekas,ikomi,gentani,op,note,time:lt(),date,
+      // keep legacy fields for compatibility
+      shift:'HARIAN',ss550:kgBaru,wc:0,slb:kgBekas});
+    localStorage.setItem('snb_gt',JSON.stringify(gtLogs));
+    hideSpin();showSuccess('Gentani Tersimpan!','✅',gentani.toFixed(2)+' Kg/Ton — SS '+(mode==='baru'?'Baru':'Baru+Bekas')+' | '+fd(date));
+    document.getElementById('gt-ikomi').value='';document.getElementById('gt-note').value='';
+    document.getElementById('gt-prev-box').style.display='none';
+    renderGT();drawGTFull();renderDash();
+  }catch(e){hideSpin();showFail('Gagal Simpan','❌',e.message);}
+  btn.disabled=false;
+}
+
+// ── RENDER TABLES ──
+function eBtn(k,id){return`<td style="white-space:nowrap"><button class="btn btn-g btn-s" onclick="openEM('${k}','${id}');event.stopPropagation()">✏️</button> <button class="btn btn-d btn-s" onclick="openDM('${k}','${id}');event.stopPropagation()">🗑</button></td>`;}
+function renderSS(){
+  const p=document.getElementById('ss-fp')?.value||'today';
+  const snbF=document.getElementById('ss-fsnb')?.value||'all';
+  const shF=document.getElementById('ss-fsh')?.value||'all';
+  const jF=document.getElementById('ss-fj')?.value||'all';
+  let rows=fp(shotLogs,p);
+  if(snbF!=='all')rows=rows.filter(l=>l.snb===snbF);
+  if(shF!=='all')rows=rows.filter(l=>l.shift===shF);
+  if(jF!=='all')rows=rows.filter(l=>l.type===jF);
+  const ed=_em.ss;
+  const tb=document.getElementById('ss-tb');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="${ed?9:8}" class="es">Belum ada data</td></tr>`;return;}
+  tb.innerHTML=rows.map(l=>{const kg=l.type==='Baru'?(l.qty*25):l.qty_kg||(l.qty*15);
+    return`<tr><td class="mn">${fd(l.date)}</td><td><span class="bd bd-if">${l.shift}</span></td><td class="mn">${l.snb}</td><td>${l.type==='Baru'?'<span class="bd bd-ok">BARU</span>':'<span class="bd bd-wn">BEKAS</span>'}</td><td class="mn">${l.qty} ${l.qty_unit||''}</td><td class="mn t-ok">${kg} kg</td><td>${l.op}</td><td class="t-mu">${l.note||'—'}</td>${ed?eBtn('ss',l.id):''}</tr>`;
+  }).join('');
+}
+function renderLB(){
+  const p=document.getElementById('lb-fp')?.value||'today';
+  const snbF=document.getElementById('lb-fsnb')?.value||'all';
+  const shF=document.getElementById('lb-fsh')?.value||'all';
+  let rows=fp(sandLogs,p);
+  if(snbF!=='all')rows=rows.filter(l=>l.snb===snbF);
+  if(shF!=='all')rows=rows.filter(l=>l.shift===shF);
+  const ed=_em.lb;
+  const tb=document.getElementById('lb-tb');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="${ed?9:8}" class="es">Belum ada data</td></tr>`;return;}
+  const lo=+cfg.pLo||0,hi=+cfg.pHi||0;
+  tb.innerHTML=rows.map(l=>{const ok=hi<=0||(l.qty_pasir>=lo&&l.qty_pasir<=hi);
+    return`<tr><td class="mn">${fd(l.date)}</td><td><span class="bd bd-if">${l.shift}</span></td><td class="mn">${l.snb}</td><td class="mn t-wn">${l.qty_pasir}</td><td>${ok?'<span class="bd bd-ok">NORMAL</span>':'<span class="bd bd-wn">PERHATIAN</span>'}</td><td class="t-mu">${l.loc||'—'}</td><td>${l.op}</td>${ed?eBtn('lb',l.id):''}</tr>`;
+  }).join('');
+}
+function renderGT(){
+  const p=document.getElementById('gt-fp')?.value||'today';
+  let rows=fp(gtLogs,p);
+  const ed=_em.gt;
+  const tb=document.getElementById('gt-tb');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="${ed?8:7}" class="es">Belum ada data</td></tr>`;return;}
+  tb.innerHTML=rows.map(l=>{
+    const ssKg=l.ss_kg!==undefined?l.ss_kg:(l.ss550||0)+(l.wc||0);
+    const modeLabel=l.mode==='all'?'<span class="bd bd-if">Baru+Bekas</span>':'<span class="bd bd-ok">Baru</span>';
+    return`<tr><td class="mn">${fd(l.date)}</td><td>${modeLabel}</td><td class="mn">${ssKg} kg</td><td class="mn">${l.ikomi} T</td><td class="mn t-ok" style="font-weight:800">${l.gentani?l.gentani.toFixed(2):'—'}</td><td>${l.gentani?gtBadge(l.gentani):'—'}</td><td>${l.op}</td>${ed?eBtn('gt',l.id):''}</tr>`;
+  }).join('');
+}
+function dBtn(k,id){return`<td style="white-space:nowrap"><button class="btn btn-d btn-s" onclick="openDM('${k}','${id}');event.stopPropagation()">🗑</button></td>`;}
+function renderImp(){
+  const ed=_em.imp;
+  const tb=document.getElementById('imp-tb');if(!tb)return;
+  const rows=impLogs;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="${ed?6:5}" class="es">Belum ada data</td></tr>`;return;}
+  tb.innerHTML=rows.map(l=>`<tr><td class="mn">${fd(l.date)}</td><td class="mn">${l.snb}</td><td class="mn">${l.imp1_amp?l.imp1_amp+'A '+impCondBadge(l.imp1_cond):'—'}</td><td class="mn">${l.imp2_amp?l.imp2_amp+'A '+impCondBadge(l.imp2_cond):'—'}</td><td>${l.op}</td>${ed?dBtn('imp',l.id):''}</tr>`).join('');
+}
+function renderSp(){
+  const ed=_em.sp;
+  const tb=document.getElementById('sp-tb');if(!tb)return;
+  const rows=spLogs;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="${ed?7:6}" class="es">Belum ada data</td></tr>`;return;}
+  tb.innerHTML=rows.map(l=>`<tr><td class="mn">${fd(l.date)}</td><td class="mn">${l.snb}</td><td>${l.comp}</td><td class="mn">${l.qty}</td><td>${l.teknisi}</td><td class="t-mu">${l.note||'—'}</td>${ed?dBtn('sp',l.id):''}</tr>`).join('');
+}
+function renderHI(){
+  const from=document.getElementById('hi-fd1')?.value||ld(new Date(Date.now()-13*86400000));
+  const to=document.getElementById('hi-fd2')?.value||ld();
+  const snb=document.getElementById('hi-fsnb')?.value||'all';
+  const tb=document.getElementById('hi-tb');if(!tb)return;
+  if(!document.getElementById('hi-fd1').value)document.getElementById('hi-fd1').value=from;
+  if(!document.getElementById('hi-fd2').value)document.getElementById('hi-fd2').value=to;
+  const rows=impLogs.filter(l=>l.date>=from&&l.date<=to&&(snb==='all'||l.snb===snb)).slice(0,200);
+  tb.innerHTML=rows.length?rows.map(l=>`<tr><td class="mn">${fd(l.date)}</td><td class="mn">${l.snb}</td><td class="mn t-wn">${l.imp1_amp||'—'}A</td><td>${l.imp1_cond||'—'}</td><td class="mn t-wn">${l.imp2_amp||'—'}A</td><td>${l.imp2_cond||'—'}</td><td>${l.op||'—'}</td></tr>`).join(''):`<tr><td colspan="7" class="t-mu" style="text-align:center;padding:20px">Belum ada data</td></tr>`;
+}
+function renderHSP(){
+  const from=document.getElementById('hsp-fd1')?.value||ld(new Date(Date.now()-13*86400000));
+  const to=document.getElementById('hsp-fd2')?.value||ld();
+  const snb=document.getElementById('hsp-fsnb')?.value||'all';
+  const tb=document.getElementById('hsp-tb');if(!tb)return;
+  if(!document.getElementById('hsp-fd1').value)document.getElementById('hsp-fd1').value=from;
+  if(!document.getElementById('hsp-fd2').value)document.getElementById('hsp-fd2').value=to;
+  const rows=spLogs.filter(l=>l.date>=from&&l.date<=to&&(snb==='all'||l.snb===snb)).slice(0,200);
+  tb.innerHTML=rows.length?rows.map(l=>`<tr><td class="mn">${fd(l.date)}</td><td class="mn">${l.snb}</td><td>${l.part||'—'}</td><td class="mn">${l.qty}</td><td>${l.unit||'—'}</td><td class="t-mu">${l.note||'—'}</td><td>${l.op||'—'}</td></tr>`).join(''):`<tr><td colspan="7" class="t-mu" style="text-align:center;padding:20px">Belum ada data</td></tr>`;
+}
+function renderHS(){
+  const fd1=document.getElementById('hs-fd1')?.value, fd2=document.getElementById('hs-fd2')?.value;
+  if(!fd1){const d=document.getElementById('hs-fd1');if(d)d.value=ld(new Date(Date.now()-13*86400000));}
+  if(!fd2){const d=document.getElementById('hs-fd2');if(d)d.value=ld();}
+  const p='range';
+  const snbF=document.getElementById('hs-fsnb')?.value||'all';
+  const shF=document.getElementById('hs-fsh')?.value||'all';
+  let rows=fp(shotLogs,p);
+  if(snbF!=='all')rows=rows.filter(l=>l.snb===snbF);
+  if(shF!=='all')rows=rows.filter(l=>l.shift===shF);
+  const tb=document.getElementById('hs-tb');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="8" class="es">Belum ada data</td></tr>`;return;}
+  tb.innerHTML=rows.map(l=>{const kg=l.type==='Baru'?(l.qty*25):l.qty_kg||(l.qty*15);
+    return`<tr><td class="mn">${fd(l.date)}</td><td><span class="bd bd-if">${l.shift}</span></td><td class="mn">${l.snb}</td><td>${l.type==='Baru'?'<span class="bd bd-ok">BARU</span>':'<span class="bd bd-wn">BEKAS</span>'}</td><td class="mn">${l.qty} ${l.qty_unit||''}</td><td class="mn t-ok">${kg} kg</td><td>${l.op}</td>${eBtn('ss',l.id)}</tr>`;
+  }).join('');
+}
+function renderHSD(){
+  const p='range';
+  const snbF=document.getElementById('hsd-fsnb')?.value||'all';
+  const shF=document.getElementById('hsd-fsh')?.value||'all';
+  let rows=fp(sandLogs,p);
+  if(snbF!=='all')rows=rows.filter(l=>l.snb===snbF);
+  if(shF!=='all')rows=rows.filter(l=>l.shift===shF);
+  const tb=document.getElementById('hsd-tb');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="8" class="es">Belum ada data</td></tr>`;return;}
+  tb.innerHTML=rows.map(l=>`<tr><td class="mn">${fd(l.date)}</td><td><span class="bd bd-if">${l.shift}</span></td><td class="mn">${l.snb}</td><td class="mn t-wn">${l.qty_pasir}</td><td class="t-mu">${l.loc||'—'}</td><td>${l.op}</td>${eBtn('lb',l.id)}</tr>`).join('');
+}
+function renderHG(){
+  const p='range';
+  let rows=fp(gtLogs,p);
+  const tb=document.getElementById('hg-tb');if(!tb)return;
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="8" class="es">Belum ada data</td></tr>`;return;}
+  tb.innerHTML=rows.map(l=>{
+    const ssKg=l.ss_kg!==undefined?l.ss_kg:(l.ss550||0)+(l.wc||0);
+    const modeLabel=l.mode==='all'?'<span class="bd bd-if">Baru+Bekas</span>':'<span class="bd bd-ok">Baru</span>';
+    return`<tr><td class="mn">${fd(l.date)}</td><td>${modeLabel}</td><td class="mn">${ssKg} kg</td><td class="mn">${l.ikomi} T</td><td class="mn t-ok" style="font-weight:800">${l.gentani?l.gentani.toFixed(2):'—'}</td><td>${l.gentani?gtBadge(l.gentani):'—'}</td><td>${l.op}</td>${eBtn('gt',l.id)}</tr>`;
+  }).join('');
+}
+
+// ── EDIT MODE TOGGLE ──
+function togEdit(k){
+  _em[k]=!_em[k];
+  document.getElementById(k+'-edit-banner').classList.toggle('on',_em[k]);
+  document.getElementById(k+'-edit-btn').classList.toggle('on',_em[k]);
+  if(k==='ss')renderSS();if(k==='lb')renderLB();if(k==='gt')renderGT();if(k==='imp')renderImp();if(k==='sp')renderSp();
+}
+
+// ── EDIT MODAL ──
+function shRow(v){return`<div class="shift-row" style="margin-bottom:12px"><button type="button" class="sh-btn${v==='NSP'?' active':''}" id="ems-nsp" onclick="this.classList.add('active');document.getElementById('ems-nsm').classList.remove('active');document.getElementById('em-sh').value='NSP'">🌅 NSP</button><button type="button" class="sh-btn${v==='NSM'?' active':''}" id="ems-nsm" onclick="this.classList.add('active');document.getElementById('ems-nsp').classList.remove('active');document.getElementById('em-sh').value='NSM'">🌙 NSM</button></div><input type="hidden" id="em-sh" value="${v}">`;}
+const snbOpts=['SNB-1','SNB-2','SNB-3','SNB-4'];
+function openEM(kind,id){
+  const modal=document.getElementById('edit-modal');
+  const title=document.getElementById('em-title');
+  const body=document.getElementById('em-body');
+  if(kind==='ss'){
+    const l=shotLogs.find(x=>String(x.id)===String(id));if(!l)return;
+    title.textContent='✏️ Edit Steelshot';
+    body.innerHTML=`<input type="hidden" id="em-id" value="${l.id}"><input type="hidden" id="em-kind" value="ss">
+      <label>Shift</label>${shRow(l.shift||'NSP')}
+      <label>Mesin SNB</label><select id="em-snb">${snbOpts.map(s=>`<option${l.snb===s?' selected':''}>${s}</option>`).join('')}</select>
+      <label>Jenis</label><select id="em-type"><option${l.type==='Baru'?' selected':''}>Baru</option><option${l.type==='Bekas'?' selected':''}>Bekas</option></select>
+      <label>Qty</label><input type="number" id="em-qty" value="${l.qty}" step="0.5" min="0">
+      <label>Berat Aktual kg (Bekas, opsional)</label><input type="number" id="em-qkg" value="${l.qty_kg||''}" step="0.1" min="0">
+      <label>Operator</label><input type="text" id="em-op" value="${l.op}">
+      <label>Catatan</label><input type="text" id="em-note" value="${l.note||''}">
+      <div class="ma"><button class="btn btn-p" style="flex:1" onclick="saveEM()">💾 Simpan</button><button class="btn btn-g" onclick="closeEM()">Batal</button></div>`;
+  }else if(kind==='lb'){
+    const l=sandLogs.find(x=>String(x.id)===String(id));if(!l)return;
+    title.textContent='✏️ Edit Limbah';
+    body.innerHTML=`<input type="hidden" id="em-id" value="${l.id}"><input type="hidden" id="em-kind" value="lb">
+      <label>Shift</label>${shRow(l.shift||'NSP')}
+      <label>Tanggal</label><input type="date" id="em-date" value="${l.date}">
+      <label>Mesin SNB</label><select id="em-snb">${snbOpts.map(s=>`<option${l.snb===s?' selected':''}>${s}</option>`).join('')}</select>
+      <label>Troli Pasir</label><input type="number" id="em-qp" value="${l.qty_pasir}" step="0.5" min="0">
+      <label>Lokasi TPS</label><input type="text" id="em-loc" value="${l.loc||''}">
+      <label>Operator</label><input type="text" id="em-op" value="${l.op}">
+      <div class="ma"><button class="btn btn-p" style="flex:1" onclick="saveEM()">💾 Simpan</button><button class="btn btn-g" onclick="closeEM()">Batal</button></div>`;
+  }else if(kind==='gt'){
+    const l=gtLogs.find(x=>String(x.id)===String(id));if(!l)return;
+    title.textContent='✏️ Edit Gentani';
+    body.innerHTML=`<input type="hidden" id="em-id" value="${l.id}"><input type="hidden" id="em-kind" value="gt">
+      <label>Shift</label>${shRow(l.shift||'NSP')}
+      <label>Tanggal</label><input type="date" id="em-date" value="${l.date}">
+      <label>SS 550 (Kg)</label><input type="number" id="em-ss550" value="${l.ss550}" min="0">
+      <label>Wire Cut (Kg)</label><input type="number" id="em-wc" value="${l.wc}" min="0">
+      <label>Steelshot Bekas (Kg)</label><input type="number" id="em-slb" value="${l.slb||0}" step="0.1" min="0">
+      <label>Ikomi (Ton)</label><input type="number" id="em-ikomi" value="${l.ikomi}" step="0.1" min="0">
+      <label>Operator</label><input type="text" id="em-op" value="${l.op}">
+      <div class="ma"><button class="btn btn-p" style="flex:1" onclick="saveEM()">💾 Simpan</button><button class="btn btn-g" onclick="closeEM()">Batal</button></div>`;
+  }
+  modal.classList.add('on');
+}
+function closeEM(){document.getElementById('edit-modal').classList.remove('on');}
+async function saveEM(){
+  const kind=document.getElementById('em-kind').value;
+  const id=document.getElementById('em-id').value;
+  const shift=document.getElementById('em-sh')?.value||'NSP';
+  showSpin('Menyimpan...');
+  try{
+    if(kind==='ss'){
+      const snb=document.getElementById('em-snb').value,type=document.getElementById('em-type').value,qty=+document.getElementById('em-qty').value||0,qty_kg=+document.getElementById('em-qkg').value||null,op=document.getElementById('em-op').value,note=document.getElementById('em-note').value;
+      if(sbOnline)await sbF(T_SS+'?id=eq.'+id,'PATCH',{snb,shift,jenis:type,qty,qty_unit:type==='Baru'?'karung':'box',qty_kg,operator:op,catatan:note});
+      const l=shotLogs.find(x=>String(x.id)===String(id));if(l)Object.assign(l,{snb,shift,type,qty,qty_kg,op,note});
+      localStorage.setItem('snb_shot',JSON.stringify(shotLogs));renderSS();renderHS();
+    }else if(kind==='lb'){
+      const snb=document.getElementById('em-snb').value,date=document.getElementById('em-date').value,qp=+document.getElementById('em-qp').value||0,loc=document.getElementById('em-loc').value,op=document.getElementById('em-op').value;
+      if(sbOnline)await sbF(T_LB+'?id=eq.'+id,'PATCH',{snb,shift,qty_pasir:qp,lokasi:loc,operator:op,tanggal:date});
+      const l=sandLogs.find(x=>String(x.id)===String(id));if(l)Object.assign(l,{snb,shift,qty_pasir:qp,qty_debu:0,loc,op,date});
+      localStorage.setItem('snb_sand',JSON.stringify(sandLogs));renderLB();renderHSD();
+    }else if(kind==='gt'){
+      const date=document.getElementById('em-date').value,ss550=+document.getElementById('em-ss550').value||0,wc=+document.getElementById('em-wc').value||0,slb=+document.getElementById('em-slb').value||0,ikomi=+document.getElementById('em-ikomi').value||0,gentani=ikomi>0?+((ss550+wc)/ikomi).toFixed(4):0,op=document.getElementById('em-op').value;
+      if(sbOnline)await sbF(T_GT+'?id=eq.'+id,'PATCH',{shift,ss550,wire_cut:wc,slb,ikomi,gentani,operator:op,tanggal:date});
+      const l=gtLogs.find(x=>String(x.id)===String(id));if(l)Object.assign(l,{shift,ss550,wc,slb,ikomi,gentani,op,date});
+      localStorage.setItem('snb_gt',JSON.stringify(gtLogs));renderGT();renderHG();drawGTFull();
+    }
+    closeEM();showSuccess('Data Diperbarui','✅','Perubahan berhasil disimpan');renderDash();
+  }catch(e){hideSpin();showFail('Gagal Update','❌',e.message);return;}
+  hideSpin();
+}
+
+// ── DELETE ──
+function openDM(kind,id){_pdel={kind,id};document.getElementById('del-modal').classList.add('on');}
+function closeDM(){document.getElementById('del-modal').classList.remove('on');_pdel=null;}
+async function doDel(){
+  if(!_pdel)return;const{kind,id}=_pdel;closeDM();showSpin('Menghapus data...');
+  try{
+    if(kind==='ss'){if(sbOnline)await sbF(T_SS+'?id=eq.'+id,'DELETE');shotLogs=shotLogs.filter(x=>String(x.id)!==String(id));localStorage.setItem('snb_shot',JSON.stringify(shotLogs));renderSS();renderHS();}
+    if(kind==='lb'){if(sbOnline)await sbF(T_LB+'?id=eq.'+id,'DELETE');sandLogs=sandLogs.filter(x=>String(x.id)!==String(id));localStorage.setItem('snb_sand',JSON.stringify(sandLogs));renderLB();renderHSD();}
+    if(kind==='gt'){if(sbOnline)await sbF(T_GT+'?id=eq.'+id,'DELETE');gtLogs=gtLogs.filter(x=>String(x.id)!==String(id));localStorage.setItem('snb_gt',JSON.stringify(gtLogs));renderGT();renderHG();drawGTFull();}
+    if(kind==='imp'){if(sbOnline)await sbF(T_IMP+'?id=eq.'+id,'DELETE');impLogs=impLogs.filter(x=>String(x.id)!==String(id));localStorage.setItem('snb_imp',JSON.stringify(impLogs));renderImp();}
+    if(kind==='sp'){if(sbOnline)await sbF(T_SP+'?id=eq.'+id,'DELETE');spLogs=spLogs.filter(x=>String(x.id)!==String(id));localStorage.setItem('snb_sp',JSON.stringify(spLogs));renderSp();}
+    renderDash();hideSpin();toastMob('🗑 Data berhasil dihapus','danger');
+  }catch(e){hideSpin();showFail('Gagal Hapus','❌',e.message);}
+}
+
+// ── DASHBOARD ──
+function renderDash(){
+  const today=ld();const mn=today.slice(0,7);
+  const sh=shotLogs.filter(l=>l.date===today);
+  const kgH=sh.reduce((s,l)=>s+(l.type==='Baru'?(l.qty*25):l.qty_kg||(l.qty*15)),0);
+  const sd=sandLogs.filter(l=>l.date===today);
+  const tpH=sd.reduce((s,l)=>s+l.qty_pasir,0);
+  const gtH=gtLogs.filter(l=>l.date===today);
+  const ssH=gtH.length>0?(gtH[0].ss_kg||((gtH[0].ss550||0)+(gtH[0].wc||0))):0;
+  const ikH=gtH.reduce((s,l)=>s+l.ikomi,0)/Math.max(gtH.length,1)||0;
+  const gvH=gtH.length>0&&gtH[0].gentani?+gtH[0].gentani:null;
+  const kgB=shotLogs.filter(l=>l.date?.startsWith(mn)).reduce((s,l)=>s+(l.type==='Baru'?(l.qty*25):l.qty_kg||(l.qty*15)),0);
+  const gtB=gtLogs.filter(l=>l.date?.startsWith(mn));
+  const ssB=gtB.reduce((s,l)=>s+l.ss550+l.wc,0);const ikB=gtB.reduce((s,l)=>s+l.ikomi,0);
+  const gvB=ikB>0?+(ssB/ikB).toFixed(2):null;
+  document.getElementById('dash-chips').innerHTML=`
+    <div class="cp ok"><span>⚙ Shot Hari Ini</span><span class="v">${kgH} kg</span></div>
+    <div class="cp wn"><span>🪣 Pasir Hari Ini</span><span class="v">${tpH} Troli</span></div>
+    <div class="cp if"><span>📊 Gentani Hari Ini</span><span class="v">${gvH?gvH+' Kg/T':'—'}</span></div>
+    <div class="cp mu"><span>📊 Gentani Bulan</span><span class="v">${gvB?gvB+' Kg/T':'—'}</span></div>
+    <div class="cp ok"><span>⚖ Ikomi Hari Ini</span><span class="v">${ikH||'—'} Ton</span></div>
+    <div class="cp wn"><span>⚙ Shot Bulan Ini</span><span class="v">${kgB} kg</span></div>`;
+  const al=[];const lo=+cfg.gtLo||0,hi=+cfg.gtHi||0;
+  if(hi>0&&gvH&&gvH>hi)al.push({t:'d',m:'⚠ Gentani hari ini TINGGI ('+gvH+' Kg/T) — batas atas '+hi});
+  if(lo>0&&gvH&&gvH<lo)al.push({t:'w',m:'⚡ Gentani hari ini RENDAH ('+gvH+' Kg/T) — batas bawah '+lo});
+  if(hi>0&&gvB&&gvB>hi)al.push({t:'w',m:'📊 Gentani akumulasi bulan TINGGI ('+gvB+' Kg/T)'});
+  if(!al.length)al.push({t:'o',m:'✅ Semua parameter dalam batas normal'});
+  document.getElementById('dash-alerts').innerHTML=al.map(a=>`<div class="al-i al-${a.t}">${a.m}</div>`).join('');
+  renderMC();
+  drawDbCharts();
+}
+
+// ── MACHINE CARDS ──
+function renderMC(){
+  const today=ld();
+  document.getElementById('mc-grid').innerHTML=['SNB-1','SNB-2','SNB-3','SNB-4'].map(snb=>{
+    const sh=shotLogs.filter(l=>l.snb===snb&&l.date===today);
+    const kg=sh.reduce((s,l)=>s+(l.type==='Baru'?(l.qty*25):l.qty_kg||(l.qty*15)),0);
+    const sd=sandLogs.filter(l=>l.snb===snb&&l.date===today);
+    const tr=sd.reduce((s,l)=>s+l.qty_pasir,0);
+    const last=sh[0];const cid='spark-'+snb.replace('-','');
+    return`<div class="mc"><div class="mc-nm">${snb}<span class="mc-bdg">AKTIF</span></div>
+      <div class="mc-stats">
+        <div class="mc-st"><div class="mc-stv t-ok">${kg}</div><div class="mc-stl">Kg Shot</div></div>
+        <div class="mc-st"><div class="mc-stv t-wn">${tr}</div><div class="mc-stl">Troli Pasir</div></div>
+        <div class="mc-st"><div class="mc-stv t-mu">${sh.length}</div><div class="mc-stl">Entri</div></div>
+      </div>
+      <div class="mc-spark"><canvas id="${cid}"></canvas></div>
+      <div style="font-size:.65rem;color:var(--muted);margin-top:5px;font-family:'Courier New',monospace">📅 ${today}${last?' | '+last.time:''}</div>
+    </div>`;
+  }).join('');
+  requestAnimationFrame(()=>{
+    ['SNB-1','SNB-2','SNB-3','SNB-4'].forEach(snb=>{
+      const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return ld(d);});
+      const data=days.map(d=>shotLogs.filter(l=>l.snb===snb&&l.date===d).reduce((s,l)=>s+(l.type==='Baru'?(l.qty*25):l.qty_kg||(l.qty*15)),0));
+      drawSpark('spark-'+snb.replace('-',''),data);
+    });
+  });
+}
+function drawSpark(id,data){
+  const cv=document.getElementById(id);if(!cv)return;
+  const W=cv.offsetWidth||cv.parentElement?.offsetWidth||120,H=48;
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  cv.width=W*dpr;cv.height=H*dpr;
+  const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
+  const N=data.length,max=Math.max(...data,1);
+  const xOf=i=>4+(N>1?(W-8)/(N-1)*i:W/2),yOf=v=>4+(H-8)*(1-v/max);
+  const ac=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#0066cc';
+  ctx.beginPath();ctx.strokeStyle=ac;ctx.lineWidth=1.5;ctx.lineJoin='round';
+  data.forEach((v,i)=>i?ctx.lineTo(xOf(i),yOf(v)):ctx.moveTo(xOf(i),yOf(v)));
+  ctx.stroke();
+}
+
+// ── CHART ENGINE ──
+function gv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888';}
+function drawCV(cid,fn){
+  const cv=document.getElementById(cid);if(!cv)return;
+  const rect=cv.getBoundingClientRect();
+  const W=Math.round(rect.width)||cv.parentElement?.offsetWidth||400;
+  const H=Math.round(rect.height)||280;
+  if(W<30||H<30){requestAnimationFrame(()=>drawCV(cid,fn));return;}
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  cv.width=W*dpr;cv.height=H*dpr;
+  const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
+  fn(ctx,W,H);
+}
+// ── GROUPED CLUSTER BAR CHART (Baru vs Lama per SNB) ──
+function chartGrouped(cid,labels,groups,opts){
+  // groups = [{label:'Baru',bars:[{snb,color,data}]},{label:'Lama',bars:[...]}]
+  opts=opts||{};
+  drawCV(cid,(ctx,W,H)=>{
+    const PAD={t:20,r:10,b:42,l:46};
+    const CW=W-PAD.l-PAD.r,CH=H-PAD.t-PAD.b;
+    if(CW<20||CH<20)return;
+    const allV=[];
+    groups.forEach(g=>g.bars.forEach(b=>b.data.forEach(v=>{if(v>0)allV.push(v);})));
+    const rawMax=Math.max(...allV,1);
+    function nU(v){const e=Math.pow(10,Math.floor(Math.log10(v)));const f=v/e;return(f<=1?1:f<=2?2:f<=5?5:10)*e;}
+    function nS(top){const ss=[1,2,5,10,20,50,100,200,500,1000,2000,5000,10000];for(const s of ss)if(top/s<=6)return s;return Math.ceil(top/5)||1;}
+    const YMAX=nU(rawMax*1.18),STEP=nS(YMAX);
+    const tks=[];for(let t=0;t<=YMAX;t+=STEP)tks.push(t);
+    // grid
+    ctx.clearRect(0,0,W,H);
+    tks.forEach(t=>{
+      const y=PAD.t+CH*(1-t/YMAX);
+      ctx.strokeStyle=gv('--border');ctx.lineWidth=1;ctx.setLineDash([]);
+      ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.stroke();
+      ctx.fillStyle=gv('--muted');ctx.font='600 9px sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';
+      ctx.fillText(t>=1000?(Math.round(t/100)/10)+'k':t,PAD.l-4,y);
+    });
+    const nDays=labels.length;
+    const nGroups=groups.length; // 2 (Baru, Lama)
+    const nSNB=groups[0]?.bars?.length||4;
+    const slotW=CW/Math.max(nDays,1);
+    const clusterGap=slotW*0.08; // gap between Baru and Lama cluster
+    const clusterW=(slotW*0.88-clusterGap)/nGroups;
+    const barW=Math.max(2,clusterW/nSNB*0.85);
+    groups.forEach((grp,gi)=>{
+      grp.bars.forEach((b,bi)=>{
+        b.data.forEach((v,di)=>{
+          if(!v)return;
+          const bh=CH*(Math.min(v,YMAX)/YMAX);
+          const slotX=PAD.l+di*slotW+slotW*0.06;
+          const clusterX=slotX+gi*(clusterW+clusterGap);
+          const x=clusterX+bi*clusterW/nSNB;
+          const y=PAD.t+CH-bh;
+          ctx.fillStyle=b.color;ctx.globalAlpha=0.85;ctx.fillRect(x,y,barW,bh);ctx.globalAlpha=1;
+          if(bh>8){
+            const lbl=v>=1000?(Math.round(v/100)/10)+'k':String(v);
+            ctx.save();
+            ctx.fillStyle=b.color;ctx.font='bold 7px sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';
+            ctx.translate(x+barW/2,y-2);ctx.rotate(-Math.PI/2);
+            ctx.fillText(lbl,0,0);
+            ctx.restore();
+          }
+        });
+      });
+    });
+    // x labels — tampil semua tanggal, font 8px, rotasi 60°
+    labels.forEach((l,i)=>{
+      const x=PAD.l+i*slotW+slotW/2;
+      ctx.save();ctx.font='600 8px sans-serif';ctx.fillStyle=gv('--muted');ctx.textAlign='right';ctx.textBaseline='top';
+      ctx.translate(x,PAD.t+CH+4);ctx.rotate(-Math.PI*60/180);ctx.fillText(l,0,0);ctx.restore();
+    });
+    // group labels (Baru / Lama) kecil di atas cluster pertama hari pertama
+    if(nDays>0){
+      groups.forEach((grp,gi)=>{
+        const slotX=PAD.l+0*slotW+slotW*0.06;
+        const clusterX=slotX+gi*(clusterW+clusterGap)+clusterW/2;
+        ctx.fillStyle=gv('--muted');ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
+        ctx.fillText(grp.label,clusterX,PAD.t-2);
+      });
+    }
+    ctx.setLineDash([]);
+  });
+}
+
+function chartBL(cid,labels,bars,lines,opts){
+  opts=opts||{};
+  drawCV(cid,(ctx,W,H)=>{
+    const PAD={t:14,r:8,b:36,l:42};
+    const CW=W-PAD.l-PAD.r,CH=H-PAD.t-PAD.b;
+    if(CW<20||CH<20)return;
+    const allV=[];
+    bars.forEach(s=>s.data.forEach(v=>{if(v>0)allV.push(v);}));
+    lines.forEach(s=>s.data.forEach(v=>{if(v!=null)allV.push(v);}));
+    if(opts.hl)opts.hl.forEach(h=>{if(h>0)allV.push(h);});
+    const rawMax=Math.max(...allV,1);
+    function nU(v){const e=Math.pow(10,Math.floor(Math.log10(v)));const f=v/e;return(f<=1?1:f<=2?2:f<=5?5:10)*e;}
+    function nS(top){const ss=[1,2,5,10,20,50,100,200,500,1000,2000,5000];for(const s of ss)if(top/s<=6)return s;return Math.ceil(top/5)||1;}
+    const YMAX=nU(rawMax*1.18),STEP=nS(YMAX);
+    const tks=[];for(let t=0;t<=YMAX;t+=STEP)tks.push(t);
+    const xOf=i=>PAD.l+(labels.length>1?(CW/(labels.length-1))*i:CW/2);
+    const yOf=v=>v==null?null:PAD.t+CH*(1-Math.min(Math.max(v,0),YMAX)/YMAX);
+    ctx.clearRect(0,0,W,H);
+    // grid
+    tks.forEach(t=>{
+      const y=PAD.t+CH*(1-t/YMAX);
+      ctx.strokeStyle=gv('--border');ctx.lineWidth=1;ctx.setLineDash([]);
+      ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.stroke();
+      ctx.fillStyle=gv('--muted');ctx.font='600 9px sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';
+      ctx.fillText(t>=1000?(Math.round(t/100)/10)+'k':t,PAD.l-4,y);
+    });
+    // hlines
+    if(opts.hl)opts.hl.forEach((hv,hi)=>{
+      if(!hv)return;const y=yOf(hv);if(y==null)return;
+      ctx.save();ctx.strokeStyle=(opts.hc&&opts.hc[hi])||gv('--ok');ctx.lineWidth=1.5;ctx.setLineDash([5,4]);
+      ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.stroke();ctx.restore();ctx.setLineDash([]);
+    });
+    // bars
+    const NS=bars.length;const sw=CW/labels.length;const bw=Math.max(3,sw*0.6/Math.max(NS,1));
+    bars.forEach((s,si)=>{
+      s.data.forEach((v,i)=>{
+        if(!v)return;const bh=CH*(v/YMAX);
+        const x=PAD.l+i*sw+(sw-NS*bw)/2+si*bw;const y=PAD.t+CH-bh;
+        ctx.fillStyle=s.color;ctx.globalAlpha=0.82;ctx.fillRect(x,y,bw,bh);ctx.globalAlpha=1;
+        if(bh>12){ctx.fillStyle=s.color;ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(v>=1000?(Math.round(v/100)/10)+'k':v,x+bw/2,y-1);}
+      });
+    });
+    // lines
+    lines.forEach(s=>{
+      const pts=s.data.map((v,i)=>({x:xOf(i),y:yOf(v)}));
+      ctx.beginPath();ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.lineJoin='round';ctx.setLineDash([]);
+      let st=false;pts.forEach(p=>{if(p.y==null)return;if(!st){ctx.moveTo(p.x,p.y);st=true;}else ctx.lineTo(p.x,p.y);});
+      ctx.stroke();
+      pts.forEach(p=>{if(p.y==null)return;ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);ctx.fillStyle=s.color;ctx.fill();});
+    });
+    // xlabels
+    const step=Math.ceil(labels.length/10);
+    labels.forEach((l,i)=>{
+      if(i%step!==0&&i!==labels.length-1)return;
+      const x=PAD.l+i*sw+sw/2;
+      ctx.save();ctx.font='600 9px sans-serif';ctx.fillStyle=gv('--muted');ctx.textAlign='right';ctx.textBaseline='top';ctx.translate(x,PAD.t+CH+4);ctx.rotate(-Math.PI*45/180);ctx.fillText(l,0,0);ctx.restore();
+    });
+    ctx.setLineDash([]);
+  });
+}
+
+// ── CHART DATA HELPERS ──
+
+function _setDefDates(id1,id2,days){
+  const e1=document.getElementById(id1),e2=document.getElementById(id2);
+  if(e1&&!e1.value)e1.value=ld(new Date(Date.now()-(days-1)*86400000));
+  if(e2&&!e2.value)e2.value=ld();
+}
+function getDaysRange(from,to,week){
+  const days=allDays(from,to);
+  if(!week)return{days,labels:days.map(d=>{const p=d.split('-');return p[2]+'/'+p[1];})};
+  const wks={};
+  days.forEach(d=>{const dt=pld(d);const wd=new Date(dt.getFullYear(),0,1);const wk=Math.ceil(((dt-wd)/86400000+wd.getDay()+1)/7);const key=d.slice(0,4)+'-W'+String(wk).padStart(2,'0');if(!wks[key])wks[key]={start:d,end:d};else wks[key].end=d;});
+  const wkKeys=Object.keys(wks);
+  return{days:wkKeys,labels:wkKeys.map(k=>wks[k].start.slice(5)+' ~'),wks};
+}
+function getDays(view){
+  const n=view==='week'?8:14;
+  const days=[...Array(n)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-(n-1)+i);return ld(d);});
+  if(view!=='week')return{days,labels:days.map(d=>{const p=d.split('-');return p[2]+'/'+p[1];})};
+  const wks={};
+  days.forEach(d=>{const dt=pld(d);const wd=new Date(dt.getFullYear(),0,1);const wk=Math.ceil(((dt-wd)/86400000+wd.getDay()+1)/7);const key=d.slice(0,4)+'-W'+String(wk).padStart(2,'0');if(!wks[key])wks[key]={start:d,end:d};else wks[key].end=d;});
+  const wkKeys=Object.keys(wks);
+  return{days:wkKeys,labels:wkKeys.map(k=>wks[k].start.slice(5)+' ~'),wks};
+}
+function aggW(logs,wks,fn){return Object.keys(wks).map(k=>{const{start,end}=wks[k];return fn(logs.filter(l=>l.date>=start&&l.date<=end));});}
+
+// ── DASHBOARD CHARTS ──
+function _initDbDates(){
+  const d14=ld(new Date(Date.now()-13*86400000)), td=ld();
+  ['db-ss','db-lb','db-gt'].forEach(pfx=>{
+    const e1=document.getElementById(pfx+'-d1'),e2=document.getElementById(pfx+'-d2');
+    if(e1&&!e1.value)e1.value=d14;
+    if(e2&&!e2.value)e2.value=td;
+  });
+}
+function drawDbCharts(){_initDbDates();drawDbSS();drawDbLB();drawDbGT();}
+let _dbSSTog={baru:true,bekas:true};
+function dbSSTog(k,btn){_dbSSTog[k]=!_dbSSTog[k];btn.classList.toggle('on',_dbSSTog[k]);drawDbSS();}
+function dbV(k,v,btn){_dbV[k]=v;const prefix='db-'+k+'-';document.querySelectorAll('[id^="'+prefix+'"]').forEach(b=>b.classList.remove('on'));btn.classList.add('on');if(k==='ss')drawDbSS();if(k==='lb')drawDbLB();if(k==='gt')drawDbGT();}
+function drawDbSS(){
+  const d1=document.getElementById('db-ss-d1')?.value, d2=document.getElementById('db-ss-d2')?.value;
+  const from=d1||ld(new Date(Date.now()-13*86400000)), to=d2||ld();
+  const{days,labels,wks}=getDaysRange(from,to,_dbV.ss==='week');
+  const bars=[];
+  if(_dbSSTog.baru){const baru=wks?aggW(shotLogs,wks,r=>r.filter(l=>l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0)):days.map(d=>shotLogs.filter(l=>l.date===d&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0));bars.push({color:'#0066cc',data:baru});}
+  if(_dbSSTog.bekas){const bekas=wks?aggW(shotLogs,wks,r=>r.filter(l=>l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0)):days.map(d=>shotLogs.filter(l=>l.date===d&&l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0));bars.push({color:'#d97706',data:bekas});}
+  chartBL('c-ss',labels,bars,[]);
+}
+function drawDbLB(){
+  const d1=document.getElementById('db-lb-d1')?.value, d2=document.getElementById('db-lb-d2')?.value;
+  const from=d1||ld(new Date(Date.now()-13*86400000)), to=d2||ld();
+  const{days,labels,wks}=getDaysRange(from,to,_dbV.lb==='week');
+  const pasir=wks?aggW(sandLogs,wks,r=>r.reduce((s,l)=>s+l.qty_pasir,0)):days.map(d=>sandLogs.filter(l=>l.date===d).reduce((s,l)=>s+l.qty_pasir,0));
+  chartBL('c-lb',labels,[{color:'#d97706',data:pasir}],[]);
+}
+function drawDbGT(){
+  const d1=document.getElementById('db-gt-d1')?.value, d2=document.getElementById('db-gt-d2')?.value;
+  const from=d1||ld(new Date(Date.now()-13*86400000)), to=d2||ld();
+  const{days,labels,wks}=getDaysRange(from,to,_dbV.gt==='week');
+  const gtD=wks
+    ?aggW(gtLogs,wks,r=>{const ik=r.reduce((s,l)=>s+l.ikomi,0);if(!ik||!r.length)return null;const d0=r[0]?.date;if(!d0)return null;const ssKg=getSSKgForDate(d0,'baru');return ik>0?+(ssKg/ik).toFixed(2):null;})
+    :days.map(d=>{const r=gtLogs.filter(l=>l.date===d);if(!r.length)return null;const ssKg=getSSKgForDate(d,'baru');const ik=r[0].ikomi;return ik>0?+(ssKg/ik).toFixed(2):null;});
+  let aS=0,aI=0;
+  const gtA=days.map((d,i)=>{
+    if(wks){const wkKeys=Object.keys(wks);const{start,end}=wks[wkKeys[i]||d]||{start:d,end:d};const r=gtLogs.filter(l=>l.date>=start&&l.date<=end);r.forEach(l=>{aS+=getSSKgForDate(l.date,'baru');aI+=l.ikomi;});}
+    else{const r=gtLogs.filter(l=>l.date===d);r.forEach(l=>{aS+=getSSKgForDate(d,'baru');aI+=l.ikomi;});}
+    return aI>0?+(aS/aI).toFixed(2):null;
+  });
+  const lo=+cfg.gtLo||0,hi=+cfg.gtHi||0;
+  chartBL('c-gt',labels,[{color:'#0891b2',data:gtD.map(v=>v||0)}],[{color:'#7c3aed',data:gtA}],{hl:[lo,hi],hc:['#059669','#dc2626']});
+}
+
+// ── STEELSHOT FULL CHART ──
+let _ssFV='day', _ssSh={baru:true,bekas:true};
+function ssView(v,btn){_ssFV=v;document.querySelectorAll('[id^=ss-v]').forEach(b=>b.classList.remove('on'));btn.classList.add('on');drawSSFull();}
+function ssTog(k,btn){_ssSh[k]=!_ssSh[k];btn.classList.toggle('on',_ssSh[k]);drawSSFull();}
+function drawSSFull(){
+  const d1=document.getElementById('ss-fdate1')?.value, d2=document.getElementById('ss-fdate2')?.value;
+  const from=d1||ld(new Date(Date.now()-13*86400000)), to=d2||ld();
+  const{days,labels,wks}=getDaysRange(from,to,_ssFV==='week');
+  const fsnb=document.getElementById('ss-fsnb-trend')?.value||'all';
+  const lg=document.getElementById('ss-full-legend');
+  const snbs=['SNB-1','SNB-2','SNB-3','SNB-4'];
+  if(fsnb==='all'){
+    // Grouped cluster: kiri=Baru, kanan=Lama — masing2 dipecah 4 SNB
+    const groups=[];
+    if(_ssSh.baru){
+      groups.push({label:'Baru',bars:snbs.map(snb=>({
+        snb,color:_impColors[snb],
+        data:days.map(d=>shotLogs.filter(l=>l.date===d&&l.snb===snb&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0))
+      }))});
+    }
+    if(_ssSh.bekas){
+      groups.push({label:'Lama',bars:snbs.map(snb=>({
+        snb,color:_impColors[snb]+'99',
+        data:days.map(d=>shotLogs.filter(l=>l.date===d&&l.snb===snb&&l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0))
+      }))});
+    }
+    chartGrouped('c-ss-full',labels,groups);
+    if(lg)lg.innerHTML=snbs.map(snb=>`<div class="lg-i"><div class="lg-d" style="background:${_impColors[snb]}"></div>${snb}</div>`).join('')
+      +(_ssSh.baru&&_ssSh.bekas?`<div class="lg-i" style="margin-left:8px;color:var(--muted);font-size:.75rem">■ solid=Baru, ■ transparan=Lama</div>`:'');
+  }else{
+    const filt=l=>l.snb===fsnb;
+    const baru=days.map(d=>shotLogs.filter(l=>l.date===d&&l.type==='Baru'&&filt(l)).reduce((s,l)=>s+(l.qty*25),0));
+    const bekas=days.map(d=>shotLogs.filter(l=>l.date===d&&l.type==='Bekas'&&filt(l)).reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0));
+    const bars=[];
+    if(_ssSh.baru)bars.push({color:'#0066cc',data:baru,label:'Baru (kg)'});
+    if(_ssSh.bekas)bars.push({color:'#d97706',data:bekas,label:'Lama (kg)'});
+    chartBL('c-ss-full',labels,bars,[]);
+    if(lg)lg.innerHTML=bars.map(b=>`<div class="lg-i"><div class="lg-d" style="background:${b.color}"></div>${b.label}</div>`).join('');
+  }
+}
+
+// ── LIMBAH FULL CHART ──
+let _lbFV='day';
+function lbView(v,btn){_lbFV=v;document.querySelectorAll('[id^=lb-v]').forEach(b=>b.classList.remove('on'));btn.classList.add('on');drawLBFull();}
+function drawLBFull(){
+  const d1=document.getElementById('lb-fdate1')?.value, d2=document.getElementById('lb-fdate2')?.value;
+  const from=d1||ld(new Date(Date.now()-13*86400000)), to=d2||ld();
+  const{days,labels,wks}=getDaysRange(from,to,_lbFV==='week');
+  const fsnb=document.getElementById('lb-fsnb-trend')?.value||'all';
+  const lo=+cfg.pLo||0,hi=+cfg.pHi||0;
+  const lg=document.getElementById('lb-full-legend');
+  const snbs=['SNB-1','SNB-2','SNB-3','SNB-4'];
+  if(fsnb==='all'){
+    const groups=[{label:'Pasir',bars:snbs.map(snb=>({
+      snb,color:_impColors[snb],
+      data:days.map(d=>sandLogs.filter(l=>l.date===d&&l.snb===snb).reduce((s,l)=>s+l.qty_pasir,0))
+    }))}];
+    chartGrouped('c-lb-full',labels,groups);
+    if(lg)lg.innerHTML=snbs.map(snb=>`<div class="lg-i"><div class="lg-d" style="background:${_impColors[snb]}"></div>${snb}</div>`).join('');
+  }else{
+    const filt=l=>l.snb===fsnb;
+    const pasir=days.map(d=>sandLogs.filter(l=>l.date===d&&filt(l)).reduce((s,l)=>s+l.qty_pasir,0));
+    chartBL('c-lb-full',labels,[{color:'#d97706',data:pasir}],[],{hl:[lo,hi],hc:['#059669','#dc2626']});
+    if(lg)lg.innerHTML=`<div class="lg-i"><div class="lg-d" style="background:#d97706"></div>Pasir (Troli)</div>`;
+  }
+}
+
+// ── IMPELER FULL CHART (Ampere per mesin) ──
+const _impColors={'SNB-1':'#0891b2','SNB-2':'#0066cc','SNB-3':'#d97706','SNB-4':'#dc2626'};
+function drawImpFull(){
+  const d1=document.getElementById('imp-fdate1')?.value, d2=document.getElementById('imp-fdate2')?.value;
+  const fsnb=document.getElementById('imp-fsnb')?.value||'all';
+  const today=ld();
+  const from=d1||ld(new Date(Date.now()-13*86400000)), to=d2||today;
+  const days=allDays(from,to);
+  const labels=days.map(d=>{const p=d.split('-');return p[2]+'/'+p[1];});
+  const lines=[];const legend=[];
+  const snbs=fsnb==='all'?['SNB-1','SNB-2','SNB-3','SNB-4']:[fsnb];
+  snbs.forEach(snb=>{
+    const i1=days.map(d=>{const r=impLogs.filter(l=>l.date===d&&l.snb===snb).sort((a,b)=>b.id-a.id)[0];return r?r.imp1_amp||null:null;});
+    const i2=days.map(d=>{const r=impLogs.filter(l=>l.date===d&&l.snb===snb).sort((a,b)=>b.id-a.id)[0];return r?r.imp2_amp||null:null;});
+    const c=_impColors[snb];
+    lines.push({color:c,data:i1});
+    lines.push({color:c+'99',data:i2});
+    legend.push({c,l:snb+' Imp1'});
+    legend.push({c:c+'99',l:snb+' Imp2'});
+  });
+  chartBL('c-imp-full',labels,[],lines,{hl:[30,40],hc:['#059669','#dc2626']});
+  const lg=document.getElementById('imp-full-legend');
+  if(lg){
+    lg.innerHTML=legend.map(x=>`<div class="lg-i"><div class="lg-d" style="background:${x.c}"></div>${x.l}</div>`).join('')
+      +`<div class="lg-i"><div class="lg-d" style="background:#059669"></div>Batas Bawah 30A</div>`
+      +`<div class="lg-i"><div class="lg-d" style="background:#dc2626"></div>Batas Atas 40A</div>`;
+  }
+}
+function gtPd(v){_gtPdV=v;drawGTFull();}
+function getSSKgForDate(date, mode){
+  const shots=shotLogs.filter(l=>l.date===date);
+  const kgBaru=shots.filter(l=>l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
+  const kgBekas=shots.filter(l=>l.type==='Bekas').reduce((s,l)=>s+(l.qty_kg||(l.qty*15)),0);
+  return mode==='all'?(kgBaru+kgBekas):kgBaru;
+}
+function drawGTFull(){
+  const today=ld();const now=new Date();
+  const chartMode=document.getElementById('gt-chart-mode')?.value||'baru';
+  let from,to;
+  if(_gtPdV==='cur'){from=today.slice(0,7)+'-01';to=today;}
+  else if(_gtPdV==='prev'){const d=new Date(now.getFullYear(),now.getMonth()-1,1);const e=new Date(now.getFullYear(),now.getMonth(),0);from=ld(d);to=ld(e);}
+  else if(_gtPdV==='3m'){from=ld(new Date(now-90*86400000));to=today;}
+  else{from=ld(new Date(now-180*86400000));to=today;}
+  const days=allDays(from,to);
+  const labels=days.map(d=>{const p=d.split('-');return p[2]+'/'+bn(p[1]);});
+  // Build gentani per day from gtLogs OR compute directly from shotLogs+gtLogs
+  const gtD=days.map(d=>{
+    // Use saved gentani log if exists for that day with matching mode
+    const gtRow=gtLogs.filter(l=>l.date===d&&(l.mode===chartMode||(chartMode==='baru'&&!l.mode))).sort((a,b)=>b.id-a.id)[0];
+    if(gtRow) return +gtRow.gentani;
+    // Else compute on-the-fly from shotLogs: need ikomi from any gt entry that day
+    const anyGt=gtLogs.find(l=>l.date===d);
+    if(!anyGt) return null;
+    const ssKg=getSSKgForDate(d,chartMode);
+    return anyGt.ikomi>0?+(ssKg/anyGt.ikomi).toFixed(2):null;
+  });
+  let aS=0,aI=0;
+  const gtA=days.map((d,i)=>{
+    const gtRows=gtLogs.filter(l=>l.date===d);
+    gtRows.forEach(r=>{aS+=getSSKgForDate(d,chartMode)/Math.max(gtRows.length,1);aI+=r.ikomi/Math.max(gtRows.length,1);});
+    return aI>0?+(aS/aI).toFixed(2):null;
+  });
+  const lo=+cfg.gtLo||0,hi=+cfg.gtHi||0;
+  chartBL('c-gt-full',labels,[{color:'#0891b2',data:gtD.map(v=>v||0)}],[{color:'#7c3aed',data:gtA}],{hl:[lo,hi],hc:['#059669','#dc2626']});
+}
+
+// ── WHATSAPP ──
+let _waScope='shift'; // 'shift' | 'resume'
+let _waShift='NSP';
+let _waDate='';
+function _setWaScope(scope){
+  _waScope=scope;
+  const note=document.getElementById('wa-resume-note');
+  if(note)note.style.display=scope==='resume'?'block':'none';
+  _buildWAMsg(_waKind);
+}
+function _setWaShift(sh){
+  _waShift=sh;
+  document.querySelectorAll('.wa-sh-btn').forEach(b=>b.classList.toggle('on',b.dataset.sh===sh));
+  _buildWAMsg(_waKind);
+}
+function _onWaDate(){
+  _waDate=document.getElementById('wa-date-pick').value||'';
+  _buildWAMsg(_waKind);
+}
+function _buildWAMsg(kind){
+  const now=new Date();
+  const jam=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+  const tgl=now.toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  // Use picked date or fall back to form date or today
+  let rptDate=_waDate||ld();
+  if(!_waDate){
+    if(kind==='ss'){const d=document.getElementById('ss-date')?.value;if(d)rptDate=d;}
+    if(kind==='lb'){const d=document.getElementById('lb-date')?.value;if(d)rptDate=d;}
+    if(kind==='gt'){const d=document.getElementById('gt-date')?.value;if(d)rptDate=d;}
+  }
+  const mn=rptDate.slice(0,7);
+  const tglLaporan=rptDate===ld()?'Hari Ini ('+fd(rptDate)+')':'Tanggal: '+fd(rptDate);
+  const isResume=_waScope==='resume';
+  const sh=_waShift;
+
+  // ── Helper: build SS block for a given date+shift filter (HANYA STEELSHOT BARU) ──
+  function ssBlock(logs,shiftFilter){
+    const d=shiftFilter?logs.filter(l=>l.shift===shiftFilter):logs;
+    const kgBaru=d.filter(l=>l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
+    const karung=d.filter(l=>l.type==='Baru').reduce((s,l)=>s+l.qty,0);
+    return{kgBaru,karung,total:kgBaru};
+  }
+  function lbBlock(logs,shiftFilter){
+    const d=shiftFilter?logs.filter(l=>l.shift===shiftFilter):logs;
+    return{pasir:d.reduce((s,l)=>s+l.qty_pasir,0)};
+  }
+  // ── Per mesin breakdown ──
+  function ssPerSnb(logs,shiftFilter){
+    const d=shiftFilter?logs.filter(l=>l.shift===shiftFilter):logs;
+    return['SNB-1','SNB-2','SNB-3','SNB-4'].map(snb=>{
+      const kg=d.filter(l=>l.snb===snb&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
+      return'  '+snb+': *'+kg+' Kg*';
+    }).join('\n');
+  }
+  function lbPerSnbPasir(logs,shiftFilter){
+    const d=shiftFilter?logs.filter(l=>l.shift===shiftFilter):logs;
+    return['SNB-1','SNB-2','SNB-3','SNB-4'].map(snb=>{
+      const p=d.filter(l=>l.snb===snb).reduce((s,l)=>s+l.qty_pasir,0);
+      return'  '+snb+': *'+p+' Troli*';
+    }).join('\n');
+  }
+
+  let msg='';
+  if(isResume){
+    // ── RESUME SEMUA — Steelshot (Baru) + Limbah Debu + Impeler, breakdown per mesin ──
+    const ssAll=shotLogs.filter(l=>l.date===rptDate);
+    const lbAll=sandLogs.filter(l=>l.date===rptDate);
+    const impAll=impLogs.filter(l=>l.date===rptDate);
+    const ssNSP=ssBlock(ssAll,'NSP'), ssNSM=ssBlock(ssAll,'NSM'), ssTotal=ssBlock(ssAll,null);
+    const lbNSP=lbBlock(lbAll,'NSP'), lbNSM=lbBlock(lbAll,'NSM');
+    const lbTot={pasir:lbNSP.pasir+lbNSM.pasir};
+    const kgBulan=shotLogs.filter(l=>l.date?.startsWith(mn)&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
+    // impeler per SNB
+    const impLines=['SNB-1','SNB-2','SNB-3','SNB-4'].map(snb=>{
+      const r=impAll.filter(l=>l.snb===snb);
+      if(!r.length)return'  '+snb+': —';
+      const last=r[0];
+      const i1=last.imp1_amp?last.imp1_amp+'A ('+last.imp1_cond+')':'—';
+      const i2=last.imp2_amp?last.imp2_amp+'A ('+last.imp2_cond+')':'—';
+      return'  '+snb+': Imp1 *'+i1+'* | Imp2 *'+i2+'*';
+    }).join('\n');
+    const rs=_waResumeShift;
+    if(rs==='NSP'||rs==='NSM'){
+      const ssSh=rs==='NSP'?ssNSP:ssNSM;
+      const lbSh=rs==='NSP'?lbNSP:lbNSM;
+      const ssSnbLines=ssPerSnb(ssAll,rs);
+      const pasirSnbLines=lbPerSnbPasir(lbAll,rs);
+      msg=`📋 *RESUME HARIAN — ${fd(rptDate)}*\n📅 ${tgl}\n🕐 Shift *${rs}* | Dikirim: ${jam}\n━━━━━━━━━━━━━━━━━━━\n⚙ *STEELSHOT*\n  Total : *${ssSh.total} Kg* (${ssSh.karung} karung)\n${ssSnbLines}\n  Bulan : *${kgBulan} Kg* akumulasi\n\n🪣 *LIMBAH PASIR*\n  Total : *${lbSh.pasir} Troli*\n${pasirSnbLines}\n\n⚡ *IMPELER*\n${impLines}\n━━━━━━━━━━━━━━━━━━━\n\n_Dikirim ${jam} — SNB Casting 2_`;
+    }else{
+      const ssSnbLines=ssPerSnb(ssAll,null);
+      const pasirSnbLines=lbPerSnbPasir(lbAll,null);
+      msg=`📋 *RESUME HARIAN — ${fd(rptDate)}*\n📅 ${tgl}\n🕐 Dikirim: ${jam}\n━━━━━━━━━━━━━━━━━━━\n⚙ *STEELSHOT*\n  NSP   : *${ssNSP.total} Kg* (${ssNSP.karung} karung)\n  NSM   : *${ssNSM.total} Kg* (${ssNSM.karung} karung)\n  Total : *${ssTotal.total} Kg*\n${ssSnbLines}\n  Bulan : *${kgBulan} Kg* akumulasi\n\n🪣 *LIMBAH PASIR*\n  NSP   : *${lbNSP.pasir} Troli*\n  NSM   : *${lbNSM.pasir} Troli*\n  Total : *${lbTot.pasir} Troli*\n${pasirSnbLines}\n\n⚡ *IMPELER*\n${impLines}\n━━━━━━━━━━━━━━━━━━━\n\n_Dikirim ${jam} — SNB Casting 2_`;
+    }
+    document.getElementById('wa-title').textContent='📋 Resume Harian';
+  } else if(kind==='ss'){
+    const ssAll=shotLogs.filter(l=>l.date===rptDate);
+    const b=ssBlock(ssAll,sh);
+    const kgB=shotLogs.filter(l=>l.date?.startsWith(mn)&&l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
+    const perSnb=ssPerSnb(ssAll,sh);
+    msg=`⚙ *LAPORAN STEELSHOT*\n📅 ${tgl}\n📌 ${tglLaporan}\n🕐 Shift *${sh}* | Dikirim: ${jam}\n━━━━━━━━━━━━━━━━━━━\n*PEMAKAIAN SHIFT ${sh}*\n  Baru  : *${b.karung} karung = ${b.kgBaru} Kg*\n  Total : *${b.total} Kg*\n\n*PER MESIN SNB*\n${perSnb}\n\n*AKUMULASI BULAN ${bn(mn.slice(5))} ${mn.slice(0,4)}*\n  Total : *${kgB} Kg*\n━━━━━━━━━━━━━━━━━━━\n\n_Dikirim ${jam} — SNB Casting 2_`;
+    document.getElementById('wa-title').textContent='📱 Laporan Steelshot';
+  } else if(kind==='lb'){
+    const lbAll=sandLogs.filter(l=>l.date===rptDate);
+    const b=lbBlock(lbAll,sh);
+    const lo=+cfg.pLo||0,hi=+cfg.pHi||0;
+    const stP=hi>0&&b.pasir>hi?'🔴 *MELEBIHI BATAS*':lo>0&&b.pasir<lo?'🟡 *DI BAWAH BATAS*':'🟢 Normal';
+    const perSnb=['SNB-1','SNB-2','SNB-3','SNB-4'].map(snb=>{
+      const rows=lbAll.filter(l=>l.snb===snb&&l.shift===sh);
+      const p=rows.reduce((s,l)=>s+l.qty_pasir,0);
+      return'  '+snb+': *'+p+' Troli*';
+    }).join('\n');
+    msg=`🪣 *LAPORAN LIMBAH PASIR*\n📅 ${tgl}\n📌 ${tglLaporan}\n🕐 Shift *${sh}* | Dikirim: ${jam}\n━━━━━━━━━━━━━━━━━━━\n*KELUARAN SHIFT ${sh}*\n  Total Pasir : *${b.pasir} Troli*\n  Status Pasir: ${stP}\n\n*PER MESIN SNB*\n${perSnb}\n━━━━━━━━━━━━━━━━━━━\n🎯 Target: ${lo||'—'} s/d ${hi||'—'} Troli/hari\n\n_Dikirim ${jam} — SNB Casting 2_`;
+    document.getElementById('wa-title').textContent='📱 Laporan Limbah';
+  } else if(kind==='gt'){
+    const gtH=gtLogs.filter(l=>l.date===rptDate);
+    const latest=gtH[0];
+    const ssH=latest?.ss_kg||((latest?.ss550||0)+(latest?.wc||0));
+    const ikH=latest?.ikomi||0;
+    const gvH=latest?.gentani?latest.gentani.toFixed(2):null;
+    const modeLabel=latest?.mode==='all'?'Baru+Bekas':'Baru Saja';
+    const stH=gvH?gtStr(+gvH):'⬛ Belum ada data';
+    const gtB=gtLogs.filter(l=>l.date?.startsWith(mn));
+    const ssB=gtB.reduce((s,l)=>s+(l.ss_kg||((l.ss550||0)+(l.wc||0))),0);
+    const ikB=gtB.reduce((s,l)=>s+l.ikomi,0);
+    const gvB=ikB>0?(ssB/ikB).toFixed(2):null;
+    const stB=gvB?gtStr(+gvB):'⬛ Belum ada data';
+    const th=rptDate.split('-');const lo=+cfg.gtLo||0,hi=+cfg.gtHi||0;
+    const ovr=(stH.includes('TINGGI')||stB.includes('TINGGI'))?'🔴':(stH.includes('RENDAH')||stB.includes('RENDAH'))?'🟡':'🟢';
+    msg=`📊 *LAPORAN GENTANI STEELSHOT*\n📅 ${tgl}\n📌 ${tglLaporan}\n🕐 Dikirim: ${jam}\n━━━━━━━━━━━━━━━━━━━\n_Gentani = SS Terpakai ÷ Ikomi Ton_\n_Mode: ${modeLabel}_\n\n*GENTANI ${fd(rptDate)}*\n  Steelshot : *${ssH} Kg*\n  Ikomi     : *${ikH} Ton*\n  Gentani   : *${gvH?gvH+' Kg/Ton':'—'}*\n  Status    : ${stH}\n\n*AKUMULASI ${bn(th[1])} ${th[0]}* (s/d ${th[2]})\n  Total SS  : *${ssB} Kg*\n  Total IK  : *${ikB} Ton*\n  Gentani   : *${gvB?gvB+' Kg/Ton':'—'}*\n  Status    : ${stB}\n━━━━━━━━━━━━━━━━━━━\n🎯 Target: ${lo||'—'} s/d ${hi||'—'} Kg/Ton\n${ovr} *KESIMPULAN: ${ovr==='🟢'?'NORMAL':'PERLU PERHATIAN'}*\n\n_Dikirim ${jam} — SNB Casting 2_`;
+    document.getElementById('wa-title').textContent='📱 Laporan Gentani';
+  }
+  _waMsg=msg;
+  document.getElementById('wa-prev').textContent=msg;
+}
+function openWA(kind){
+  if((kind==='ss'||kind==='lb')){
+    const dateField=kind==='ss'?'ss-date':'lb-date';
+    const formDate=document.getElementById(dateField)?.value||ld();
+    if(formDate!==ld()){
+      toastMob('📁 Tanggal '+fd(formDate)+' adalah data lama — tersimpan, tidak dikirim ke WA','warn');
+      return;
+    }
+  }
+  _waKind=kind;
+  _waScope='shift';
+  _waShift=_sh[kind]||'NSP';
+  _waDate='';
+  document.getElementById('wa-note').value='';
+  const scopeBar=document.getElementById('wa-scope-bar');
+  const today=ld();
+  if(scopeBar){
+    const hasShift=(kind==='ss'||kind==='lb');
+    scopeBar.innerHTML=`
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+        ${hasShift?`<div>
+          <div style="font-size:.65rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Shift</div>
+          <div style="display:flex;gap:6px">
+            <button class="chc-b wa-sh-btn ${_waShift==='NSP'?'on':''}" data-sh="NSP" onclick="_setWaShift('NSP')">🌅 NSP</button>
+            <button class="chc-b wa-sh-btn ${_waShift==='NSM'?'on':''}" data-sh="NSM" onclick="_setWaShift('NSM')">🌙 NSM</button>
+          </div>
+        </div>`:''}
+        <div>
+          <div style="font-size:.65rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Tanggal Laporan</div>
+          <input type="date" id="wa-date-pick" value="${today}" oninput="_onWaDate()" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:8px 10px;color:var(--text);font-family:inherit;font-size:.85rem">
+        </div>
+      </div>`;
+  }
+  _buildWAMsg(kind);
+  document.getElementById('wa-modal').classList.add('on');
+}
+
+function closeWM(){document.getElementById('wa-modal').classList.remove('on');}
+function sendWA(){
+  const note=document.getElementById('wa-note').value.trim();
+  let msg=_waMsg;
+  if(note)msg=msg.replace(/\n_Dikirim/,'\n📝 *Catatan:* '+note+'\n_Dikirim');
+  const no=(cfg.waNo||'').replace(/\D/g,'');
+  window.open('https://wa.me/'+(no||'')+'?text='+encodeURIComponent(msg),'_blank');
+  closeWM();
+}
+
+// ── SETTING ──
+function loadSetUI(){
+  document.getElementById('s-gtlo').value=cfg.gtLo||'';
+  document.getElementById('s-gthi').value=cfg.gtHi||'';
+  document.getElementById('s-plo').value=cfg.pLo||'';
+  document.getElementById('s-phi').value=cfg.pHi||'';
+  document.getElementById('s-dlo').value=cfg.dLo||'';
+  document.getElementById('s-dhi').value=cfg.dHi||'';
+  document.getElementById('s-wa').value=cfg.waNo||'';
+  document.getElementById('s-sburl').value=SB_URL||'';
+  document.getElementById('s-sbkey').value=SB_KEY||'';
+  document.getElementById('s-sbst').textContent=sbOnline?'✅ Terhubung':'❌ Tidak terhubung';
+}
+function saveCfg(ev){const b=ev?.currentTarget;if(b)b.disabled=true;
+  cfg.gtLo=+document.getElementById('s-gtlo').value||0;cfg.gtHi=+document.getElementById('s-gthi').value||0;
+  cfg.pLo=+document.getElementById('s-plo').value||0;cfg.pHi=+document.getElementById('s-phi').value||0;
+  cfg.dLo=+document.getElementById('s-dlo').value||0;cfg.dHi=+document.getElementById('s-dhi').value||0;
+  saveCfgL();toast('✅ Setting tersimpan');renderDash();if(b)setTimeout(()=>b.disabled=false,500);
+}
+function saveWA(){cfg.waNo=document.getElementById('s-wa').value.trim();saveCfgL();toast('✅ No. WA disimpan');}
+function saveSB(){
+  SB_URL=document.getElementById('s-sburl').value.trim();SB_KEY=document.getElementById('s-sbkey').value.trim();
+  localStorage.setItem('snb_sb_url',SB_URL);localStorage.setItem('snb_sb_key',SB_KEY);
+  toast('🔄 Reconnecting...','warn');sbOnline=false;sbInit();
+}
+function clearLocal(){
+  if(!confirm('⚠ Hapus semua data lokal? Tidak bisa dibatalkan!'))return;
+  localStorage.removeItem('snb_shot');localStorage.removeItem('snb_sand');localStorage.removeItem('snb_gt');
+  shotLogs=[];sandLogs=[];gtLogs=[];renderDash();toast('🗑 Data lokal dihapus','warn');
+}
+
+// ── SNAPSHOT ──
+async function doSnapshot(){
+  try{
+    let shots=shotLogs,sands=sandLogs,gts=gtLogs;
+    if(sbOnline){
+      toast('📥 Mengambil data Supabase...','warn',5000);
+      [shots,sands,gts]=await Promise.all([
+        sbF(T_SS+'?order=created_at.desc&limit=2000').catch(()=>[]),
+        sbF(T_LB+'?order=created_at.desc&limit=2000').catch(()=>[]),
+        sbF(T_GT+'?order=created_at.desc&limit=2000').catch(()=>[]),
+      ]).then(([s,sd,g])=>[
+        s.map(r=>({id:r.id,snb:r.snb,shift:r.shift||'NSP',type:r.jenis,qty:+r.qty,qty_unit:r.qty_unit,qty_kg:r.qty_kg||null,op:r.operator,note:r.catatan||'',time:r.waktu,date:r.tanggal||r.created_at?.slice(0,10)||''})),
+        sd.map(r=>({id:r.id,snb:r.snb,shift:r.shift||'NSP',qty_pasir:+r.qty_pasir||0,qty_debu:+r.qty_debu||0,loc:r.lokasi||'',op:r.operator,note:r.catatan||'',time:r.waktu,date:r.tanggal||r.created_at?.slice(0,10)||''})),
+        g.map(r=>({id:r.id,shift:r.shift||'NSP',ss550:+r.ss550||0,wc:+r.wire_cut||0,slb:+r.slb||0,ikomi:+r.ikomi||0,gentani:+r.gentani||0,op:r.operator,note:r.catatan||'',time:r.waktu,date:r.tanggal||r.created_at?.slice(0,10)||''}))
+      ]);
+    }
+    const res=await fetch(window.location.href);let html=await res.text();
+    const ts=new Date().toLocaleString('id-ID');
+    html=html.replace('let shotLogs=[];',`let shotLogs=${JSON.stringify(shots)};`);
+    html=html.replace('let sandLogs=[];',`let sandLogs=${JSON.stringify(sands)};`);
+    html=html.replace('let gtLogs=[];',`let gtLogs=${JSON.stringify(gts)};`);
+    html=html.replace('sbInit();',`(function(){const p=document.getElementById('db-pill');if(p){p.className='db-pill snap';p.textContent='📦 SNAPSHOT ${ts}';}loadLS();renderDash();})();`);
+    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='snb_snapshot_'+ld()+'_'+lt().replace(':','h')+'.html';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+    toast('✅ Snapshot: '+shots.length+' shot | '+sands.length+' limbah | '+gts.length+' gentani');
+  }catch(e){toast('❌ Snapshot gagal: '+e.message,'danger');}
+}
+
+// ── INIT ──
+(function(){
+  const t=ld();
+  const ss_d=document.getElementById('ss-date');if(ss_d)ss_d.value=t;
+  const ld_el=document.getElementById('lb-date');if(ld_el)ld_el.value=t;
+  const gt_el=document.getElementById('gt-date');if(gt_el)gt_el.value=t;
+  const imp_d=document.getElementById('imp-date');if(imp_d)imp_d.value=t;
+  const sp_d=document.getElementById('sp-date');if(sp_d)sp_d.value=t;
+  sbInit();
+  setTimeout(onGTDateChange, 500);
+})();
+</script>
+</body>
+</html>
