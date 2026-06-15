@@ -980,6 +980,10 @@ tr:hover td{background:var(--accent-bg);}
     <div class="sr"><div class="sl">URL</div><input class="si si-w" type="text" id="s-sburl" placeholder="https://xxx.supabase.co"></div>
     <div class="sr"><div class="sl">Anon Key</div><input class="si si-w" type="text" id="s-sbkey" placeholder="eyJ..."></div>
     <div style="font-size:.72rem;color:var(--muted);margin-top:4px">Status: <span id="s-sbst" style="font-weight:700">—</span></div>
+    <div style="margin-top:8px;padding:8px 10px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:8px;font-size:.72rem;">
+      ⚠ Jika Gentani gagal simpan karena tabel belum ada, klik tombol di bawah untuk copy SQL, lalu jalankan di <b>Supabase → SQL Editor</b>.
+      <button onclick="copyGentaniSQL()" style="margin-top:6px;width:100%;padding:6px;background:#d97706;color:#fff;border:none;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer">📋 Copy SQL: Buat Tabel snb_gentani</button>
+    </div>
     <button class="btn btn-p btn-s" style="margin-top:10px" onclick="saveSB()">💾 Simpan &amp; Reconnect</button>
   </div>
   <div class="cd">
@@ -1527,9 +1531,22 @@ async function submitGT(ev){
     const row={mode,ss_kg:ssKg,ss_baru:kgBaru,ss_bekas:kgBekas,ikomi,gentani,operator:op,catatan:note,waktu:lt(),tanggal:date};
     let id=uid();
     if(sbOnline){
-      // Store in supabase — map to existing columns
       const sbRow={shift:'HARIAN',ss550:kgBaru,wire_cut:0,slb:kgBekas,ikomi,gentani,operator:op,catatan:(mode==='all'?'[BARU+BEKAS] ':'[BARU] ')+note,waktu:lt(),tanggal:date};
-      const res=await sbF(T_GT,'POST',sbRow);if(res&&res[0])id=res[0].id;
+      try{
+        const res=await sbF(T_GT,'POST',sbRow);if(res&&res[0])id=res[0].id;
+      }catch(sbErr){
+        // Tabel snb_gentani belum dibuat — simpan lokal, tampilkan pesan SQL
+        const sqlHint=`-- Jalankan di Supabase SQL Editor:\nCREATE TABLE IF NOT EXISTS public.snb_gentani (\n  id bigserial PRIMARY KEY,\n  shift text,\n  ss550 numeric,\n  wire_cut numeric,\n  slb numeric,\n  ikomi numeric,\n  gentani numeric,\n  operator text,\n  catatan text,\n  waktu text,\n  tanggal date,\n  created_at timestamptz DEFAULT now()\n);`;
+        hideSpin();
+        showFail('Tabel snb_gentani Belum Ada','⚠️','Data disimpan lokal. Buat tabel dulu di Supabase:\n\n'+sqlHint);
+        // Tetap simpan lokal
+        gtLogs.unshift({id,mode,ss_kg:ssKg,ss_baru:kgBaru,ss_bekas:kgBekas,ikomi,gentani,op,note,time:lt(),date,shift:'HARIAN',ss550:kgBaru,wc:0,slb:kgBekas});
+        localStorage.setItem('snb_gt',JSON.stringify(gtLogs));
+        document.getElementById('gt-ikomi').value='';document.getElementById('gt-note').value='';
+        document.getElementById('gt-prev-box').style.display='none';
+        renderGT();drawGTFull();renderDash();
+        btn.disabled=false;return;
+      }
     }
     gtLogs.unshift({id,mode,ss_kg:ssKg,ss_baru:kgBaru,ss_bekas:kgBekas,ikomi,gentani,op,note,time:lt(),date,
       // keep legacy fields for compatibility
@@ -1886,7 +1903,7 @@ function chartGrouped(cid,labels,groups,opts){
   // groups = [{label:'Baru',bars:[{snb,color,data}]},{label:'Lama',bars:[...]}]
   opts=opts||{};
   drawCV(cid,(ctx,W,H)=>{
-    const PAD={t:20,r:10,b:46,l:52};
+    const PAD={t:38,r:10,b:46,l:52};
     const CW=W-PAD.l-PAD.r,CH=H-PAD.t-PAD.b;
     if(CW<20||CH<20)return;
     const allV=[];
@@ -1922,19 +1939,17 @@ function chartGrouped(cid,labels,groups,opts){
           const x=clusterX+bi*clusterW/nSNB;
           const y=PAD.t+CH-bh;
           ctx.fillStyle=b.color;ctx.globalAlpha=0.85;ctx.fillRect(x,y,barW,bh);ctx.globalAlpha=1;
-          // label nilai: vertikal di dalam bar, clipped supaya tidak keluar
+          // label vertikal di ATAS bar — font fixed 7px, selalu tampil
           const lbl=v.toLocaleString('id-ID');
-          const fs=Math.min(8,barW-1);
-          if(bh>20&&fs>=5){
-            ctx.save();
-            ctx.rect(x,y,barW,bh);ctx.clip();
-            ctx.fillStyle='#fff';ctx.globalAlpha=0.92;
-            ctx.font='bold '+fs+'px sans-serif';
-            ctx.textAlign='center';ctx.textBaseline='middle';
-            ctx.translate(x+barW/2,y+bh/2);ctx.rotate(-Math.PI/2);
-            ctx.fillText(lbl,0,0);
-            ctx.restore();
-          }
+          ctx.save();
+          ctx.font='bold 7px sans-serif';
+          ctx.textAlign='left';ctx.textBaseline='middle';
+          ctx.translate(x+barW/2,y-2);ctx.rotate(-Math.PI/2);
+          ctx.strokeStyle=gv('--bg')||'#ffffff';ctx.lineWidth=3;ctx.lineJoin='round';
+          ctx.strokeText(lbl,0,0);
+          ctx.fillStyle=gv('--text')||'#111827';
+          ctx.fillText(lbl,0,0);
+          ctx.restore();
         });
       });
     });
@@ -2000,19 +2015,17 @@ function chartBL(cid,labels,bars,lines,opts){
         if(!v)return;const bh=CH*(v/YMAX);
         const x=PAD.l+i*sw+(sw-NS*bw)/2+si*bw;const y=PAD.t+CH-bh;
         ctx.fillStyle=s.color;ctx.globalAlpha=0.82;ctx.fillRect(x,y,bw,bh);ctx.globalAlpha=1;
-        // label nilai: vertikal di dalam bar, hanya tampil kalau bar cukup tinggi
+        // label vertikal di ATAS bar — font fixed 7px, selalu tampil
         const lbl=v.toLocaleString('id-ID');
-        const fs=Math.min(9,bw-2);
-        if(bh>22&&fs>=5){
-          ctx.save();
-          ctx.rect(x,y,bw,bh);ctx.clip();
-          ctx.fillStyle='#fff';ctx.globalAlpha=0.92;
-          ctx.font='bold '+fs+'px sans-serif';
-          ctx.textAlign='center';ctx.textBaseline='middle';
-          ctx.translate(x+bw/2,y+bh/2);ctx.rotate(-Math.PI/2);
-          ctx.fillText(lbl,0,0);
-          ctx.restore();
-        }
+        ctx.save();
+        ctx.font='bold 7px sans-serif';
+        ctx.textAlign='left';ctx.textBaseline='middle';
+        ctx.translate(x+bw/2,y-2);ctx.rotate(-Math.PI/2);
+        ctx.strokeStyle=gv('--bg')||'#ffffff';ctx.lineWidth=3;ctx.lineJoin='round';
+        ctx.strokeText(lbl,0,0);
+        ctx.fillStyle=gv('--text')||'#111827';
+        ctx.fillText(lbl,0,0);
+        ctx.restore();
       });
     });
     // lines
@@ -2517,6 +2530,25 @@ function saveSB(){
   SB_URL=document.getElementById('s-sburl').value.trim();SB_KEY=document.getElementById('s-sbkey').value.trim();
   localStorage.setItem('snb_sb_url',SB_URL);localStorage.setItem('snb_sb_key',SB_KEY);
   toast('🔄 Reconnecting...','warn');sbOnline=false;sbInit();
+}
+function copyGentaniSQL(){
+  const sql=`CREATE TABLE IF NOT EXISTS public.snb_gentani (
+  id bigserial PRIMARY KEY,
+  shift text,
+  ss550 numeric,
+  wire_cut numeric,
+  slb numeric,
+  ikomi numeric,
+  gentani numeric,
+  operator text,
+  catatan text,
+  waktu text,
+  tanggal date,
+  created_at timestamptz DEFAULT now()
+);`;
+  navigator.clipboard.writeText(sql).then(()=>toast('✅ SQL disalin! Paste di Supabase SQL Editor')).catch(()=>{
+    prompt('Copy SQL ini:',sql);
+  });
 }
 function clearLocal(){
   if(!confirm('⚠ Hapus semua data lokal? Tidak bisa dibatalkan!'))return;
