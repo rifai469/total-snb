@@ -690,6 +690,48 @@ tr:hover td{background:var(--accent-bg);}
     </div>
   </div>
 
+  <!-- Rekap Gentani per Periode (mingguan/bulanan/custom range) -->
+  <div class="cd">
+    <div class="st">🗓️ Rekap Gentani per Periode</div>
+    <div class="info-box info">ℹ️ Pilih rentang tanggal — Total SS terpakai &amp; Total Ikomi pada rentang itu dijumlahkan, lalu Gentani gabungannya dihitung otomatis.</div>
+    <div class="fbar" style="margin-bottom:4px">
+      <button class="chc-b" id="gr-pw" onclick="grPreset('week',this)">Minggu Ini</button>
+      <button class="chc-b" id="gr-pm" onclick="grPreset('month',this)">Bulan Ini</button>
+      <button class="chc-b" id="gr-ppm" onclick="grPreset('pmonth',this)">Bulan Lalu</button>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Dari</label><input type="date" id="gr-from" onchange="grCustom()"></div>
+      <div class="fg"><label>Sampai</label><input type="date" id="gr-to" onchange="grCustom()"></div>
+      <div class="fg"><label>Mode</label>
+        <select id="gr-mode" onchange="drawGRecap()">
+          <option value="baru">SS Baru</option>
+          <option value="all">Baru+Bekas</option>
+        </select>
+      </div>
+    </div>
+    <div class="gt-prev-box" id="gr-box" style="display:block">
+      <div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:6px" id="gr-period-lbl">—</div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div>
+          <div class="gt-big" id="gr-num">—</div>
+          <div class="gt-unit">Kg / Ton (Gabungan)</div>
+        </div>
+        <div id="gr-stat"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center">
+          <div class="mn t-ok" style="font-size:1.05rem;font-weight:800" id="gr-ss">0</div>
+          <div style="font-size:.65rem;color:var(--muted);margin-top:2px">Total SS (Kg)</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center">
+          <div class="mn" style="font-size:1.05rem;font-weight:800;color:var(--accent)" id="gr-ik">0</div>
+          <div style="font-size:.65rem;color:var(--muted);margin-top:2px">Total Ikomi (Ton)</div>
+        </div>
+      </div>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:8px" id="gr-detail">—</div>
+    </div>
+  </div>
+
   <!-- Trend chart -->
   <div class="cd">
     <button class="coll-hdr" onclick="toggleColl('gt-trend-body',this);if(document.getElementById('gt-trend-body').style.display!=='none')drawGTFull()">
@@ -710,11 +752,11 @@ tr:hover td{background:var(--accent-bg);}
         </select>
         <div class="fbar-sep"></div>
         <span class="fbar-lbl">Tampilan</span>
-        <select class="fbar-sel" id="gt-fv" onchange="drawGTFull()"><option value="day">Harian</option><option value="week">Mingguan</option></select>
+        <select class="fbar-sel" id="gt-fv" onchange="drawGTFull()"><option value="day">Harian</option><option value="week">Mingguan</option><option value="month">Bulanan</option></select>
       </div>
       <div class="chart-area"><canvas id="c-gt-full"></canvas></div>
       <div class="lg-r">
-        <div class="lg-i"><div class="lg-d" style="background:#0891b2"></div>Harian</div>
+        <div class="lg-i"><div class="lg-d" style="background:#0891b2"></div><span id="gt-full-lbl">Harian</span></div>
         <div class="lg-i"><div class="lg-d" style="background:#7c3aed"></div>Akumulasi</div>
         <div class="lg-i"><div class="lg-d" style="background:#059669"></div>Target Bawah</div>
         <div class="lg-i"><div class="lg-d" style="background:#dc2626"></div>Target Atas</div>
@@ -1151,7 +1193,7 @@ function tgTheme(){
   h.setAttribute('data-theme',dk?'light':'dark');
   document.getElementById('thbtn').textContent=dk?'🌙':'☀️';
   localStorage.setItem('snb_theme',dk?'light':'dark');
-  setTimeout(()=>{renderDash();if(_curTab==='lb')drawLBFull();if(_curTab==='gt')drawGTFull();},80);
+  setTimeout(()=>{renderDash();if(_curTab==='lb')drawLBFull();if(_curTab==='gt'){drawGTFull();drawGRecap();}},80);
 }
 (()=>{const t=localStorage.getItem('snb_theme');if(t){document.documentElement.setAttribute('data-theme',t);document.getElementById('thbtn').textContent=t==='dark'?'☀️':'🌙';}})();
 
@@ -1178,7 +1220,7 @@ function goTab(id){
   if(id==='dash')renderDash();
   if(id==='ss'){renderSS();}
   if(id==='lb'){renderLB();drawLBFull();}
-  if(id==='gt'){renderGT();drawGTFull();onGTDateChange();}
+  if(id==='gt'){renderGT();drawGTFull();onGTDateChange();if(!document.getElementById('gr-from').value){grPreset('month',document.getElementById('gr-pm'));}else{drawGRecap();}}
   if(id==='imp')renderImp();
   if(id==='sp')renderSp();
   if(id==='hist')hTab(document.querySelector('.sub-tab.on'),'shot');
@@ -1544,7 +1586,7 @@ async function submitGT(ev){
         localStorage.setItem('snb_gt',JSON.stringify(gtLogs));
         document.getElementById('gt-ikomi').value='';document.getElementById('gt-note').value='';
         document.getElementById('gt-prev-box').style.display='none';
-        renderGT();drawGTFull();renderDash();
+        renderGT();drawGTFull();drawGRecap();renderDash();
         btn.disabled=false;return;
       }
     }
@@ -1555,7 +1597,7 @@ async function submitGT(ev){
     hideSpin();showSuccess('Gentani Tersimpan!','✅',gentani.toFixed(2)+' Kg/Ton — SS '+(mode==='baru'?'Baru':'Baru+Bekas')+' | '+fd(date));
     document.getElementById('gt-ikomi').value='';document.getElementById('gt-note').value='';
     document.getElementById('gt-prev-box').style.display='none';
-    renderGT();drawGTFull();renderDash();
+    renderGT();drawGTFull();drawGRecap();renderDash();
   }catch(e){hideSpin();showFail('Gagal Simpan','❌',e.message);}
   btn.disabled=false;
 }
@@ -1764,7 +1806,7 @@ async function saveEM(){
       const date=document.getElementById('em-date').value,ss550=+document.getElementById('em-ss550').value||0,wc=+document.getElementById('em-wc').value||0,slb=+document.getElementById('em-slb').value||0,ikomi=+document.getElementById('em-ikomi').value||0,gentani=ikomi>0?+((ss550+wc)/ikomi).toFixed(4):0,op=document.getElementById('em-op').value;
       if(sbOnline)await sbF(T_GT+'?id=eq.'+id,'PATCH',{shift,ss550,wire_cut:wc,slb,ikomi,gentani,operator:op,tanggal:date});
       const l=gtLogs.find(x=>String(x.id)===String(id));if(l)Object.assign(l,{shift,ss550,wc,slb,ikomi,gentani,op,date});
-      localStorage.setItem('snb_gt',JSON.stringify(gtLogs));renderGT();renderHG();drawGTFull();
+      localStorage.setItem('snb_gt',JSON.stringify(gtLogs));renderGT();renderHG();drawGTFull();drawGRecap();
     }
     closeEM();showSuccess('Data Diperbarui','✅','Perubahan berhasil disimpan');renderDash();
   }catch(e){hideSpin();showFail('Gagal Update','❌',e.message);return;}
@@ -1779,7 +1821,7 @@ async function doDel(){
   try{
     if(kind==='ss'){if(sbOnline)await sbF(T_SS+'?id=eq.'+id,'DELETE');shotLogs=shotLogs.filter(x=>String(x.id)!==String(id));localStorage.setItem('snb_shot',JSON.stringify(shotLogs));renderSS();renderHS();}
     if(kind==='lb'){if(sbOnline)await sbF(T_LB+'?id=eq.'+id,'DELETE');sandLogs=sandLogs.filter(x=>String(x.id)!==String(id));localStorage.setItem('snb_sand',JSON.stringify(sandLogs));renderLB();renderHSD();}
-    if(kind==='gt'){if(sbOnline)await sbF(T_GT+'?id=eq.'+id,'DELETE');gtLogs=gtLogs.filter(x=>String(x.id)!==String(id));localStorage.setItem('snb_gt',JSON.stringify(gtLogs));renderGT();renderHG();drawGTFull();}
+    if(kind==='gt'){if(sbOnline)await sbF(T_GT+'?id=eq.'+id,'DELETE');gtLogs=gtLogs.filter(x=>String(x.id)!==String(id));localStorage.setItem('snb_gt',JSON.stringify(gtLogs));renderGT();renderHG();drawGTFull();drawGRecap();}
     if(kind==='imp'){if(sbOnline)await sbF(T_IMP+'?id=eq.'+id,'DELETE');impLogs=impLogs.filter(x=>String(x.id)!==String(id));localStorage.setItem('snb_imp',JSON.stringify(impLogs));renderImp();}
     if(kind==='sp'){if(sbOnline)await sbF(T_SP+'?id=eq.'+id,'DELETE');spLogs=spLogs.filter(x=>String(x.id)!==String(id));localStorage.setItem('snb_sp',JSON.stringify(spLogs));renderSp();}
     renderDash();hideSpin();toastMob('🗑 Data berhasil dihapus','danger');
@@ -2271,6 +2313,69 @@ function drawImpFull(){
   }
 }
 function gtPd(v){_gtPdV=v;drawGTFull();}
+
+// ── REKAP GENTANI PER PERIODE (mingguan/bulanan/custom range) ──
+function grPreset(type,btn){
+  const now=new Date();
+  let from,to;
+  if(type==='week'){
+    const dow=now.getDay()||7; // Senin=1..Minggu=7
+    const monday=new Date(now);monday.setDate(now.getDate()-dow+1);
+    from=ld(monday);to=ld();
+  }else if(type==='month'){
+    from=ld().slice(0,7)+'-01';to=ld();
+  }else if(type==='pmonth'){
+    const d=new Date(now.getFullYear(),now.getMonth()-1,1);
+    const e=new Date(now.getFullYear(),now.getMonth(),0);
+    from=ld(d);to=ld(e);
+  }
+  document.getElementById('gr-from').value=from;
+  document.getElementById('gr-to').value=to;
+  document.querySelectorAll('#gr-pw,#gr-pm,#gr-ppm').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  drawGRecap();
+}
+function grCustom(){
+  document.querySelectorAll('#gr-pw,#gr-pm,#gr-ppm').forEach(b=>b.classList.remove('on'));
+  drawGRecap();
+}
+function drawGRecap(){
+  const lblEl=document.getElementById('gr-period-lbl');
+  const from=document.getElementById('gr-from')?.value, to=document.getElementById('gr-to')?.value;
+  const mode=document.getElementById('gr-mode')?.value||'baru';
+  if(!from||!to||from>to){
+    if(lblEl)lblEl.textContent='Pilih tanggal Dari & Sampai yang valid';
+    document.getElementById('gr-num').textContent='—';
+    document.getElementById('gr-stat').innerHTML='';
+    document.getElementById('gr-ss').textContent='0';
+    document.getElementById('gr-ik').textContent='0';
+    document.getElementById('gr-detail').textContent='—';
+    return;
+  }
+  const days=allDays(from,to);
+  let totSS=0,totIK=0,nHari=0;
+  days.forEach(d=>{
+    const rows=gtLogs.filter(l=>l.date===d);
+    if(!rows.length)return;
+    const latest=rows.slice().sort((a,b)=>b.id-a.id)[0];
+    totIK+=latest.ikomi||0;
+    totSS+=getSSKgForDate(d,mode);
+    nHari++;
+  });
+  if(lblEl)lblEl.textContent=fd(from)+' s/d '+fd(to)+' • '+days.length+' hari ('+nHari+' hari ada data)';
+  if(totIK>0){
+    const g=+(totSS/totIK).toFixed(2);
+    document.getElementById('gr-num').textContent=g;
+    document.getElementById('gr-stat').innerHTML=gtBadge(g);
+    document.getElementById('gr-detail').textContent='SS '+(mode==='baru'?'Baru':'Baru+Bekas')+': '+Math.round(totSS).toLocaleString('id-ID')+' kg ÷ Ikomi: '+totIK.toLocaleString('id-ID')+' Ton';
+  }else{
+    document.getElementById('gr-num').textContent='—';
+    document.getElementById('gr-stat').innerHTML='';
+    document.getElementById('gr-detail').textContent='Belum ada data Ikomi pada rentang tanggal ini.';
+  }
+  document.getElementById('gr-ss').textContent=Math.round(totSS).toLocaleString('id-ID');
+  document.getElementById('gr-ik').textContent=totIK.toLocaleString('id-ID');
+}
 function getSSKgForDate(date, mode){
   const shots=shotLogs.filter(l=>l.date===date);
   const kgBaru=shots.filter(l=>l.type==='Baru').reduce((s,l)=>s+(l.qty*25),0);
@@ -2280,31 +2385,42 @@ function getSSKgForDate(date, mode){
 function drawGTFull(){
   const today=ld();const now=new Date();
   const chartMode=document.getElementById('gt-chart-mode')?.value||'baru';
+  const view=document.getElementById('gt-fv')?.value||'day';
   let from,to;
   if(_gtPdV==='cur'){from=today.slice(0,7)+'-01';to=today;}
   else if(_gtPdV==='prev'){const d=new Date(now.getFullYear(),now.getMonth()-1,1);const e=new Date(now.getFullYear(),now.getMonth(),0);from=ld(d);to=ld(e);}
   else if(_gtPdV==='3m'){from=ld(new Date(now-90*86400000));to=today;}
   else{from=ld(new Date(now-180*86400000));to=today;}
-  const days=allDays(from,to);
-  const labels=days.map(d=>{const p=d.split('-');return p[2]+'/'+bn(p[1]);});
-  // Build gentani per day from gtLogs OR compute directly from shotLogs+gtLogs
-  const gtD=days.map(d=>{
-    // Use saved gentani log if exists for that day with matching mode
-    const gtRow=gtLogs.filter(l=>l.date===d&&(l.mode===chartMode||(chartMode==='baru'&&!l.mode))).sort((a,b)=>b.id-a.id)[0];
-    if(gtRow) return +gtRow.gentani;
-    // Else compute on-the-fly from shotLogs: need ikomi from any gt entry that day
-    const anyGt=gtLogs.find(l=>l.date===d);
-    if(!anyGt) return null;
-    const ssKg=getSSKgForDate(d,chartMode);
-    return anyGt.ikomi>0?+(ssKg/anyGt.ikomi).toFixed(2):null;
+  // view: 'day' = bar harian (default), 'week' = bar mingguan, 'month' = bar bulanan — hanya muncul kalau dipilih
+  const period=getDaysRange(from,to,view==='day'?undefined:view);
+  const{labels}=period;
+  const bucketKeys=period.wks?Object.keys(period.wks):(period.mths?Object.keys(period.mths):period.days);
+  const rangeOf=key=>period.wks?period.wks[key]:(period.mths?period.mths[key]:{start:key,end:key});
+  // Ambil entry gentani terakhir per tanggal (hindari dobel hitung kalau ada revisi/edit)
+  function bucketTotals(start,end){
+    const rows=gtLogs.filter(l=>l.date>=start&&l.date<=end);
+    const byDate={};rows.forEach(r=>{if(!byDate[r.date]||r.id>byDate[r.date].id)byDate[r.date]=r;});
+    let ssKg=0,ik=0;
+    Object.values(byDate).forEach(r=>{ssKg+=getSSKgForDate(r.date,chartMode);ik+=(+r.ikomi||0);});
+    return{ssKg,ik};
+  }
+  // Bar per-bucket (harian/mingguan/bulanan sesuai Tampilan)
+  const gtD=bucketKeys.map(key=>{
+    const{start,end}=rangeOf(key);
+    const{ssKg,ik}=bucketTotals(start,end);
+    return ik>0?+(ssKg/ik).toFixed(2):null;
   });
+  // Garis akumulasi berjalan sejak awal periode
   let aS=0,aI=0;
-  const gtA=days.map((d,i)=>{
-    const gtRows=gtLogs.filter(l=>l.date===d);
-    gtRows.forEach(r=>{aS+=getSSKgForDate(d,chartMode)/Math.max(gtRows.length,1);aI+=r.ikomi/Math.max(gtRows.length,1);});
+  const gtA=bucketKeys.map(key=>{
+    const{start,end}=rangeOf(key);
+    const{ssKg,ik}=bucketTotals(start,end);
+    aS+=ssKg;aI+=ik;
     return aI>0?+(aS/aI).toFixed(2):null;
   });
   const lo=+cfg.gtLo||0,hi=+cfg.gtHi||0;
+  const lblEl=document.getElementById('gt-full-lbl');
+  if(lblEl)lblEl.textContent=view==='week'?'Mingguan':(view==='month'?'Bulanan':'Harian');
   chartBL('c-gt-full',labels,[{color:'#0891b2',data:gtD.map(v=>v||0)}],[{color:'#7c3aed',data:gtA}],{hl:[lo,hi],hc:['#059669','#dc2626']});
 }
 
